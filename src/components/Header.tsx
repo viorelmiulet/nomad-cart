@@ -4,7 +4,7 @@ import CartDrawer from "./CartDrawer";
 import SearchDialog from "./SearchDialog";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-import logoFurniLux from "@/assets/logo-furniLux.png";
+import logoFurniLux from "@/assets/logo-furniLux-styled.png";
 
 const Header = () => {
   const navigate = useNavigate();
