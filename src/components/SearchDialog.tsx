@@ -60,80 +60,86 @@ const SearchDialog = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <div className="hidden md:flex items-center space-x-2 w-96">
-          <div className="relative w-full group cursor-pointer">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-white/60 z-10" />
-            <Input
-              placeholder="Caută mobilier de lux..."
-              className="pl-10 h-12 bg-glass-gradient backdrop-blur-lg border border-white/20 text-white placeholder:text-white/60 focus:border-luxury-gold/50 focus:ring-1 focus:ring-luxury-gold/30 rounded-xl cursor-pointer"
-              readOnly
-            />
-            <div className="absolute inset-0 bg-liquid-gradient opacity-20 rounded-xl group-hover:opacity-30 transition-opacity duration-300"></div>
-          </div>
-        </div>
+        <Button 
+          size="icon" 
+          variant="ghost" 
+          className="h-12 w-12 bg-glass-gradient backdrop-blur-lg border border-white/20 rounded-xl text-white/80 hover:text-luxury-gold hover:bg-white/10 transition-all duration-300 shadow-lg group relative overflow-hidden"
+        >
+          <Search className="h-5 w-5 relative z-10 group-hover:scale-110 transition-transform" />
+          <div className="absolute inset-0 bg-luxury-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+        </Button>
       </DialogTrigger>
-      <DialogContent className="bg-luxury-dark/95 backdrop-blur-xl border border-luxury-gold/30 text-luxury-cream max-w-2xl shadow-2xl">
-        <DialogHeader>
-          <DialogTitle className="text-luxury-gold font-playfair text-xl drop-shadow-lg">
+      <DialogContent className="bg-hero-gradient backdrop-blur-xl border border-luxury-gold/30 text-luxury-cream max-w-2xl shadow-2xl relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-luxury-dark/90 via-luxury-navy/70 to-luxury-dark/95"></div>
+        <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
+        
+        <DialogHeader className="relative z-10">
+          <DialogTitle className="text-2xl font-bold font-playfair bg-luxury-gradient bg-clip-text text-transparent drop-shadow-lg">
             Căutare Mobilier Premium
           </DialogTitle>
         </DialogHeader>
         
-        <form onSubmit={handleSearch} className="space-y-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-luxury-cream/70" />
+        <form onSubmit={handleSearch} className="space-y-6 relative z-10">
+          <div className="relative group">
+            <Search className="absolute left-4 top-4 h-5 w-5 text-luxury-gold/80 z-10" />
             <Input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Caută canapele, mese, paturi..."
-              className="pl-10 h-12 bg-luxury-gold/10 border border-luxury-gold/30 text-luxury-cream placeholder:text-luxury-cream/60 focus:border-luxury-gold/70 focus:ring-1 focus:ring-luxury-gold/50"
+              className="pl-12 h-14 bg-glass-gradient backdrop-blur-lg border border-white/20 text-luxury-cream placeholder:text-luxury-cream/60 focus:border-luxury-gold/50 focus:ring-1 focus:ring-luxury-gold/30 rounded-xl text-lg shadow-xl"
               autoFocus
             />
+            <div className="absolute inset-0 bg-liquid-gradient opacity-10 group-focus-within:opacity-20 transition-opacity duration-300 rounded-xl"></div>
           </div>
           
-          <Button type="submit" className="w-full bg-luxury-gradient hover:opacity-90 text-luxury-dark font-semibold shadow-lg transform hover:scale-[1.02] transition-all duration-300">
-            <Search className="mr-2 h-4 w-4" />
-            Caută Produse
+          <Button type="submit" className="w-full h-14 bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/10 text-luxury-gold font-semibold px-8 text-lg transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-luxury-gold/20 group relative overflow-hidden rounded-xl">
+            <span className="relative z-10">Caută Produse</span>
+            <Search className="ml-2 h-5 w-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+            <div className="absolute inset-0 bg-luxury-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
           </Button>
         </form>
         
         {searchTerm && (
-          <div className="mt-6">
-            <h3 className="text-sm font-medium text-luxury-cream/80 mb-3">
-              Rezultate pentru "{searchTerm}"
+          <div className="mt-8 relative z-10">
+            <h3 className="text-lg font-medium text-luxury-cream mb-4 font-playfair">
+              Rezultate pentru "<span className="text-luxury-gold">{searchTerm}</span>"
             </h3>
-            <div className="space-y-2 max-h-64 overflow-y-auto">
+            <div className="space-y-3 max-h-80 overflow-y-auto custom-scrollbar">
               {filteredResults.length > 0 ? (
                 filteredResults.map((product) => (
                   <button
                     key={product.id}
                     onClick={() => handleProductClick(product)}
-                    className="w-full text-left p-3 bg-luxury-gold/10 hover:bg-luxury-gold/20 rounded-lg border border-luxury-gold/20 transition-all duration-300 group"
+                    className="w-full text-left p-4 bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/10 rounded-xl transition-all duration-300 group shadow-lg hover:shadow-xl relative overflow-hidden"
                   >
-                    <div className="flex items-center space-x-3">
-                      <img 
-                        src={product.image} 
-                        alt={product.name}
-                        className="w-12 h-12 object-cover rounded-lg"
-                      />
+                    <div className="absolute inset-0 bg-liquid-gradient opacity-10 group-hover:opacity-20 transition-opacity duration-300"></div>
+                    <div className="flex items-center space-x-4 relative z-10">
+                      <div className="relative">
+                        <img 
+                          src={product.image} 
+                          alt={product.name}
+                          className="w-16 h-16 object-cover rounded-xl shadow-lg"
+                        />
+                        <div className="absolute inset-0 bg-luxury-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-xl"></div>
+                      </div>
                       <div className="flex-1">
                         <div className="flex justify-between items-start">
                           <div>
-                            <h4 className="font-medium text-luxury-cream group-hover:text-luxury-gold transition-colors">{product.name}</h4>
-                            <div className="flex items-center mt-1">
+                            <h4 className="font-semibold text-luxury-cream group-hover:text-luxury-gold transition-colors font-playfair">{product.name}</h4>
+                            <div className="flex items-center mt-2">
                               <div className="flex items-center">
                                 {[...Array(5)].map((_, i) => (
                                   <Star
                                     key={i}
-                                    className={`h-3 w-3 ${
-                                      i < product.rating ? "text-luxury-gold fill-current" : "text-gray-500"
+                                    className={`h-4 w-4 ${
+                                      i < product.rating ? "text-luxury-gold fill-current" : "text-luxury-cream/30"
                                     }`}
                                   />
                                 ))}
                               </div>
                             </div>
                           </div>
-                          <span className="text-luxury-gold font-semibold">
+                          <span className="text-xl font-bold text-luxury-gold font-inter">
                             {product.price.toLocaleString('ro-RO')} Lei
                           </span>
                         </div>
@@ -142,9 +148,15 @@ const SearchDialog = () => {
                   </button>
                 ))
               ) : (
-                <p className="text-luxury-cream/60 text-center py-4">
-                  Nu s-au găsit produse pentru "{searchTerm}"
-                </p>
+                <div className="text-center py-8">
+                  <Search className="h-16 w-16 text-luxury-cream/30 mx-auto mb-4" />
+                  <p className="text-luxury-cream/60 font-inter text-lg">
+                    Nu s-au găsit produse pentru "<span className="text-luxury-gold">{searchTerm}</span>"
+                  </p>
+                  <p className="text-luxury-cream/40 text-sm mt-2">
+                    Încearcă cu un alt termen de căutare
+                  </p>
+                </div>
               )}
             </div>
           </div>
