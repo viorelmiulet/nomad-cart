@@ -1,7 +1,15 @@
 import ProductCard from "./ProductCard";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/hooks/use-toast";
 
 const ProductGrid = () => {
+  const handleViewAllProducts = () => {
+    toast({
+      title: "Toate Produsele",
+      description: "Vei fi redirecționat către pagina cu toate produsele premium.",
+    });
+  };
+
   const products = [
     {
       id: "1",
@@ -63,7 +71,7 @@ const ProductGrid = () => {
   ];
 
   return (
-    <section className="py-20 bg-background relative">
+    <section id="products-section" className="py-20 bg-background relative">
       <div className="absolute inset-0 bg-gradient-to-b from-luxury-cream/30 to-transparent"></div>
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
@@ -85,7 +93,10 @@ const ProductGrid = () => {
         </div>
         
         <div className="text-center mt-16">
-          <Button className="bg-luxury-gradient text-luxury-dark px-10 py-4 h-14 text-lg font-semibold hover:opacity-90 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105">
+          <Button 
+            onClick={handleViewAllProducts}
+            className="bg-luxury-gradient text-luxury-dark px-10 py-4 h-14 text-lg font-semibold hover:opacity-90 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105"
+          >
             Vezi Toată Colecția Premium
           </Button>
         </div>

@@ -1,7 +1,27 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Armchair } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 const Hero = () => {
+  const handleExploreCollection = () => {
+    toast({
+      title: "Explorare Colecție",
+      description: "Vei fi redirecționat către pagina cu produse premium.",
+    });
+    // Scroll to products section
+    const productsSection = document.querySelector('#products-section');
+    if (productsSection) {
+      productsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleScheduleConsultation = () => {
+    toast({
+      title: "Programare Consultanță",
+      description: "Un consultant de design te va contacta în cel mai scurt timp.",
+    });
+  };
+
   return (
     <section className="relative overflow-hidden bg-hero-gradient min-h-[90vh] flex items-center">
       <div className="absolute inset-0 bg-gradient-to-br from-luxury-dark/90 via-luxury-navy/70 to-luxury-dark/95"></div>
@@ -31,6 +51,7 @@ const Hero = () => {
             <div className="flex flex-col sm:flex-row gap-6">
               <Button 
                 size="lg" 
+                onClick={handleExploreCollection}
                 className="bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/10 text-luxury-gold font-semibold px-8 py-4 h-14 text-lg transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-luxury-gold/20 group relative overflow-hidden"
               >
                 <span className="relative z-10">Explorează Colecția</span>
@@ -40,6 +61,7 @@ const Hero = () => {
               <Button 
                 size="lg" 
                 variant="outline"
+                onClick={handleScheduleConsultation}
                 className="border-2 border-white/30 bg-glass-gradient backdrop-blur-lg text-white hover:bg-white/20 hover:border-luxury-gold/50 transition-all duration-300 px-8 py-4 h-14 text-lg font-semibold shadow-xl"
               >
                 Programează Consultanță

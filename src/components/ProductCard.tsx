@@ -2,6 +2,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, Heart, Star } from "lucide-react";
+import { useCart } from "@/hooks/useCart";
+import { useWishlist } from "@/hooks/useWishlist";
 
 interface ProductCardProps {
   id: string;
@@ -16,6 +18,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ 
+  id,
   name, 
   price, 
   originalPrice, 
@@ -25,6 +28,17 @@ const ProductCard = ({
   isNew, 
   isOnSale 
 }: ProductCardProps) => {
+  const { addItem } = useCart();
+  const { toggleItem, isInWishlist } = useWishlist();
+
+  const handleAddToCart = () => {
+    addItem({ id, name, price, image });
+  };
+
+  const handleToggleWishlist = () => {
+    toggleItem({ id, name, price, image });
+  };
+
   return (
     <Card className="group overflow-hidden border-0 bg-glass-gradient backdrop-blur-xl shadow-2xl hover:shadow-luxury-gold/20 transition-all duration-500 transform hover:-translate-y-3 hover:scale-[1.02] rounded-2xl border border-white/10 relative">
       <div className="absolute inset-0 bg-liquid-gradient opacity-20 group-hover:opacity-30 transition-opacity duration-500 rounded-2xl"></div>
@@ -51,9 +65,10 @@ const ProductCard = ({
         <Button
           size="icon"
           variant="secondary"
-          className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/20 z-20 shadow-lg"
+          onClick={handleToggleWishlist}
+          className={`absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/20 z-20 shadow-lg ${isInWishlist(id) ? 'text-red-500' : 'text-luxury-gold'}`}
         >
-          <Heart className="h-4 w-4 text-luxury-gold" />
+          <Heart className={`h-4 w-4 ${isInWishlist(id) ? 'fill-current' : ''}`} />
         </Button>
         
         {/* Glass reflection */}
@@ -92,7 +107,10 @@ const ProductCard = ({
           </div>
         </div>
         
-        <Button className="w-full bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/10 transition-all duration-300 text-luxury-gold font-semibold py-3 h-12 text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] group relative overflow-hidden">
+        <Button 
+          onClick={handleAddToCart}
+          className="w-full bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/10 transition-all duration-300 text-luxury-gold font-semibold py-3 h-12 text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] group relative overflow-hidden"
+        >
           <span className="relative z-10 flex items-center">
             <ShoppingCart className="mr-2 h-5 w-5" />
             Adaugă în Coș

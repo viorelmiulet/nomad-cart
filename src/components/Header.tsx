@@ -1,8 +1,24 @@
 import { ShoppingCart, Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import CartDrawer from "./CartDrawer";
+import SearchDialog from "./SearchDialog";
+import { toast } from "@/hooks/use-toast";
 
 const Header = () => {
+  const handleNavClick = (section: string) => {
+    toast({
+      title: `Navigare către ${section}`,
+      description: `Secțiunea ${section} se va deschide în curând.`,
+    });
+  };
+
+  const handleMobileMenu = () => {
+    toast({
+      title: "Meniu mobil",
+      description: "Meniul mobil se va deschide în curând.",
+    });
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full bg-glass-gradient backdrop-blur-xl border-b border-white/10 shadow-lg">
       <div className="container flex h-20 items-center relative">
@@ -18,44 +34,35 @@ const Header = () => {
         
         
         <nav className="hidden md:flex items-center space-x-8 text-sm font-medium font-inter relative z-10">
-          <a href="#" className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
+          <button onClick={() => handleNavClick("Living")} className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
             Living
             <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-          </a>
-          <a href="#" className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
+          </button>
+          <button onClick={() => handleNavClick("Dormitor")} className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
             Dormitor
             <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-          </a>
-          <a href="#" className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
+          </button>
+          <button onClick={() => handleNavClick("Bucătărie")} className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
             Bucătărie
             <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-          </a>
-          <a href="#" className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
+          </button>
+          <button onClick={() => handleNavClick("Colecții Premium")} className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
             Colecții Premium
             <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-          </a>
+          </button>
         </nav>
 
         <div className="flex flex-1 items-center justify-end space-x-4 relative z-10">
-          <div className="hidden md:flex items-center space-x-2 w-96">
-            <div className="relative w-full group">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-white/60 z-10" />
-              <Input
-                placeholder="Caută mobilier de lux..."
-                className="pl-10 h-12 bg-glass-gradient backdrop-blur-lg border border-white/20 text-white placeholder:text-white/60 focus:border-luxury-gold/50 focus:ring-1 focus:ring-luxury-gold/30 rounded-xl"
-              />
-              <div className="absolute inset-0 bg-liquid-gradient opacity-20 rounded-xl group-hover:opacity-30 transition-opacity duration-300"></div>
-            </div>
-          </div>
+          <SearchDialog />
           
-          <Button size="icon" variant="ghost" className="relative h-12 w-12 bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/10 rounded-xl group">
-            <ShoppingCart className="h-5 w-5 text-white/80 group-hover:text-luxury-gold transition-colors" />
-            <span className="absolute -top-1 -right-1 h-5 w-5 bg-luxury-gradient text-xs font-bold rounded-full flex items-center justify-center text-luxury-dark shadow-lg border border-white/30">
-              0
-            </span>
-          </Button>
+          <CartDrawer />
           
-          <Button size="icon" variant="ghost" className="md:hidden h-12 w-12 bg-glass-gradient backdrop-blur-lg border border-white/20 rounded-xl">
+          <Button 
+            size="icon" 
+            variant="ghost" 
+            className="md:hidden h-12 w-12 bg-glass-gradient backdrop-blur-lg border border-white/20 rounded-xl"
+            onClick={handleMobileMenu}
+          >
             <Menu className="h-5 w-5 text-white/80" />
           </Button>
         </div>
