@@ -32,25 +32,25 @@ const BenefitsBar = () => {
   };
 
   return (
-    <div className="bg-glass-gradient backdrop-blur-xl border-b border-white/10 py-3">
+    <div className="bg-glass-gradient backdrop-blur-xl border-b border-white/10 py-4">
       <div className="container mx-auto px-4">
-        <div className="flex flex-wrap items-center justify-center gap-6 text-sm">
+        <div className="flex flex-wrap items-center justify-center gap-8 text-sm">
           {benefits.map((benefit, index) => (
             <button
               key={index}
               onClick={() => handleBenefitClick(benefit.title)}
-              className="flex items-center gap-2 text-white/80 hover:text-luxury-gold transition-colors duration-300 group"
+              className="flex items-center gap-3 text-white hover:text-luxury-gold transition-colors duration-300 group min-w-fit"
             >
-              <span className="text-lg group-hover:scale-110 transition-transform">{benefit.icon}</span>
+              <span className="text-xl group-hover:scale-110 transition-transform flex-shrink-0">{benefit.icon}</span>
               <div className="text-left">
-                <div className="font-medium">{benefit.title}</div>
-                <div className="text-xs text-white/60">{benefit.description}</div>
+                <div className="font-semibold text-white">{benefit.title}</div>
+                <div className="text-xs text-white/70">{benefit.description}</div>
               </div>
             </button>
           ))}
-          <div className="flex items-center gap-2 text-white/80">
-            <span className="text-lg">📞</span>
-            <span className="font-medium">0312 295 893</span>
+          <div className="flex items-center gap-3 text-white min-w-fit">
+            <span className="text-xl flex-shrink-0">📞</span>
+            <span className="font-semibold">0312 295 893</span>
           </div>
         </div>
       </div>
