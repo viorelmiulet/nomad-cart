@@ -20,10 +20,9 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-luxury-dark/95 backdrop-blur-xl border-b border-luxury-gold/20 shadow-2xl relative overflow-hidden">
-      <div className="absolute inset-0 bg-hero-gradient opacity-90"></div>
-      <div className="absolute inset-0 bg-liquid-gradient opacity-40 animate-liquid-flow"></div>
-      <div className="absolute inset-0 bg-gradient-to-r from-luxury-gold/5 via-transparent to-luxury-gold/5 animate-pulse"></div>
+    <header className="sticky top-0 z-50 w-full bg-hero-gradient backdrop-blur-xl border-b border-luxury-gold/20 shadow-2xl relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-luxury-dark/90 via-luxury-navy/70 to-luxury-dark/95"></div>
+      <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
       <div className="container flex h-16 items-center relative z-10">
         <div className="mr-8 flex items-center space-x-3 relative z-10">
           <div className="h-10 w-10 rounded-xl bg-glass-gradient backdrop-blur-lg flex items-center justify-center shadow-xl border border-white/20 animate-glass-float">
