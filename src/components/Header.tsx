@@ -38,7 +38,7 @@ const Header = () => {
           <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg md:rounded-xl bg-glass-gradient backdrop-blur-lg flex items-center justify-center shadow-xl border border-white/20 animate-glass-float">
             <span className="text-luxury-gold font-bold text-base md:text-lg font-playfair drop-shadow-lg">F</span>
           </div>
-          <span className="text-xl md:text-2xl font-bold font-playfair bg-luxury-gradient bg-clip-text text-transparent drop-shadow-lg">
+          <span className="text-xl md:text-2xl font-bold font-playfair text-luxury-gold drop-shadow-lg">
             FurniLux
           </span>
         </button>
