@@ -23,6 +23,9 @@ export default {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
+        "tech-blue": "hsl(var(--tech-blue))",
+        "accent-cyan": "hsl(var(--accent-cyan))",
+        "accent-purple": "hsl(var(--accent-purple))",
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
@@ -57,6 +60,11 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+      },
+      backgroundImage: {
+        "tech-gradient": "var(--tech-gradient)",
+        "hero-gradient": "var(--hero-gradient)", 
+        "card-gradient": "var(--card-gradient)",
       },
       borderRadius: {
         lg: "var(--radius)",
