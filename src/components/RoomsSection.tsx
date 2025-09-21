@@ -58,15 +58,16 @@ const RoomsSection = () => {
   };
 
   return (
-    <section className="py-16 bg-background relative">
-      <div className="absolute inset-0 bg-gradient-to-b from-luxury-cream/20 to-transparent"></div>
+    <section className="py-16 bg-hero-gradient relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-luxury-dark/90 via-luxury-navy/70 to-luxury-dark/95"></div>
+      <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-4 font-playfair text-foreground">
+          <h2 className="text-3xl lg:text-4xl font-bold mb-4 font-playfair text-luxury-cream">
             Camerele
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-inter">
+          <p className="text-lg text-luxury-cream/90 max-w-2xl mx-auto font-inter">
             Descoperă mobilierul perfect pentru fiecare cameră din casa ta
           </p>
         </div>
@@ -91,7 +92,7 @@ const RoomsSection = () => {
                 </div>
                 
                 <div className="relative p-6 bg-glass-gradient backdrop-blur-sm">
-                  <h3 className="text-xl font-bold mb-4 font-playfair text-foreground group-hover:text-luxury-gold transition-colors">
+                  <h3 className="text-xl font-bold mb-4 font-playfair text-luxury-cream group-hover:text-luxury-gold transition-colors">
                     {category.title}
                   </h3>
                   
@@ -103,7 +104,7 @@ const RoomsSection = () => {
                             e.stopPropagation();
                             handleSubcategoryClick(sub);
                           }}
-                          className="text-sm text-muted-foreground hover:text-luxury-gold transition-colors duration-300 font-inter text-left"
+                          className="text-sm text-luxury-cream/70 hover:text-luxury-gold transition-colors duration-300 font-inter text-left"
                         >
                           {sub}
                         </button>

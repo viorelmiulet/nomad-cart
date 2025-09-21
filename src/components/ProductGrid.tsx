@@ -79,14 +79,15 @@ const ProductGrid = () => {
   ];
 
   return (
-    <section id="products-section" className="py-20 bg-background relative">
-      <div className="absolute inset-0 bg-gradient-to-b from-luxury-cream/30 to-transparent"></div>
+    <section id="products-section" className="py-20 bg-hero-gradient relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-luxury-dark/90 via-luxury-navy/70 to-luxury-dark/95"></div>
+      <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-6 font-playfair">
+          <h2 className="text-3xl lg:text-4xl font-bold mb-6 font-playfair text-luxury-cream">
             Produse Populare
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-inter leading-relaxed">
+          <p className="text-lg text-luxury-cream/90 max-w-2xl mx-auto font-inter leading-relaxed">
             Cele mai apreciate piese de mobilier de către clienții noștri
           </p>
         </div>
