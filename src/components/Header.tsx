@@ -21,7 +21,7 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-glass-gradient backdrop-blur-xl border-b border-white/10 shadow-lg">
-      <div className="container flex h-14 items-center relative">
+      <div className="container flex h-16 items-center relative">
         <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
         <div className="mr-8 flex items-center space-x-3 relative z-10">
           <div className="h-10 w-10 rounded-xl bg-glass-gradient backdrop-blur-lg flex items-center justify-center shadow-xl border border-white/20 animate-glass-float">
