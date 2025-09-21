@@ -2,6 +2,14 @@ import ProductCard from "./ProductCard";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 
+// Import product images
+import sofaImage from "@/assets/product-sofa-modern.jpg";
+import diningTableImage from "@/assets/product-dining-table.jpg";
+import wardrobeImage from "@/assets/product-wardrobe.jpg";
+import armchairsImage from "@/assets/product-armchairs.jpg";
+import bookshelfImage from "@/assets/product-bookshelf.jpg";
+import mattressImage from "@/assets/product-mattress.jpg";
+
 const ProductGrid = () => {
   const handleViewAllProducts = () => {
     toast({
@@ -16,7 +24,7 @@ const ProductGrid = () => {
       name: "Canapea Modernă 3 Locuri",
       price: 2999,
       originalPrice: 3499,
-      image: "/placeholder.svg",
+      image: sofaImage,
       rating: 5,
       reviews: 128,
       isNew: true,
@@ -26,7 +34,7 @@ const ProductGrid = () => {
       id: "2", 
       name: "Masă de Dining Extensibilă",
       price: 1899,
-      image: "/placeholder.svg",
+      image: diningTableImage,
       rating: 5,
       reviews: 95,
       isNew: true
@@ -36,7 +44,7 @@ const ProductGrid = () => {
       name: "Dulap Dormitor cu Oglinzi", 
       price: 3299,
       originalPrice: 3799,
-      image: "/placeholder.svg",
+      image: wardrobeImage,
       rating: 4,
       reviews: 67,
       isOnSale: true
@@ -45,7 +53,7 @@ const ProductGrid = () => {
       id: "4",
       name: "Set Fotolii Living x2",
       price: 2399,
-      image: "/placeholder.svg", 
+      image: armchairsImage, 
       rating: 4,
       reviews: 45,
       isNew: true
@@ -55,7 +63,7 @@ const ProductGrid = () => {
       name: "Bibliotecă Modulară",
       price: 1699,
       originalPrice: 1999,
-      image: "/placeholder.svg",
+      image: bookshelfImage,
       rating: 4,
       reviews: 89,
       isOnSale: true
@@ -64,7 +72,7 @@ const ProductGrid = () => {
       id: "6",
       name: "Saltea Memory Foam",
       price: 1299,
-      image: "/placeholder.svg",
+      image: mattressImage,
       rating: 4, 
       reviews: 34
     }
