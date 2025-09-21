@@ -75,14 +75,11 @@ const ProductGrid = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-luxury-cream/30 to-transparent"></div>
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <div className="inline-block px-4 py-2 bg-luxury-gold/10 rounded-full text-luxury-gold text-sm font-medium mb-6 border border-luxury-gold/20">
-            ✨ Colecția Premium
-          </div>
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6 font-playfair">
-            Mobilier de Lux
+          <h2 className="text-3xl lg:text-4xl font-bold mb-6 font-playfair">
+            Produse Populare
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-inter leading-relaxed">
-            Descoperă cele mai rafinate piese de mobilier, create cu atenție la detalii și materiale de cea mai înaltă calitate
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-inter leading-relaxed">
+            Cele mai apreciate piese de mobilier de către clienții noștri
           </p>
         </div>
         
@@ -95,9 +92,9 @@ const ProductGrid = () => {
         <div className="text-center mt-16">
           <Button 
             onClick={handleViewAllProducts}
-            className="bg-luxury-gradient text-luxury-dark px-10 py-4 h-14 text-lg font-semibold hover:opacity-90 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105"
+            className="bg-luxury-gradient text-luxury-dark px-8 py-3 h-12 text-base font-semibold hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
           >
-            Vezi Toată Colecția Premium
+            Vezi Toate Produsele
           </Button>
         </div>
       </div>

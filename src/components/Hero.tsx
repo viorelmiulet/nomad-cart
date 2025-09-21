@@ -34,19 +34,15 @@ const Hero = () => {
       <div className="container mx-auto px-4 py-20 lg:py-32 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="text-luxury-cream">
-            <div className="inline-block px-6 py-3 bg-glass-gradient backdrop-blur-lg rounded-full text-luxury-gold text-sm font-medium mb-6 border border-white/20 shadow-xl">
-              ✨ Colecție Exclusivă 2024
-            </div>
-            <h1 className="text-5xl lg:text-7xl font-bold leading-tight mb-8 font-playfair">
-              Mobilierul 
+            <h1 className="text-4xl lg:text-6xl font-bold leading-tight mb-8 font-playfair">
+              Mii de piese de mobilier
               <span className="block bg-luxury-gradient bg-clip-text text-transparent">
-                de lux
+                cu livrare gratuită
               </span>
-              <span className="text-luxury-cream">pentru casa ta</span>
             </h1>
-            <p className="text-xl text-luxury-cream/90 mb-10 leading-relaxed font-inter max-w-lg">
-              Descoperă colecția noastră exclusivă de mobilier de lux. 
-              Artizanat de excepție, materiale premium și design inconfundabil.
+            <p className="text-xl text-luxury-cream/90 mb-10 leading-relaxed font-inter max-w-xl">
+              Descoperă colecția noastră vastă de mobilier pentru toate camerele din casă. 
+              Calitate premium, prețuri accesibile și livrare gratuită.
             </p>
             <div className="flex flex-col sm:flex-row gap-6">
               <Button 
@@ -54,7 +50,7 @@ const Hero = () => {
                 onClick={handleExploreCollection}
                 className="bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/10 text-luxury-gold font-semibold px-8 py-4 h-14 text-lg transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-luxury-gold/20 group relative overflow-hidden"
               >
-                <span className="relative z-10">Explorează Colecția</span>
+                <span className="relative z-10">Vezi Mobilierul</span>
                 <ArrowRight className="ml-2 h-5 w-5 relative z-10 group-hover:translate-x-1 transition-transform" />
                 <div className="absolute inset-0 bg-luxury-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
               </Button>
@@ -64,7 +60,7 @@ const Hero = () => {
                 onClick={handleScheduleConsultation}
                 className="border-2 border-white/30 bg-glass-gradient backdrop-blur-lg text-white hover:bg-white/20 hover:border-luxury-gold/50 transition-all duration-300 px-8 py-4 h-14 text-lg font-semibold shadow-xl"
               >
-                Programează Consultanță
+                Consultanță Gratuită
               </Button>
             </div>
           </div>

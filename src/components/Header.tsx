@@ -33,9 +33,17 @@ const Header = () => {
         </div>
         
         
-        <nav className="hidden md:flex items-center space-x-8 text-sm font-medium font-inter relative z-10">
-          <button onClick={() => handleNavClick("Living")} className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
-            Living
+        <nav className="hidden lg:flex items-center space-x-8 text-sm font-medium font-inter relative z-10">
+          <button onClick={() => handleNavClick("Mobilier")} className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
+            Mobilier
+            <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
+          </button>
+          <button onClick={() => handleNavClick("Mobilier Tapitat")} className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
+            Mobilier Tapitat
+            <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
+          </button>
+          <button onClick={() => handleNavClick("Camera de zi")} className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
+            Camera de zi
             <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
           </button>
           <button onClick={() => handleNavClick("Dormitor")} className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
@@ -46,8 +54,16 @@ const Header = () => {
             Bucătărie
             <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
           </button>
-          <button onClick={() => handleNavClick("Colecții Premium")} className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
-            Colecții Premium
+          <button onClick={() => handleNavClick("Hol")} className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
+            Hol
+            <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
+          </button>
+          <button onClick={() => handleNavClick("Birou de acasă")} className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
+            Birou de acasă
+            <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
+          </button>
+          <button onClick={() => handleNavClick("Inspirații")} className="text-white/80 hover:text-luxury-gold transition-all duration-300 relative group">
+            Inspirații
             <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
           </button>
         </nav>
