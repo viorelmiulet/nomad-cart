@@ -8,19 +8,22 @@ const Header = () => {
       <div className="container flex h-16 items-center">
         <div className="mr-6 flex items-center space-x-2">
           <div className="h-8 w-8 rounded-lg bg-tech-gradient flex items-center justify-center">
-            <span className="text-white font-bold text-sm">M</span>
+            <span className="text-white font-bold text-sm">F</span>
           </div>
           <span className="text-xl font-bold bg-tech-gradient bg-clip-text text-transparent">
-            MobileMart
+            FurniStore
           </span>
         </div>
         
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
           <a href="#" className="text-foreground/60 hover:text-foreground transition-colors">
-            Telefoane
+            Living
           </a>
           <a href="#" className="text-foreground/60 hover:text-foreground transition-colors">
-            Accesorii
+            Dormitor
+          </a>
+          <a href="#" className="text-foreground/60 hover:text-foreground transition-colors">
+            Bucătărie
           </a>
           <a href="#" className="text-foreground/60 hover:text-foreground transition-colors">
             Oferte
@@ -35,7 +38,7 @@ const Header = () => {
             <div className="relative w-full">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Caută telefoane..."
+                placeholder="Caută mobilier..."
                 className="pl-8"
               />
             </div>

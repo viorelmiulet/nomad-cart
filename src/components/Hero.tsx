@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Smartphone } from "lucide-react";
+import { ArrowRight, Armchair } from "lucide-react";
 
 const Hero = () => {
   return (
@@ -8,14 +8,14 @@ const Hero = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="text-white">
             <h1 className="text-4xl lg:text-6xl font-bold leading-tight mb-6">
-              Cele mai noi
+              Mobilierul perfect
               <span className="block text-accent-cyan">
-                telefoane mobile
+                pentru casa ta
               </span>
             </h1>
             <p className="text-xl text-white/80 mb-8 leading-relaxed">
-              Descoperă gama completă de smartphone-uri cu cele mai avansate tehnologii. 
-              Prețuri competitive și livrare rapidă.
+              Descoperă colecția noastră de mobilier de calitate superioară. 
+              Design modern, materiale premium și prețuri accesibile.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
@@ -39,11 +39,11 @@ const Hero = () => {
             <div className="absolute inset-0 bg-white/10 rounded-3xl blur-3xl"></div>
             <div className="relative bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
               <div className="flex items-center justify-center h-64 lg:h-80">
-                <Smartphone className="h-32 w-32 lg:h-40 lg:w-40 text-white/80" />
+                <Armchair className="h-32 w-32 lg:h-40 lg:w-40 text-white/80" />
               </div>
               <div className="text-center mt-6">
-                <h3 className="text-2xl font-bold text-white mb-2">Latest Models</h3>
-                <p className="text-white/70">Disponible acum în stoc</p>
+                <h3 className="text-2xl font-bold text-white mb-2">Colecții Noi</h3>
+                <p className="text-white/70">Disponibile acum în showroom</p>
               </div>
             </div>
           </div>

@@ -4,9 +4,9 @@ const ProductGrid = () => {
   const products = [
     {
       id: "1",
-      name: "iPhone 15 Pro Max",
-      price: 6999,
-      originalPrice: 7499,
+      name: "Canapea Modernă 3 Locuri",
+      price: 2999,
+      originalPrice: 3499,
       image: "/placeholder.svg",
       rating: 5,
       reviews: 128,
@@ -15,8 +15,8 @@ const ProductGrid = () => {
     },
     {
       id: "2", 
-      name: "Samsung Galaxy S24 Ultra",
-      price: 6299,
+      name: "Masă de Dining Extensibilă",
+      price: 1899,
       image: "/placeholder.svg",
       rating: 5,
       reviews: 95,
@@ -24,9 +24,9 @@ const ProductGrid = () => {
     },
     {
       id: "3",
-      name: "Google Pixel 8 Pro", 
-      price: 4499,
-      originalPrice: 4999,
+      name: "Dulap Dormitor cu Oglinzi", 
+      price: 3299,
+      originalPrice: 3799,
       image: "/placeholder.svg",
       rating: 4,
       reviews: 67,
@@ -34,8 +34,8 @@ const ProductGrid = () => {
     },
     {
       id: "4",
-      name: "OnePlus 12",
-      price: 3999,
+      name: "Set Fotolii Living x2",
+      price: 2399,
       image: "/placeholder.svg", 
       rating: 4,
       reviews: 45,
@@ -43,9 +43,9 @@ const ProductGrid = () => {
     },
     {
       id: "5",
-      name: "Xiaomi 14 Ultra",
-      price: 3599,
-      originalPrice: 3999,
+      name: "Bibliotecă Modulară",
+      price: 1699,
+      originalPrice: 1999,
       image: "/placeholder.svg",
       rating: 4,
       reviews: 89,
@@ -53,8 +53,8 @@ const ProductGrid = () => {
     },
     {
       id: "6",
-      name: "Nothing Phone 2",
-      price: 2899,
+      name: "Saltea Memory Foam",
+      price: 1299,
       image: "/placeholder.svg",
       rating: 4, 
       reviews: 34
@@ -66,10 +66,10 @@ const ProductGrid = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-            Telefoane populare
+            Mobilier popular
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Descoperă cele mai căutate modele de smartphone-uri cu specificații premium
+            Descoperă cele mai căutate piese de mobilier pentru casa ta
           </p>
         </div>
         
