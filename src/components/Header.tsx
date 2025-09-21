@@ -38,13 +38,13 @@ const Header = () => {
           <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg md:rounded-xl bg-glass-gradient backdrop-blur-lg flex items-center justify-center shadow-xl border border-white/20 animate-glass-float">
             <span className="text-luxury-gold font-bold text-base md:text-lg font-playfair drop-shadow-lg">F</span>
           </div>
-          <span className="text-xl md:text-2xl font-bold font-playfair text-luxury-gold drop-shadow-lg">
+          <span className="text-2xl md:text-3xl font-bold font-playfair text-luxury-gold drop-shadow-lg">
             FurniLux
           </span>
         </button>
         
         
-        <nav className="hidden md:flex items-center space-x-4 lg:space-x-8 text-xs lg:text-sm font-medium font-inter relative z-10 mx-4">
+        <nav className="hidden md:flex items-center space-x-4 lg:space-x-8 text-sm lg:text-base font-medium font-inter relative z-10 mx-4">
           <button onClick={() => handleNavClick("Mobilier")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
             Mobilier
             <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
