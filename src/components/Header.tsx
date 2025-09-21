@@ -4,7 +4,7 @@ import CartDrawer from "./CartDrawer";
 import SearchDialog from "./SearchDialog";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-import logoFurniLux from "@/assets/logo-furniLux-styled.png";
+import logoFurniLux from "@/assets/logo-furniLux-glass.png";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -36,11 +36,14 @@ const Header = () => {
           onClick={handleHomeClick}
           className="flex items-center space-x-2 md:space-x-3 relative z-10 hover:scale-105 transition-transform duration-200"
         >
-          <img 
-            src={logoFurniLux} 
-            alt="FurniLux Logo" 
-            className="h-10 w-auto md:h-12 drop-shadow-xl transition-transform duration-300 hover:scale-110"
-          />
+          <div className="relative bg-glass-gradient backdrop-blur-xl border border-white/20 rounded-xl p-2 shadow-xl animate-glass-float">
+            <img 
+              src={logoFurniLux} 
+              alt="FurniLux Logo" 
+              className="h-8 w-auto md:h-10 drop-shadow-xl transition-transform duration-300 hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-xl pointer-events-none"></div>
+          </div>
         </button>
         
         
