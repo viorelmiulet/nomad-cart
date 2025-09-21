@@ -74,6 +74,17 @@ export default {
         "hero-gradient": "var(--hero-gradient)", 
         "card-gradient": "var(--card-gradient)",
         "accent-gradient": "var(--accent-gradient)",
+        "glass-gradient": "var(--glass-gradient)",
+        "liquid-gradient": "var(--liquid-gradient)",
+      },
+      backdropBlur: {
+        'xs': '2px',
+        'sm': '4px',
+        'md': '8px',
+        'lg': '16px',
+        'xl': '24px',
+        '2xl': '40px',
+        '3xl': '64px',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -120,6 +131,36 @@ export default {
         "shimmer": {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(100%)" }
+        },
+        "liquid-flow": {
+          "0%, 100%": { 
+            transform: "translateY(0px) rotate(0deg)",
+            borderRadius: "60% 40% 30% 70% / 60% 30% 70% 40%"
+          },
+          "50%": { 
+            transform: "translateY(-20px) rotate(180deg)",
+            borderRadius: "30% 60% 70% 40% / 50% 60% 30% 60%"
+          }
+        },
+        "glass-float": {
+          "0%, 100%": { 
+            transform: "translateY(0px) scale(1)",
+            opacity: "0.7"
+          },
+          "50%": { 
+            transform: "translateY(-10px) scale(1.05)",
+            opacity: "1"
+          }
+        },
+        "ripple": {
+          "0%": {
+            transform: "scale(0)",
+            opacity: "1"
+          },
+          "100%": {
+            transform: "scale(4)",
+            opacity: "0"
+          }
         }
       },
       animation: {
@@ -128,6 +169,9 @@ export default {
         "fade-in": "fade-in 0.3s ease-out",
         "scale-in": "scale-in 0.2s ease-out",
         "shimmer": "shimmer 2s ease-in-out infinite",
+        "liquid-flow": "liquid-flow 8s ease-in-out infinite",
+        "glass-float": "glass-float 6s ease-in-out infinite",
+        "ripple": "ripple 0.6s linear",
       },
     },
   },

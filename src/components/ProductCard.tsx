@@ -26,22 +26,23 @@ const ProductCard = ({
   isOnSale 
 }: ProductCardProps) => {
   return (
-    <Card className="group overflow-hidden border-0 bg-card-gradient shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-[1.02] rounded-2xl">
-      <div className="relative overflow-hidden rounded-t-2xl">
+    <Card className="group overflow-hidden border-0 bg-glass-gradient backdrop-blur-xl shadow-2xl hover:shadow-luxury-gold/20 transition-all duration-500 transform hover:-translate-y-3 hover:scale-[1.02] rounded-2xl border border-white/10 relative">
+      <div className="absolute inset-0 bg-liquid-gradient opacity-20 group-hover:opacity-30 transition-opacity duration-500 rounded-2xl"></div>
+      <div className="relative overflow-hidden rounded-t-2xl z-10">
         <img 
           src={image} 
           alt={name}
           className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
         />
         
-        <div className="absolute top-4 left-4 flex gap-2">
+        <div className="absolute top-4 left-4 flex gap-2 z-20">
           {isNew && (
-            <Badge className="bg-luxury-gradient text-luxury-dark border-0 font-semibold px-3 py-1">
+            <Badge className="bg-glass-gradient backdrop-blur-lg text-luxury-gold border border-white/20 font-semibold px-3 py-1 shadow-lg">
               Nou
             </Badge>
           )}
           {isOnSale && (
-            <Badge className="bg-luxury-burgundy text-luxury-cream border-0 font-semibold px-3 py-1">
+            <Badge className="bg-luxury-burgundy/80 backdrop-blur-lg text-luxury-cream border border-white/20 font-semibold px-3 py-1 shadow-lg">
               Ofertă Exclusivă
             </Badge>
           )}
@@ -50,13 +51,16 @@ const ProductCard = ({
         <Button
           size="icon"
           variant="secondary"
-          className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-luxury-cream/90 hover:bg-luxury-gold hover:text-luxury-dark"
+          className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/20 z-20 shadow-lg"
         >
-          <Heart className="h-4 w-4" />
+          <Heart className="h-4 w-4 text-luxury-gold" />
         </Button>
+        
+        {/* Glass reflection */}
+        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       </div>
       
-      <CardContent className="p-8">
+      <CardContent className="p-8 relative z-10 bg-glass-gradient backdrop-blur-sm">
         <h3 className="font-semibold text-xl mb-3 group-hover:text-luxury-gold transition-colors font-playfair">
           {name}
         </h3>
@@ -88,9 +92,12 @@ const ProductCard = ({
           </div>
         </div>
         
-        <Button className="w-full bg-luxury-gradient hover:opacity-90 transition-all duration-300 text-luxury-dark border-0 font-semibold py-3 h-12 text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02]">
-          <ShoppingCart className="mr-2 h-5 w-5" />
-          Adaugă în Coș
+        <Button className="w-full bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/10 transition-all duration-300 text-luxury-gold font-semibold py-3 h-12 text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] group relative overflow-hidden">
+          <span className="relative z-10 flex items-center">
+            <ShoppingCart className="mr-2 h-5 w-5" />
+            Adaugă în Coș
+          </span>
+          <div className="absolute inset-0 bg-luxury-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
         </Button>
       </CardContent>
     </Card>
