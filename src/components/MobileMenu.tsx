@@ -15,13 +15,14 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
 
   const handleNavClick = (section: string) => {
     const routes: { [key: string]: string } = {
-      "Mobilier": "/mobilier",
+      "Acasă": "/",
       "Mobilier Tapitat": "/mobilier-tapitat", 
       "Camera de zi": "/camera-de-zi",
       "Dormitor": "/dormitor",
       "Bucătărie": "/bucatarie",
       "Hol": "/hol",
-      "Inspirații": "/inspiratii"
+      "Inspirații": "/inspiratii",
+      "Blog": "/blog"
     };
     
     const route = routes[section];
@@ -34,13 +35,14 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
   };
 
   const menuItems = [
-    "Mobilier",
+    "Acasă",
     "Mobilier Tapitat", 
     "Camera de zi",
     "Dormitor",
     "Bucătărie",
     "Hol",
-    "Inspirații"
+    "Inspirații",
+    "Blog"
   ];
 
   return (
