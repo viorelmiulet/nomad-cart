@@ -367,19 +367,6 @@ const BlogPage = () => {
             ))}
           </div>
           
-          <div className="text-center mt-16">
-            <Button
-              onClick={() => {
-                toast({
-                  title: "Mai multe articole",
-                  description: "Noi articole vor fi adăugate în curând!",
-                });
-              }}
-              className="bg-luxury-gradient text-luxury-dark px-8 py-3 h-12 text-base font-semibold hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
-            >
-              Vezi Mai Multe Articole
-            </Button>
-          </div>
         </div>
       </main>
       
