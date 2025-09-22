@@ -21,6 +21,9 @@ const Hero = () => {
       title: "Programare Consultanță",
       description: "Un consultant de design te va contacta în cel mai scurt timp.",
     });
+    setTimeout(() => {
+      window.location.href = "/contact";
+    }, 1000);
   };
 
   return (

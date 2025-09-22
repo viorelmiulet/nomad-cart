@@ -1,7 +1,8 @@
-import { ShoppingCart, Search, Menu } from "lucide-react";
+import { ShoppingCart, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CartDrawer from "./CartDrawer";
 import SearchDialog from "./SearchDialog";
+import MobileMenu from "./MobileMenu";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import logoFurniLux from "@/assets/logo-furniLux-glass.png";
@@ -16,12 +17,6 @@ const Header = () => {
     });
   };
 
-  const handleMobileMenu = () => {
-    toast({
-      title: "Meniu mobil",
-      description: "Meniul mobil se va deschide în curând.",
-    });
-  };
 
   const handleHomeClick = () => {
     navigate("/");
@@ -83,14 +78,7 @@ const Header = () => {
           
           <CartDrawer />
           
-          <Button 
-            size="icon" 
-            variant="ghost" 
-            className="md:hidden h-10 w-10 md:h-12 md:w-12 bg-glass-gradient backdrop-blur-lg border border-white/20 rounded-lg md:rounded-xl"
-            onClick={handleMobileMenu}
-          >
-            <Menu className="h-4 w-4 md:h-5 md:w-5 text-white/80" />
-          </Button>
+          <MobileMenu onNavClick={handleNavClick} />
         </div>
       </div>
     </header>

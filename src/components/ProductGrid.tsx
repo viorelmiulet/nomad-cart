@@ -1,6 +1,7 @@
 import ProductCard from "./ProductCard";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 // Import product images
 import sofaImage from "@/assets/product-sofa-modern.jpg";
@@ -11,11 +12,16 @@ import bookshelfImage from "@/assets/product-bookshelf.jpg";
 import mattressImage from "@/assets/product-mattress.jpg";
 
 const ProductGrid = () => {
+  const navigate = useNavigate();
+  
   const handleViewAllProducts = () => {
     toast({
       title: "Toate Produsele",
       description: "Vei fi redirecționat către pagina cu toate produsele premium.",
     });
+    setTimeout(() => {
+      navigate("/products");
+    }, 1000);
   };
 
   const products = [
