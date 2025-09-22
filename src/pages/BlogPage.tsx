@@ -161,6 +161,102 @@ const BlogPage = () => {
       category: "Familie",
       likes: 278,
       views: 3890
+    },
+    {
+      id: 13,
+      title: "Mobilierul din Lemn Masiv: Alegerea Românilor în 2025",
+      excerpt: "Lemnul masiv continuă să domine preferințele românilor în 2025, îmbinând tradiția cu inovația. De la stejar maramureșean la fag carpatic, descoperă de ce mobilierul din lemn solid este investiția perfectă: durabilitate de generații, frumusețe naturală și sustenabilitate. Explorează beneficiile producției locale și impactul asupra economiei românești.",
+      author: "Maestru Dulgher Ioan Creț",
+      date: "18 Ianuarie 2025",
+      readTime: "8 min",
+      image: "/api/placeholder/600/400",
+      category: "Sustenabilitate",
+      likes: 342,
+      views: 4850
+    },
+    {
+      id: 14,
+      title: "8 Tendințe în Mobilierul din Lemn pentru 2025",
+      excerpt: "Anul 2025 aduce noi perspective asupra mobilierului din lemn: finisaje naturale mate, combinații de esențe, mobilier multifuncțional și design bioflic. Descoperă cum granulele naturale și tonurile calde ale lemnului creează conexiuni autentice cu natura în casa ta. De la live-edge la mobilier modular sustenabil.",
+      author: "Design Expert Maria Georgescu",
+      date: "12 Ianuarie 2025", 
+      readTime: "7 min",
+      image: "/api/placeholder/600/400",
+      category: "Tendințe 2025",
+      likes: 298,
+      views: 4120
+    },
+    {
+      id: 15,
+      title: "Sustenabilitatea în Design Interior: Viitorul Mobilierului",
+      excerpt: "Designul sustenabil nu mai este o tendință, ci o necesitate. Mobilierul eco-friendly din materiale reciclate, lemnul certificat FSC, finisajele naturale și producția locală redefinesc industria. Afla cum să creezi spații responsabile fără compromisuri de stil și de ce investiția în mobilier durabil protejează planeta și portofelul.",
+      author: "Eco-Designer Carmen Popescu",
+      date: "8 Ianuarie 2025",
+      readTime: "9 min",
+      image: "/api/placeholder/600/400",
+      category: "Eco-Design",
+      likes: 421,
+      views: 5230
+    },
+    {
+      id: 16,
+      title: "Confort, Versatilitate și Durabilitate: Tendințele Mobilierului 2025",
+      excerpt: "Revoluglia mobilierului 2025 se concentrează pe trei piloni: confortul maxim prin materiale premium, versatilitatea spațiilor multifuncționale și durabilitatea ca investiție pe termen lung. De la fotoliile ergonomice cu memorie foam la mesele extensibile pentru familiile moderne - mobilierul se adaptează stilului de viață dinamic.",
+      author: "Furniture Trends Analyst Alex Radu",
+      date: "5 Ianuarie 2025",
+      readTime: "10 min",
+      image: "/api/placeholder/600/400",
+      category: "Tendințe 2025",
+      likes: 356,
+      views: 4680
+    },
+    {
+      id: 17,
+      title: "Mobilier Meștesugit Românesc: Artă și Tradiție Bucovinană",
+      excerpt: "În inima Bucovinei, meșterii păstrează tradițiile seculare ale prelucrării lemnului masiv. Fiecare piesă poartă amprenta uniquă a artizanului - de la sculpturile tradiționale moldovenești la tehnicile de îmbinare fără cuie. Descoperă povestea mobilierului meștesugit care transformă lemnul în artă vie, dedicat celor care prețuiesc autenticitatea.",
+      author: "Maestru Artisan Vasile Munteanu",
+      date: "2 Ianuarie 2025",
+      readTime: "12 min",
+      image: "/api/placeholder/600/400",
+      category: "Tradiție",
+      likes: 467,
+      views: 5890
+    },
+    {
+      id: 18,
+      title: "Culori și Texturi 2025: Paleta Mobilierului Modern",
+      excerpt: "Anul 2025 introduce paleta 'Warm Minimalism': nuanțe de latte și caramel, verdeturi profunde de pădure și albastre ocean. Explorează cum aceste culori naturale se îmbină cu texturile organice - ratanul împletit manual, lemnul cu venele aparente și țesăturile din fibre naturale pentru un decor care respiră liniște și eleganță contemporană.",
+      author: "Color Specialist Diana Mihalache",
+      date: "28 Decembrie 2024",
+      readTime: "6 min",
+      image: "/api/placeholder/600/400",
+      category: "Design",
+      likes: 298,
+      views: 3940
+    },
+    {
+      id: 19,
+      title: "Investiția Inteligentă: De Ce Mobilierul de Calitate Se Plătește Singur",
+      excerpt: "Analiza economică demonstrează că mobilierul premium se amortizează în 5-7 ani față de alternativele ieftine care necesită înlocuire la 2-3 ani. Cost per zi de utilizare, menținerea valorii la revânzare, impactul asupra sănătății și satisfacția zilnică fac din mobilierul de calitate cea mai inteligentă investiție pentru casa ta.",
+      author: "Financial Advisor Bogdan Stoica",
+      date: "25 Decembrie 2024",
+      readTime: "8 min",
+      image: "/api/placeholder/600/400",
+      category: "Investiție",
+      likes: 234,
+      views: 3250
+    },
+    {
+      id: 20,
+      title: "Design Biofil și Conectivitatea cu Natura în Casă",
+      excerpt: "Designul biofil revolutionează spațiile interioare prin integrarea elementelor naturale: mobilier din lemn cu ecorcea păstrată, ghivece integrate în rafturi, ferestre panoramice și materiale organice. Studiile demonstrează că aceste elemente reduc stresul cu 15% și îmbunătățesc productivitatea. Creează sanctuarul tău natural urban.",
+      author: "Biophilic Designer Laura Nițu",
+      date: "22 Decembrie 2024",
+      readTime: "7 min",
+      image: "/api/placeholder/600/400",
+      category: "Wellness",
+      likes: 389,
+      views: 4720
     }
   ];
 
