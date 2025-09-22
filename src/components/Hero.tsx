@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import heroCollection from "@/assets/hero-collection.jpg";
+import heroCozyCpollection from "@/assets/hero-cozy-collection.jpg";
 
 const Hero = () => {
   const handleExploreCollection = () => {
@@ -73,7 +73,7 @@ const Hero = () => {
               <div className="absolute inset-0 bg-liquid-gradient opacity-20 rounded-3xl group-hover:opacity-30 transition-opacity duration-300"></div>
               <div className="flex items-center justify-center h-64 lg:h-80 relative z-10">
                 <img 
-                  src={heroCollection} 
+                  src={heroCozyCpollection} 
                   alt="Colecții Exclusive de mobilier luxury" 
                   className="w-full h-full object-cover rounded-2xl shadow-2xl"
                 />
