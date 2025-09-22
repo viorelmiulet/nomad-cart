@@ -62,7 +62,7 @@ const Hero = () => {
                 className="border-2 border-green-500/50 bg-glass-gradient backdrop-blur-lg text-white hover:bg-green-500/20 hover:border-green-400/70 transition-all duration-300 px-8 py-4 h-14 text-lg font-semibold shadow-xl"
               >
                 <MessageCircle className="mr-2 h-5 w-5" />
-                WhatsApp Contact
+                Contactează-ne pe WhatsApp
               </Button>
             </div>
           </div>
