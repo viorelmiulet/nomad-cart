@@ -24,7 +24,7 @@ const BlogPage = () => {
     {
       id: 1,
       title: "10 Tendințe în Design Interior pentru 2024",
-      excerpt: "Descoperă cele mai noi tendințe în amenajările interioare și cum să le integrezi în casa ta.",
+      excerpt: "De la culorile calde și naturale la texturile organice, descoperă cum să îți transformi casa cu cele mai noi tendințe: mobilier durabil din lemn masiv, accesorii handmade, spații multifuncționale și iluminat LED personalizabil. Află cum să creezi un echilibru perfect între confort modern și eleganță tradițională.",
       author: "Design Team FurniLux",
       date: "15 Martie 2024",
       readTime: "5 min",
@@ -36,7 +36,7 @@ const BlogPage = () => {
     {
       id: 2,
       title: "Cum să Alegi Mobilierul Perfect pentru Camera de Zi",
-      excerpt: "Ghid complet pentru alegerea mobilierului de living care să îți transforme casa într-un spațiu elegant și funcțional.",
+      excerpt: "Ghid pas cu pas pentru selectarea mobilierului de living: de la măsurarea corectă a spațiului și alegerea canapelei ideale, la combinarea meselor de cafea cu fotoliile și crearea unei zone de conversație perfecte. Includiu sfaturi despre culori, materiale și proporții pentru un living de vis.",
       author: "Alexandra Popescu",
       date: "12 Martie 2024", 
       readTime: "8 min",
@@ -48,7 +48,7 @@ const BlogPage = () => {
     {
       id: 3,
       title: "Dormitorul de Lux: Secretele unui Somn Odihnitor",
-      excerpt: "Învață cum să creezi un dormitor luxos care să îți ofere confortul și liniștea de care ai nevoie.",
+      excerpt: "Creează sanctuarul perfect pentru odihnă cu paturile noastre din lemn masiv, saltelele premium din spumă cu memorie și lenjeria din bumbac egyptian. Descoperă importanța culorilor calmante, a iluminatului indirect și a mobilierului ergonomic pentru cel mai bun somn din viața ta.",
       author: "Mihai Georgescu",
       date: "10 Martie 2024",
       readTime: "6 min", 
@@ -60,7 +60,7 @@ const BlogPage = () => {
     {
       id: 4,
       title: "Materialele Premium: Calitate și Durabilitate",
-      excerpt: "Tot ce trebuie să știi despre materialele de înaltă calitate folosite în mobilierul de lux.",
+      excerpt: "Explorează lumea materialelor de lux: lemnul de stejar american vârsta de 50+ ani, pielea italiană full-grain, marmura Carrara și țesăturile belgiene hand-woven. Afli cum să identifici calitatea adevărată și de ce investiția în materiale premium se reflectă în durata de viață de peste 20 de ani.",
       author: "Design Team FurniLux",
       date: "8 Martie 2024",
       readTime: "7 min",
@@ -72,7 +72,7 @@ const BlogPage = () => {
     {
       id: 5,
       title: "Bucătăria Modernă: Funcționalitate și Eleganță",
-      excerpt: "Cum să combini funcționalitatea cu designul elegant în bucătăria ta modernă.",
+      excerpt: "Designul bucătăriei moderne combină ergonomia cu estetica: blat-uri din cuarț, corpuri cu închidere soft-close, electrocasnice integrate și sisteme de organizare inteligente. Descoperă cum să maximizezi spațiul de depozitare și să creezi un triunghi de lucru eficient pentru gătitul zilnic.",
       author: "Elena Ionescu",
       date: "5 Martie 2024",
       readTime: "9 min",
@@ -84,7 +84,7 @@ const BlogPage = () => {
     {
       id: 6,
       title: "Iluminatul în Design Interior: Creează Atmosfera Perfectă",
-      excerpt: "Descoperă cum iluminatul poate transforma complet aspectul și atmosfera casei tale.",
+      excerpt: "Masterizează arta iluminatului cu combinații de lumină ambientală, task și accent. De la lustre statement și aplice decorative la benzi LED ascunse și lampade de podea reglabile - află cum să creezi scenic-uri diferite pentru fiecare moment al zilei cu sisteme smart controlabile prin telefon.",
       author: "Andrei Radu",
       date: "3 Martie 2024",
       readTime: "6 min",
@@ -92,6 +92,78 @@ const BlogPage = () => {
       category: "Iluminat",
       likes: 198,
       views: 2890
+    },
+    {
+      id: 7,
+      title: "Spațiile Mici: Trucuri pentru Maximizarea Funcționalității",
+      excerpt: "Transformă apartamentele mici în locuințe spațioase cu mobilier multifuncțional: canapele extensibile cu lăzi de depozitare, mese pliabile, dulap-uri suspendate și separatori transparenți. Descoperă cum oglinzile strategice și culorile deschise pot dubla senzația de spațiu.",
+      author: "Cristina Munteanu",
+      date: "28 Februarie 2024",
+      readTime: "7 min",
+      image: "/api/placeholder/600/400",
+      category: "Design",
+      likes: 221,
+      views: 3150
+    },
+    {
+      id: 8,
+      title: "Mobilierul Handmade: Artă și Tradiție în Casa Ta",
+      excerpt: "Povestea din spatele fiecărei piese handmade: de la meșterul care sculptează cu mâna fiecare detaliu la lemnul selectat special pentru venitura și rezistența sa. Afla despre tehnicile tradiționale de îmbinare, finisajele naturale și de ce fiecare piesă handmade este unică și de neuitat.",
+      author: "Master Craftsman Ioan",
+      date: "25 Februarie 2024",
+      readTime: "10 min",
+      image: "/api/placeholder/600/400",
+      category: "Craftsmanship",
+      likes: 312,
+      views: 4200
+    },
+    {
+      id: 9,
+      title: "Feng Shui și Mobilierul: Energia Pozitivă în Casa Ta",
+      excerpt: "Aplică principiile Feng Shui în amenajarea cu mobilier: poziționarea patului pentru somn liniștit, biroul orientat spre vest pentru productivitate, plantele în zona de est pentru sănătate și cristalele în colțul bogăției. Crează un flux energetic armonios în fiecare cameră.",
+      author: "Dr. Li Wei Chen",
+      date: "22 Februarie 2024",
+      readTime: "8 min",
+      image: "/api/placeholder/600/400",
+      category: "Lifestyle",
+      likes: 187,
+      views: 2650
+    },
+    {
+      id: 10,
+      title: "Investiția în Mobilier de Calitate: Ghid Financiar",
+      excerpt: "Analiza cost-beneficiu: cum mobilierul premium se amortizează în timp prin durabilitate, menținerea valorii și satisfacția zilnică. Compară costul pe an de utilizare dintre mobilierul de calitate și alternativele ieftine, plus sfaturi despre perioade promoționale și finanțare.",
+      author: "Economic Analyst Maria Pop",
+      date: "20 Februarie 2024",
+      readTime: "6 min",
+      image: "/api/placeholder/600/400",
+      category: "Investiție",
+      likes: 156,
+      views: 2240
+    },
+    {
+      id: 11,
+      title: "Tendințe Color în Mobilier: Paleete 2024",
+      excerpt: "Explorează paletele cromatice ale anului: earth tones cu accente de emerald green, warm neutrals cu touches de terracotta și classic navy combinat cu soft beige. Vezi cum să integrezi aceste culori în mobilierul existent și ce accesorii să alegi pentru refresh-ul perfect.",
+      author: "Color Expert Diana Vlad",
+      date: "18 Februarie 2024",
+      readTime: "5 min",
+      image: "/api/placeholder/600/400",
+      category: "Design",
+      likes: 203,
+      views: 2980
+    },
+    {
+      id: 12,
+      title: "Mobilierul pentru Copii: Siguranță și Creativitate",
+      excerpt: "Ghid complet pentru mobilierul copiilor: de la paturile cu bariere de siguranță și colțuri rotunjite la sistemele modulare care cresc odată cu copilul. Materiale non-toxice, vopsele pe bază de apă și design-uri care stimulează creativitatea și independența celor mici.",
+      author: "Pediatru Designer Ana Stoica",
+      date: "15 Februarie 2024",
+      readTime: "9 min",
+      image: "/api/placeholder/600/400",
+      category: "Familie",
+      likes: 278,
+      views: 3890
     }
   ];
 
