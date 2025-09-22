@@ -11,10 +11,25 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleNavClick = (section: string) => {
-    toast({
-      title: `Navigare către ${section}`,
-      description: `Secțiunea ${section} se va deschide în curând.`,
-    });
+    const routes: { [key: string]: string } = {
+      "Mobilier": "/mobilier",
+      "Mobilier Tapitat": "/mobilier-tapitat", 
+      "Camera de zi": "/camera-de-zi",
+      "Dormitor": "/dormitor",
+      "Bucătărie": "/bucatarie",
+      "Hol": "/hol",
+      "Inspirații": "/inspiratii"
+    };
+    
+    const route = routes[section];
+    if (route) {
+      navigate(route);
+    } else {
+      toast({
+        title: `Navigare către ${section}`,
+        description: `Secțiunea ${section} se va deschide în curând.`,
+      });
+    }
   };
 
 

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface MobileMenuProps {
   onNavClick: (section: string) => void;
@@ -10,9 +11,25 @@ interface MobileMenuProps {
 
 const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleNavClick = (section: string) => {
-    onNavClick(section);
+    const routes: { [key: string]: string } = {
+      "Mobilier": "/mobilier",
+      "Mobilier Tapitat": "/mobilier-tapitat", 
+      "Camera de zi": "/camera-de-zi",
+      "Dormitor": "/dormitor",
+      "Bucătărie": "/bucatarie",
+      "Hol": "/hol",
+      "Inspirații": "/inspiratii"
+    };
+    
+    const route = routes[section];
+    if (route) {
+      navigate(route);
+    } else {
+      onNavClick(section);
+    }
     setIsOpen(false);
   };
 
@@ -65,10 +82,7 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
           <div className="pt-8 space-y-4">
             <button
               onClick={() => {
-                toast({
-                  title: "Contact",
-                  description: "Suntem disponibili pentru tine 24/7!",
-                });
+                navigate("/contact");
                 setIsOpen(false);
               }}
               className="w-full p-4 bg-luxury-gradient text-luxury-dark rounded-xl transition-all duration-300 font-semibold shadow-xl hover:opacity-90 transform hover:scale-[1.02]"
