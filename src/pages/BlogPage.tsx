@@ -13,11 +13,8 @@ const BlogPage = () => {
     navigate("/");
   };
 
-  const handlePostClick = (title: string) => {
-    toast({
-      title: "Articol selectat",
-      description: `Citești: ${title}`,
-    });
+  const handlePostClick = (postId: number) => {
+    navigate(`/blog/${postId}`);
   };
 
   const blogPosts = [
@@ -203,7 +200,7 @@ const BlogPage = () => {
               <Card 
                 key={post.id}
                 className="bg-glass-gradient backdrop-blur-xl border border-white/20 shadow-2xl hover:shadow-luxury-gold/20 transition-all duration-500 transform hover:-translate-y-2 cursor-pointer group"
-                onClick={() => handlePostClick(post.title)}
+                onClick={() => handlePostClick(post.id)}
               >
                 <div className="relative overflow-hidden rounded-t-lg">
                   <div className="w-full h-48 bg-gradient-to-br from-luxury-gold/20 to-luxury-burgundy/20 flex items-center justify-center">
