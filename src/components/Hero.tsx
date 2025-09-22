@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Armchair } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import heroCollection from "@/assets/hero-collection.jpg";
 
 const Hero = () => {
   const handleExploreCollection = () => {
@@ -71,7 +72,11 @@ const Hero = () => {
             <div className="relative bg-glass-gradient backdrop-blur-xl rounded-3xl p-8 border border-white/20 shadow-2xl group hover:shadow-luxury-gold/20 transition-all duration-500">
               <div className="absolute inset-0 bg-liquid-gradient opacity-20 rounded-3xl group-hover:opacity-30 transition-opacity duration-300"></div>
               <div className="flex items-center justify-center h-64 lg:h-80 relative z-10">
-                <Armchair className="h-32 w-32 lg:h-40 lg:w-40 text-luxury-gold drop-shadow-2xl animate-glass-float" />
+                <img 
+                  src={heroCollection} 
+                  alt="Colecții Exclusive de mobilier luxury" 
+                  className="w-full h-full object-cover rounded-2xl shadow-2xl"
+                />
               </div>
               <div className="text-center mt-6 relative z-10">
                 <h3 className="text-2xl font-bold text-luxury-cream mb-2 font-playfair drop-shadow-lg">Colecții Exclusive</h3>
