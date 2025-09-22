@@ -16,9 +16,9 @@ const BlogPostPage = () => {
   const blogPosts = [
     {
       id: 1,
-      title: "10 Tendințe în Design Interior pentru 2024",
-      content: `<h2>Culorile Anului 2024</h2>
-      <p>Anul 2024 aduce o paletă cromatică bogată și diversă, dominată de tonuri calde și naturale. De la earth tones sofisticate la accentele vibrante de emerald green, designerii se îndreaptă către culori care reflectă o conexiune profundă cu natura.</p>
+      title: "10 Tendințe în Design Interior pentru 2025",
+      content: `<h2>Culorile Anului 2025</h2>
+      <p>Anul 2025 aduce o paletă cromatică bogată și diversă, dominată de tonuri calde și naturale. De la earth tones sofisticate la accentele vibrante de emerald green, designerii se îndreaptă către culori care reflectă o conexiune profundă cu natura.</p>
       
       <h3>1. Warm Neutrals cu Accente Naturale</h3>
       <p>Baza designului modern o constituie acum warm neutrals - beige-uri calde, gri-uri soft și crem-uri sofisticate. Acestea sunt complementate de accente în terracotta, sage green și deep navy, creând o atmosferă echilibrată și relaxantă.</p>
@@ -35,7 +35,7 @@ const BlogPostPage = () => {
       <h3>5. Iluminat LED Personalizabil</h3>
       <p>Tehnologia LED permite acum controlul complet asupra atmosferei. Sistemele smart de iluminat cu temperatura culorii reglabilă și intensitate variabilă se integrează perfect în designul modern, oferind scenarii diferite pentru fiecare moment al zilei.</p>`,
       author: "Design Team FurniLux",
-      date: "15 Martie 2024",
+      date: "15 Martie 2025",
       readTime: "5 min",
       category: "Design",
       likes: 245,
@@ -62,7 +62,7 @@ const BlogPostPage = () => {
       <h3>Pas 5: Sistemul de Stocare</h3>
       <p>Un living organizat necesită spațiu de depozitare inteligent. Biblioteca modulară, comodele suspendate și mobilierul media integrat mențin ordinea fără să sacrifice stilul. Optați pentru piese cu uși pentru a ascunde obiectele mai puțin estetice.</p>`,
       author: "Alexandra Popescu",
-      date: "12 Martie 2024",
+      date: "12 Martie 2025",
       readTime: "8 min",
       category: "Mobilier",
       likes: 189,
