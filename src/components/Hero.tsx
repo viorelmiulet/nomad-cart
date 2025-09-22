@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import heroCozyCpollection from "@/assets/hero-cozy-collection.jpg";
 
@@ -16,14 +16,11 @@ const Hero = () => {
     }
   };
 
-  const handleScheduleConsultation = () => {
-    toast({
-      title: "Programare Consultanță",
-      description: "Un consultant de design te va contacta în cel mai scurt timp.",
-    });
-    setTimeout(() => {
-      window.location.href = "/contact";
-    }, 1000);
+  const handleWhatsAppContact = () => {
+    const phoneNumber = "0758433114";
+    const message = "Salut! Sunt interesat de mobilierul dvs. premium.";
+    const whatsappUrl = `https://wa.me/4${phoneNumber.substring(1)}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   return (
@@ -61,10 +58,11 @@ const Hero = () => {
               <Button 
                 size="lg" 
                 variant="outline"
-                onClick={handleScheduleConsultation}
-                className="border-2 border-white/30 bg-glass-gradient backdrop-blur-lg text-white hover:bg-white/20 hover:border-luxury-gold/50 transition-all duration-300 px-8 py-4 h-14 text-lg font-semibold shadow-xl"
+                onClick={handleWhatsAppContact}
+                className="border-2 border-green-500/50 bg-glass-gradient backdrop-blur-lg text-white hover:bg-green-500/20 hover:border-green-400/70 transition-all duration-300 px-8 py-4 h-14 text-lg font-semibold shadow-xl"
               >
-                Consultanță Gratuită
+                <MessageCircle className="mr-2 h-5 w-5" />
+                WhatsApp Contact
               </Button>
             </div>
           </div>
