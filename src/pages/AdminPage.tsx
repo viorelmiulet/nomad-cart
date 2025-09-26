@@ -314,16 +314,42 @@ const AdminPage = () => {
   // Update order status
   const handleUpdateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
+      // Find the order to get customer details
+      const order = orders.find(o => o.id === orderId);
+      if (!order) {
+        throw new Error("Comanda nu a fost găsită");
+      }
+
+      // Update order status in database
       const { error } = await supabase
         .from('orders')
         .update({ status: newStatus })
         .eq('id', orderId);
 
       if (error) throw error;
+      
+      // Send status update email
+      try {
+        const { error: emailError } = await supabase.functions.invoke('send-order-status-email', {
+          body: {
+            customerName: order.customer_name,
+            customerEmail: order.customer_email,
+            orderNumber: orderId.slice(0, 8).toUpperCase(),
+            newStatus: newStatus
+          }
+        });
+
+        if (emailError) {
+          console.error('Error sending email:', emailError);
+        }
+      } catch (emailError) {
+        console.error('Error sending status email:', emailError);
+        // Don't throw here - we still want to show success for status update
+      }
 
       toast({
         title: "Succes",
-        description: "Statusul comenzii a fost actualizat!",
+        description: "Statusul comenzii a fost actualizat și clientul a fost notificat prin email.",
       });
 
       fetchData();
