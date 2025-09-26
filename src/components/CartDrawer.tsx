@@ -4,10 +4,12 @@ import { ShoppingCart, Plus, Minus, Trash2, CreditCard, Banknote } from "lucide-
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CartDrawer = () => {
   const { items, updateQuantity, removeItem, getTotalItems, getTotalPrice, clearCart, isOpen, setIsOpen } = useCart();
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash'>('card');
+  const navigate = useNavigate();
 
   const getDiscountedPrice = () => {
     const total = getTotalPrice();
@@ -34,14 +36,8 @@ const CartDrawer = () => {
       return;
     }
     
-    const finalPrice = getDiscountedPrice();
-    const discount = getDiscount();
-    
-    toast({
-      title: "Redirecționare către checkout",
-      description: `Total final: ${finalPrice.toLocaleString('ro-RO')} Lei${discount > 0 ? ` (discount ${discount.toLocaleString('ro-RO')} Lei)` : ''} pentru ${getTotalItems()} produse.`,
-    });
     setIsOpen(false);
+    navigate('/checkout');
   };
 
   return (
