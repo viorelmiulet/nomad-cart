@@ -391,6 +391,43 @@ const AdminPage = () => {
     }
   };
 
+  // Delete order
+  const handleDeleteOrder = async (orderId: string) => {
+    if (!confirm("Ești sigur că vrei să ștergi această comandă? Această acțiune nu poate fi anulată.")) return;
+
+    try {
+      // First delete order items
+      const { error: orderItemsError } = await supabase
+        .from('order_items')
+        .delete()
+        .eq('order_id', orderId);
+
+      if (orderItemsError) throw orderItemsError;
+
+      // Then delete the order
+      const { error } = await supabase
+        .from('orders')
+        .delete()
+        .eq('id', orderId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Succes",
+        description: "Comanda a fost ștearsă cu succes!",
+      });
+
+      fetchData();
+    } catch (error) {
+      console.error('Error deleting order:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-a putut șterge comanda.",
+        variant: "destructive",
+      });
+    }
+  };
+
   // View order details
   const handleViewOrderDetails = async (order: Order) => {
     try {
@@ -731,13 +768,23 @@ const AdminPage = () => {
                         </TableCell>
                         <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
                         <TableCell>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => handleViewOrderDetails(order)}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
+                          <div className="flex gap-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => handleViewOrderDetails(order)}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => handleDeleteOrder(order.id)}
+                              className="text-destructive hover:text-destructive"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
