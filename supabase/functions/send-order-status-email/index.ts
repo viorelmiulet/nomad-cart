@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
 const resendApiKey = Deno.env.get("RESEND_API_KEY");
+const resendFrom = Deno.env.get("RESEND_FROM") || "FurniLux <onboarding@resend.dev>";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -47,7 +48,7 @@ const handler = async (req: Request): Promise<Response> => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: "FurniLux <mvaperfectbusiness@gmail.com>",
+        from: resendFrom,
         to: [customerEmail],
         subject: `Actualizare comandă #${orderNumber}`,
         html: `
