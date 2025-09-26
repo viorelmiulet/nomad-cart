@@ -13,7 +13,6 @@ const Header = () => {
   const handleNavClick = (section: string) => {
     const routes: { [key: string]: string } = {
       "Acasă": "/",
-      "Mobilier Tapitat": "/mobilier-tapitat", 
       "Camera de zi": "/camera-de-zi",
       "Dormitor": "/dormitor",
       "Bucătărie": "/bucatarie",
@@ -61,10 +60,6 @@ const Header = () => {
         <nav className="hidden md:flex items-center space-x-4 lg:space-x-8 text-sm lg:text-base font-medium font-inter relative z-10 mx-4">
           <button onClick={() => handleNavClick("Acasă")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
             Acasă
-            <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-          </button>
-          <button onClick={() => handleNavClick("Mobilier Tapitat")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
-            Mobilier Tapitat
             <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
           </button>
           <button onClick={() => handleNavClick("Camera de zi")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
