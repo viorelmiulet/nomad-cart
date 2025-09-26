@@ -10,10 +10,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { BarChart3, Users, Package, ShoppingCart, Settings, Eye, Edit, Trash2, Plus, Image as ImageIcon } from "lucide-react";
+import { BarChart3, Users, Package, ShoppingCart, Settings, Eye, Edit, Trash2, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import ImageUploadZone from "@/components/ImageUploadZone";
+import ImageUpload from "@/components/ImageUpload";
 
 interface Category {
   id: string;
@@ -37,14 +37,6 @@ interface Product {
   };
 }
 
-interface ProductImage {
-  id: string;
-  image_url: string;
-  image_name: string;
-  display_order: number;
-  is_primary: boolean;
-}
-
 interface Order {
   id: string;
   customer_name: string;
@@ -55,6 +47,20 @@ interface Order {
   created_at: string;
 }
 
+interface ProductImage {
+  id: string;
+  image_url: string;
+  image_name: string;
+  display_order: number;
+  is_primary: boolean;
+}
+
+interface ImageFile {
+  file: File;
+  preview: string;
+  id: string;
+}
+
 const AdminPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -63,7 +69,8 @@ const AdminPage = () => {
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);
   const [isEditProductOpen, setIsEditProductOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [productImages, setProductImages] = useState<ProductImage[]>([]);
+  const [productImages, setProductImages] = useState<ImageFile[]>([]);
+  const [editProductImages, setEditProductImages] = useState<ImageFile[]>([]);
   const { toast } = useToast();
 
   // Form states for new product
@@ -131,10 +138,45 @@ const AdminPage = () => {
     fetchData();
   }, []);
 
+  // Upload images to Supabase Storage
+  const uploadImages = async (images: ImageFile[], productId: string) => {
+    const uploadPromises = images.map(async (imageFile, index) => {
+      const fileExt = imageFile.file.name.split('.').pop();
+      const fileName = `${productId}/${Date.now()}-${index}.${fileExt}`;
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(fileName, imageFile.file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: urlData } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(fileName);
+
+      // Save image record to database
+      const { error: dbError } = await supabase
+        .from('product_images')
+        .insert({
+          product_id: productId,
+          image_url: urlData.publicUrl,
+          image_name: imageFile.file.name,
+          display_order: index,
+          is_primary: index === 0
+        });
+
+      if (dbError) throw dbError;
+      
+      return urlData.publicUrl;
+    });
+
+    return Promise.all(uploadPromises);
+  };
+
   // Add new product
   const handleAddProduct = async () => {
     try {
-      const { data: productData, error } = await supabase
+      const { data: productData, error: productError } = await supabase
         .from('products')
         .insert([{
           name: newProduct.name,
@@ -147,30 +189,16 @@ const AdminPage = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (productError) throw productError;
 
-      // Save product images if any
+      // Upload images if any
       if (productImages.length > 0) {
-        const imageInserts = productImages.map((img, index) => ({
-          product_id: productData.id,
-          image_url: img.image_url,
-          image_name: img.image_name,
-          display_order: index,
-          is_primary: index === 0,
-        }));
-
-        const { error: imageError } = await supabase
-          .from('product_images')
-          .insert(imageInserts);
-
-        if (imageError) {
-          console.error('Error saving product images:', imageError);
-        }
+        await uploadImages(productImages, productData.id);
       }
 
       toast({
         title: "Succes",
-        description: "Produsul a fost adăugat cu succes!",
+        description: `Produsul a fost adăugat cu succes${productImages.length > 0 ? ` cu ${productImages.length} imagini` : ''}!`,
       });
 
       setIsAddProductOpen(false);
@@ -213,13 +241,19 @@ const AdminPage = () => {
 
       if (error) throw error;
 
+      // Upload new images if any
+      if (editProductImages.length > 0) {
+        await uploadImages(editProductImages, editingProduct.id);
+      }
+
       toast({
         title: "Succes",
-        description: "Produsul a fost actualizat cu succes!",
+        description: `Produsul a fost actualizat cu succes${editProductImages.length > 0 ? ` cu ${editProductImages.length} imagini noi` : ''}!`,
       });
 
       setIsEditProductOpen(false);
       setEditingProduct(null);
+      setEditProductImages([]);
       fetchData();
     } catch (error) {
       console.error('Error updating product:', error);
@@ -236,6 +270,24 @@ const AdminPage = () => {
     if (!confirm("Ești sigur că vrei să ștergi acest produs?")) return;
 
     try {
+      // First delete associated images from storage
+      const { data: imageData } = await supabase
+        .from('product_images')
+        .select('image_url')
+        .eq('product_id', productId);
+
+      if (imageData) {
+        const deletePromises = imageData.map(async (img) => {
+          const fileName = img.image_url.split('/').pop();
+          if (fileName) {
+            await supabase.storage
+              .from('product-images')
+              .remove([`${productId}/${fileName}`]);
+          }
+        });
+        await Promise.all(deletePromises);
+      }
+
       const { error } = await supabase
         .from('products')
         .delete()
@@ -377,7 +429,7 @@ const AdminPage = () => {
               <CardHeader>
                 <CardTitle>Gestionare Produse</CardTitle>
                 <CardDescription>
-                  Administrează inventarul de mobilier
+                  Administrează inventarul de mobilier cu imagini
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -393,78 +445,72 @@ const AdminPage = () => {
                       <DialogHeader>
                         <DialogTitle>Adaugă Produs Nou</DialogTitle>
                         <DialogDescription>
-                          Completează informațiile pentru noul produs.
+                          Completează informațiile pentru noul produs și adaugă până la 50 de imagini.
                         </DialogDescription>
                       </DialogHeader>
                       <div className="grid gap-6 py-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <div className="space-y-4">
-                            <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="name" className="text-right">Nume</Label>
-                              <Input
-                                id="name"
-                                value={newProduct.name}
-                                onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}
-                                className="col-span-3"
-                              />
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="description" className="text-right">Descriere</Label>
-                              <Input
-                                id="description"
-                                value={newProduct.description}
-                                onChange={(e) => setNewProduct({...newProduct, description: e.target.value})}
-                                className="col-span-3"
-                              />
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="price" className="text-right">Preț</Label>
-                              <Input
-                                id="price"
-                                type="number"
-                                value={newProduct.price}
-                                onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
-                                className="col-span-3"
-                              />
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="stock" className="text-right">Stoc</Label>
-                              <Input
-                                id="stock"
-                                type="number"
-                                value={newProduct.stock}
-                                onChange={(e) => setNewProduct({...newProduct, stock: e.target.value})}
-                                className="col-span-3"
-                              />
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="category" className="text-right">Categorie</Label>
-                              <Select value={newProduct.category_id} onValueChange={(value) => setNewProduct({...newProduct, category_id: value})}>
-                                <SelectTrigger className="col-span-3">
-                                  <SelectValue placeholder="Selectează categoria" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {categories.map((category) => (
-                                    <SelectItem key={category.id} value={category.id}>
-                                      {category.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          </div>
-                          
-                          <div className="space-y-4">
-                            <div className="flex items-center space-x-2 mb-4">
-                              <ImageIcon className="h-5 w-5" />
-                              <Label className="text-lg font-medium">Imagini Produs (până la 50)</Label>
-                            </div>
-                            <ImageUploadZone
-                              onImagesChange={setProductImages}
-                              initialImages={productImages}
-                              maxImages={50}
-                            />
-                          </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="name" className="text-right">Nume</Label>
+                          <Input
+                            id="name"
+                            value={newProduct.name}
+                            onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}
+                            className="col-span-3"
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="description" className="text-right">Descriere</Label>
+                          <Input
+                            id="description"
+                            value={newProduct.description}
+                            onChange={(e) => setNewProduct({...newProduct, description: e.target.value})}
+                            className="col-span-3"
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="price" className="text-right">Preț</Label>
+                          <Input
+                            id="price"
+                            type="number"
+                            value={newProduct.price}
+                            onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
+                            className="col-span-3"
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="stock" className="text-right">Stoc</Label>
+                          <Input
+                            id="stock"
+                            type="number"
+                            value={newProduct.stock}
+                            onChange={(e) => setNewProduct({...newProduct, stock: e.target.value})}
+                            className="col-span-3"
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="category" className="text-right">Categorie</Label>
+                          <Select value={newProduct.category_id} onValueChange={(value) => setNewProduct({...newProduct, category_id: value})}>
+                            <SelectTrigger className="col-span-3">
+                              <SelectValue placeholder="Selectează categoria" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {categories.map((category) => (
+                                <SelectItem key={category.id} value={category.id}>
+                                  {category.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        {/* Image Upload Section */}
+                        <div className="col-span-4">
+                          <Label className="text-sm font-medium mb-4 block">Imagini Produs</Label>
+                          <ImageUpload 
+                            images={productImages}
+                            onImagesChange={setProductImages}
+                            maxImages={50}
+                          />
                         </div>
                       </div>
                       <DialogFooter>
@@ -652,15 +698,15 @@ const AdminPage = () => {
 
         {/* Edit Product Dialog */}
         <Dialog open={isEditProductOpen} onOpenChange={setIsEditProductOpen}>
-          <DialogContent>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Editează Produs</DialogTitle>
               <DialogDescription>
-                Modifică informațiile produsului.
+                Modifică informațiile produsului și adaugă imagini noi.
               </DialogDescription>
             </DialogHeader>
             {editingProduct && (
-              <div className="grid gap-4 py-4">
+              <div className="grid gap-6 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="edit-name" className="text-right">Nume</Label>
                   <Input
@@ -731,6 +777,16 @@ const AdminPage = () => {
                       <SelectItem value="inactive">Inactiv</SelectItem>
                     </SelectContent>
                   </Select>
+                </div>
+                
+                {/* Image Upload Section for Edit */}
+                <div className="col-span-4">
+                  <Label className="text-sm font-medium mb-4 block">Adaugă Imagini Noi</Label>
+                  <ImageUpload 
+                    images={editProductImages}
+                    onImagesChange={setEditProductImages}
+                    maxImages={50}
+                  />
                 </div>
               </div>
             )}
