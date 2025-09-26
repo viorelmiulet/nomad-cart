@@ -10,9 +10,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { BarChart3, Users, Package, ShoppingCart, Settings, Eye, Edit, Trash2, Plus } from "lucide-react";
+import { BarChart3, Users, Package, ShoppingCart, Settings, Eye, Edit, Trash2, Plus, Image as ImageIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import ImageUploadZone from "@/components/ImageUploadZone";
 
 interface Category {
   id: string;
@@ -36,6 +37,14 @@ interface Product {
   };
 }
 
+interface ProductImage {
+  id: string;
+  image_url: string;
+  image_name: string;
+  display_order: number;
+  is_primary: boolean;
+}
+
 interface Order {
   id: string;
   customer_name: string;
@@ -54,6 +63,7 @@ const AdminPage = () => {
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);
   const [isEditProductOpen, setIsEditProductOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [productImages, setProductImages] = useState<ProductImage[]>([]);
   const { toast } = useToast();
 
   // Form states for new product
@@ -124,7 +134,7 @@ const AdminPage = () => {
   // Add new product
   const handleAddProduct = async () => {
     try {
-      const { error } = await supabase
+      const { data: productData, error } = await supabase
         .from('products')
         .insert([{
           name: newProduct.name,
@@ -133,9 +143,30 @@ const AdminPage = () => {
           stock: parseInt(newProduct.stock),
           category_id: newProduct.category_id,
           status: newProduct.status
-        }]);
+        }])
+        .select()
+        .single();
 
       if (error) throw error;
+
+      // Save product images if any
+      if (productImages.length > 0) {
+        const imageInserts = productImages.map((img, index) => ({
+          product_id: productData.id,
+          image_url: img.image_url,
+          image_name: img.image_name,
+          display_order: index,
+          is_primary: index === 0,
+        }));
+
+        const { error: imageError } = await supabase
+          .from('product_images')
+          .insert(imageInserts);
+
+        if (imageError) {
+          console.error('Error saving product images:', imageError);
+        }
+      }
 
       toast({
         title: "Succes",
@@ -151,6 +182,7 @@ const AdminPage = () => {
         category_id: "",
         status: "active"
       });
+      setProductImages([]);
       fetchData();
     } catch (error) {
       console.error('Error adding product:', error);
@@ -357,66 +389,82 @@ const AdminPage = () => {
                         Adaugă Produs Nou
                       </Button>
                     </DialogTrigger>
-                    <DialogContent>
+                    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                       <DialogHeader>
                         <DialogTitle>Adaugă Produs Nou</DialogTitle>
                         <DialogDescription>
                           Completează informațiile pentru noul produs.
                         </DialogDescription>
                       </DialogHeader>
-                      <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="name" className="text-right">Nume</Label>
-                          <Input
-                            id="name"
-                            value={newProduct.name}
-                            onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}
-                            className="col-span-3"
-                          />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="description" className="text-right">Descriere</Label>
-                          <Input
-                            id="description"
-                            value={newProduct.description}
-                            onChange={(e) => setNewProduct({...newProduct, description: e.target.value})}
-                            className="col-span-3"
-                          />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="price" className="text-right">Preț</Label>
-                          <Input
-                            id="price"
-                            type="number"
-                            value={newProduct.price}
-                            onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
-                            className="col-span-3"
-                          />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="stock" className="text-right">Stoc</Label>
-                          <Input
-                            id="stock"
-                            type="number"
-                            value={newProduct.stock}
-                            onChange={(e) => setNewProduct({...newProduct, stock: e.target.value})}
-                            className="col-span-3"
-                          />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="category" className="text-right">Categorie</Label>
-                          <Select value={newProduct.category_id} onValueChange={(value) => setNewProduct({...newProduct, category_id: value})}>
-                            <SelectTrigger className="col-span-3">
-                              <SelectValue placeholder="Selectează categoria" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {categories.map((category) => (
-                                <SelectItem key={category.id} value={category.id}>
-                                  {category.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                      <div className="grid gap-6 py-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="name" className="text-right">Nume</Label>
+                              <Input
+                                id="name"
+                                value={newProduct.name}
+                                onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}
+                                className="col-span-3"
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="description" className="text-right">Descriere</Label>
+                              <Input
+                                id="description"
+                                value={newProduct.description}
+                                onChange={(e) => setNewProduct({...newProduct, description: e.target.value})}
+                                className="col-span-3"
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="price" className="text-right">Preț</Label>
+                              <Input
+                                id="price"
+                                type="number"
+                                value={newProduct.price}
+                                onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
+                                className="col-span-3"
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="stock" className="text-right">Stoc</Label>
+                              <Input
+                                id="stock"
+                                type="number"
+                                value={newProduct.stock}
+                                onChange={(e) => setNewProduct({...newProduct, stock: e.target.value})}
+                                className="col-span-3"
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="category" className="text-right">Categorie</Label>
+                              <Select value={newProduct.category_id} onValueChange={(value) => setNewProduct({...newProduct, category_id: value})}>
+                                <SelectTrigger className="col-span-3">
+                                  <SelectValue placeholder="Selectează categoria" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {categories.map((category) => (
+                                    <SelectItem key={category.id} value={category.id}>
+                                      {category.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                          
+                          <div className="space-y-4">
+                            <div className="flex items-center space-x-2 mb-4">
+                              <ImageIcon className="h-5 w-5" />
+                              <Label className="text-lg font-medium">Imagini Produs (până la 50)</Label>
+                            </div>
+                            <ImageUploadZone
+                              onImagesChange={setProductImages}
+                              initialImages={productImages}
+                              maxImages={50}
+                            />
+                          </div>
                         </div>
                       </div>
                       <DialogFooter>
