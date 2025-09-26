@@ -51,7 +51,7 @@ serve(async (req) => {
             currency: 'ron',
             product_data: {
               name: 'Comandă Mobilier FurniLux',
-              description: `Comandă pentru ${orderData.customer_name}`,
+              description: `Comandă pentru ${orderData.customer_name} - ${orderData.customer_address}`,
             },
             unit_amount: amountInBani,
           },

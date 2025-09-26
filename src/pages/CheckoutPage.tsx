@@ -23,7 +23,8 @@ const CheckoutPage = () => {
   const [customerData, setCustomerData] = useState({
     name: user?.user_metadata?.display_name || '',
     email: user?.email || '',
-    phone: ''
+    phone: '',
+    address: ''
   });
 
   useEffect(() => {
@@ -49,7 +50,7 @@ const CheckoutPage = () => {
   };
 
   const handleCheckout = async () => {
-    if (!customerData.name || !customerData.email) {
+    if (!customerData.name || !customerData.email || !customerData.address) {
       toast({
         title: "Date incomplete",
         description: "Te rugăm să completezi toate câmpurile obligatorii.",
@@ -73,6 +74,7 @@ const CheckoutPage = () => {
           customer_name: customerData.name,
           customer_email: customerData.email,
           customer_phone: customerData.phone,
+          customer_address: customerData.address,
           total: getTotalPrice(),
           status: 'pending'
         };
@@ -125,6 +127,7 @@ const CheckoutPage = () => {
           customer_name: customerData.name,
           customer_email: customerData.email,
           customer_phone: customerData.phone,
+          customer_address: customerData.address,
           total: getTotalPrice(),
           items: items
         };
@@ -212,6 +215,16 @@ const CheckoutPage = () => {
                   type="tel"
                   value={customerData.phone}
                   onChange={(e) => setCustomerData({...customerData, phone: e.target.value})}
+                />
+              </div>
+              <div>
+                <Label htmlFor="address">Adresa de livrare *</Label>
+                <Input
+                  id="address"
+                  value={customerData.address}
+                  onChange={(e) => setCustomerData({...customerData, address: e.target.value})}
+                  placeholder="Strada, numărul, orașul, județul"
+                  required
                 />
               </div>
             </CardContent>

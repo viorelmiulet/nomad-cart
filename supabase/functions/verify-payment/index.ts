@@ -49,6 +49,7 @@ serve(async (req) => {
         customer_name: orderData.customer_name,
         customer_email: orderData.customer_email,
         customer_phone: orderData.customer_phone,
+        customer_address: orderData.customer_address,
         total: session.amount_total / 100, // Convert back from bani to RON
         status: 'paid'
       }])

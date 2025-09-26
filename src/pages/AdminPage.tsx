@@ -42,6 +42,7 @@ interface Order {
   customer_name: string;
   customer_email: string;
   customer_phone: string;
+  customer_address: string;
   total: number;
   status: string;
   created_at: string;
@@ -941,6 +942,10 @@ const AdminPage = () => {
                       <div>
                         <Label className="text-sm font-medium text-muted-foreground">Telefon</Label>
                         <p className="text-sm">{selectedOrder.customer_phone || 'Nu a fost furnizat'}</p>
+                      </div>
+                      <div>
+                        <Label className="text-sm font-medium text-muted-foreground">Adresa de livrare</Label>
+                        <p className="text-sm">{selectedOrder.customer_address || 'Nu a fost furnizată'}</p>
                       </div>
                     </CardContent>
                   </Card>
