@@ -21,10 +21,14 @@ const CheckoutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash'>('card');
   const [loading, setLoading] = useState(false);
   const [customerData, setCustomerData] = useState({
-    name: user?.user_metadata?.display_name || '',
+    firstName: '',
+    lastName: '',
     email: user?.email || '',
     phone: '',
-    address: ''
+    county: '',
+    city: '',
+    street: '',
+    number: ''
   });
 
   useEffect(() => {
@@ -50,7 +54,12 @@ const CheckoutPage = () => {
   };
 
   const handleCheckout = async () => {
-    if (!customerData.name || !customerData.email || !customerData.address) {
+    const fullName = `${customerData.firstName} ${customerData.lastName}`.trim();
+    const fullAddress = `${customerData.street} ${customerData.number}, ${customerData.city}, ${customerData.county}`.trim();
+    
+    if (!customerData.firstName || !customerData.lastName || !customerData.email || 
+        !customerData.phone || !customerData.county || !customerData.city || 
+        !customerData.street || !customerData.number) {
       toast({
         title: "Date incomplete",
         description: "Te rugăm să completezi toate câmpurile obligatorii.",
@@ -71,10 +80,10 @@ const CheckoutPage = () => {
         
         // For cash payments, create order directly in database
         const orderData = {
-          customer_name: customerData.name,
+          customer_name: fullName,
           customer_email: customerData.email,
           customer_phone: customerData.phone,
-          customer_address: customerData.address,
+          customer_address: fullAddress,
           total: getTotalPrice(),
           status: 'pending'
         };
@@ -124,10 +133,10 @@ const CheckoutPage = () => {
       } else {
         // For card payments, redirect to Stripe checkout
         const orderData = {
-          customer_name: customerData.name,
+          customer_name: fullName,
           customer_email: customerData.email,
           customer_phone: customerData.phone,
-          customer_address: customerData.address,
+          customer_address: fullAddress,
           total: getTotalPrice(),
           items: items
         };
@@ -189,14 +198,25 @@ const CheckoutPage = () => {
               <CardDescription>Completează datele de contact pentru comandă</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="name">Nume complet *</Label>
-                <Input
-                  id="name"
-                  value={customerData.name}
-                  onChange={(e) => setCustomerData({...customerData, name: e.target.value})}
-                  required
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="firstName">Nume *</Label>
+                  <Input
+                    id="firstName"
+                    value={customerData.firstName}
+                    onChange={(e) => setCustomerData({...customerData, firstName: e.target.value})}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="lastName">Prenume *</Label>
+                  <Input
+                    id="lastName"
+                    value={customerData.lastName}
+                    onChange={(e) => setCustomerData({...customerData, lastName: e.target.value})}
+                    required
+                  />
+                </div>
               </div>
               <div>
                 <Label htmlFor="email">Email *</Label>
@@ -209,23 +229,58 @@ const CheckoutPage = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="phone">Telefon</Label>
+                <Label htmlFor="phone">Telefon *</Label>
                 <Input
                   id="phone"
                   type="tel"
                   value={customerData.phone}
                   onChange={(e) => setCustomerData({...customerData, phone: e.target.value})}
-                />
-              </div>
-              <div>
-                <Label htmlFor="address">Adresa de livrare *</Label>
-                <Input
-                  id="address"
-                  value={customerData.address}
-                  onChange={(e) => setCustomerData({...customerData, address: e.target.value})}
-                  placeholder="Strada, numărul, orașul, județul"
                   required
                 />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="county">Județ *</Label>
+                  <Input
+                    id="county"
+                    value={customerData.county}
+                    onChange={(e) => setCustomerData({...customerData, county: e.target.value})}
+                    placeholder="ex: București"
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="city">Localitate *</Label>
+                  <Input
+                    id="city"
+                    value={customerData.city}
+                    onChange={(e) => setCustomerData({...customerData, city: e.target.value})}
+                    placeholder="ex: Sectorul 1"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="md:col-span-2">
+                  <Label htmlFor="street">Strada *</Label>
+                  <Input
+                    id="street"
+                    value={customerData.street}
+                    onChange={(e) => setCustomerData({...customerData, street: e.target.value})}
+                    placeholder="ex: Calea Victoriei"
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="number">Număr *</Label>
+                  <Input
+                    id="number"
+                    value={customerData.number}
+                    onChange={(e) => setCustomerData({...customerData, number: e.target.value})}
+                    placeholder="ex: 15"
+                    required
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>
