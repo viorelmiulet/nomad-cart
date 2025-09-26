@@ -47,6 +47,19 @@ interface Order {
   created_at: string;
 }
 
+interface OrderItem {
+  id: string;
+  order_id: string;
+  product_id: string;
+  quantity: number;
+  price: number;
+  products?: {
+    id: string;
+    name: string;
+    image_url: string;
+  };
+}
+
 interface ProductImage {
   id: string;
   image_url: string;
@@ -68,6 +81,9 @@ const AdminPage = () => {
   const [loading, setLoading] = useState(true);
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);
   const [isEditProductOpen, setIsEditProductOpen] = useState(false);
+  const [isOrderDetailsOpen, setIsOrderDetailsOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [productImages, setProductImages] = useState<ImageFile[]>([]);
   const [editProductImages, setEditProductImages] = useState<ImageFile[]>([]);
@@ -363,6 +379,38 @@ const AdminPage = () => {
     }
   };
 
+  // View order details
+  const handleViewOrderDetails = async (order: Order) => {
+    try {
+      setSelectedOrder(order);
+      
+      // Fetch order items with product details
+      const { data: orderItemsData, error } = await supabase
+        .from('order_items')
+        .select(`
+          *,
+          products (
+            id,
+            name,
+            image_url
+          )
+        `)
+        .eq('order_id', order.id);
+
+      if (error) throw error;
+      
+      setOrderItems(orderItemsData || []);
+      setIsOrderDetailsOpen(true);
+    } catch (error) {
+      console.error('Error fetching order details:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-au putut încărca detaliile comenzii.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const stats = [
     { title: "Total Produse", value: products.length.toString(), icon: Package, color: "bg-blue-500" },
     { title: "Comenzi Luna", value: orders.filter(order => {
@@ -645,7 +693,11 @@ const AdminPage = () => {
                         </TableCell>
                         <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
                         <TableCell>
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleViewOrderDetails(order)}
+                          >
                             <Eye className="h-4 w-4" />
                           </Button>
                         </TableCell>
@@ -819,6 +871,136 @@ const AdminPage = () => {
             )}
             <DialogFooter>
               <Button onClick={handleEditProduct}>Salvează Modificările</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Order Details Dialog */}
+        <Dialog open={isOrderDetailsOpen} onOpenChange={setIsOrderDetailsOpen}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Detalii Comandă</DialogTitle>
+              <DialogDescription>
+                Vizualizează toate detaliile comenzii și produsele comandate
+              </DialogDescription>
+            </DialogHeader>
+            {selectedOrder && (
+              <div className="space-y-6 py-4">
+                {/* Customer Information */}
+                <div className="grid grid-cols-2 gap-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Informații Client</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div>
+                        <Label className="text-sm font-medium text-muted-foreground">Nume</Label>
+                        <p className="text-sm">{selectedOrder.customer_name}</p>
+                      </div>
+                      <div>
+                        <Label className="text-sm font-medium text-muted-foreground">Email</Label>
+                        <p className="text-sm">{selectedOrder.customer_email}</p>
+                      </div>
+                      <div>
+                        <Label className="text-sm font-medium text-muted-foreground">Telefon</Label>
+                        <p className="text-sm">{selectedOrder.customer_phone || 'Nu a fost furnizat'}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Informații Comandă</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div>
+                        <Label className="text-sm font-medium text-muted-foreground">ID Comandă</Label>
+                        <p className="text-sm font-mono">{selectedOrder.id.slice(0, 8).toUpperCase()}</p>
+                      </div>
+                      <div>
+                        <Label className="text-sm font-medium text-muted-foreground">Data Comandă</Label>
+                        <p className="text-sm">{new Date(selectedOrder.created_at).toLocaleString('ro-RO')}</p>
+                      </div>
+                      <div>
+                        <Label className="text-sm font-medium text-muted-foreground">Status</Label>
+                        <Badge className={getStatusBadge(selectedOrder.status)}>
+                          {getStatusText(selectedOrder.status)}
+                        </Badge>
+                      </div>
+                      <div>
+                        <Label className="text-sm font-medium text-muted-foreground">Total</Label>
+                        <p className="text-lg font-bold text-primary">{selectedOrder.total.toLocaleString('ro-RO')} RON</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Order Items */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Produse Comandate</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Produs</TableHead>
+                          <TableHead>Cantitate</TableHead>
+                          <TableHead>Preț Unitar</TableHead>
+                          <TableHead>Subtotal</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {orderItems.map((item) => (
+                          <TableRow key={item.id}>
+                            <TableCell>
+                              <div className="flex items-center space-x-3">
+                                {item.products?.image_url && (
+                                  <img 
+                                    src={item.products.image_url} 
+                                    alt={item.products.name}
+                                    className="w-12 h-12 object-cover rounded-lg"
+                                  />
+                                )}
+                                <div>
+                                  <p className="font-medium">{item.products?.name || 'Produs șters'}</p>
+                                  <p className="text-sm text-muted-foreground">ID: {item.product_id.slice(0, 8)}</p>
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <span className="font-medium">{item.quantity}</span>
+                            </TableCell>
+                            <TableCell>
+                              {item.price.toLocaleString('ro-RO')} RON
+                            </TableCell>
+                            <TableCell>
+                              <span className="font-medium">
+                                {(item.price * item.quantity).toLocaleString('ro-RO')} RON
+                              </span>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                    
+                    {/* Order Summary */}
+                    <div className="mt-6 pt-4 border-t">
+                      <div className="flex justify-between items-center">
+                        <span className="text-lg font-semibold">Total Comandă:</span>
+                        <span className="text-xl font-bold text-primary">
+                          {selectedOrder.total.toLocaleString('ro-RO')} RON
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsOrderDetailsOpen(false)}>
+                Închide
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
