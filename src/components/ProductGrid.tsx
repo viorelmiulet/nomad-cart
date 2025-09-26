@@ -26,7 +26,7 @@ const ProductGrid = () => {
 
   const products = [
     {
-      id: "1",
+      id: "68599044-1e21-4809-8057-6a44a058fbee", // Fotoliu Elegant from DB
       name: "Canapea Modernă 3 Locuri",
       price: 2999,
       originalPrice: 3499,
@@ -37,7 +37,7 @@ const ProductGrid = () => {
       isOnSale: true
     },
     {
-      id: "2", 
+      id: "2a28a172-ad86-4074-9dbc-7290a0bb820e", // Masă Dining from DB
       name: "Masă de Dining Extensibilă",
       price: 1899,
       image: diningTableImage,
@@ -46,7 +46,7 @@ const ProductGrid = () => {
       isNew: true
     },
     {
-      id: "3",
+      id: "6db8b793-bf63-4fe7-bf61-25106f0a7595", // Dulap Dormitor from DB
       name: "Dulap Dormitor cu Oglinzi", 
       price: 3299,
       originalPrice: 3799,
@@ -56,7 +56,7 @@ const ProductGrid = () => {
       isOnSale: true
     },
     {
-      id: "4",
+      id: "398478a8-4a0a-4ebb-b737-f6c26364afd6", // Comoda Hol from DB (repurposed as fotolii)
       name: "Set Fotolii Living x2",
       price: 2399,
       image: armchairsImage, 
@@ -65,7 +65,7 @@ const ProductGrid = () => {
       isNew: true
     },
     {
-      id: "5",
+      id: "68599044-1e21-4809-8057-6a44a058fbee", // Reusing Fotoliu Elegant ID (will update DB later)
       name: "Bibliotecă Modulară",
       price: 1699,
       originalPrice: 1999,
@@ -75,7 +75,7 @@ const ProductGrid = () => {
       isOnSale: true
     },
     {
-      id: "6",
+      id: "2a28a172-ad86-4074-9dbc-7290a0bb820e", // Reusing Masă Dining ID (will update DB later)
       name: "Saltea Memory Foam",
       price: 1299,
       image: mattressImage,

@@ -61,21 +61,36 @@ const CheckoutPage = () => {
     setLoading(true);
 
     try {
+      console.log("Starting checkout process with payment method:", paymentMethod);
+      console.log("Customer data:", customerData);
+      console.log("Cart items:", items);
+      
       if (paymentMethod === 'cash') {
+        console.log("Processing cash payment...");
+        
         // For cash payments, create order directly in database
+        const orderData = {
+          customer_name: customerData.name,
+          customer_email: customerData.email,
+          customer_phone: customerData.phone,
+          total: getTotalPrice(),
+          status: 'pending'
+        };
+        
+        console.log("Creating order with data:", orderData);
+        
         const { data: orderRecord, error: orderError } = await supabase
           .from('orders')
-          .insert([{
-            customer_name: customerData.name,
-            customer_email: customerData.email,
-            customer_phone: customerData.phone,
-            total: getTotalPrice(),
-            status: 'pending'
-          }])
+          .insert([orderData])
           .select()
           .single();
 
-        if (orderError) throw orderError;
+        if (orderError) {
+          console.error("Order creation error:", orderError);
+          throw orderError;
+        }
+        
+        console.log("Order created successfully:", orderRecord);
 
         // Create order items
         const orderItems = items.map(item => ({
@@ -84,12 +99,19 @@ const CheckoutPage = () => {
           quantity: item.quantity,
           price: item.price
         }));
+        
+        console.log("Creating order items:", orderItems);
 
         const { error: itemsError } = await supabase
           .from('order_items')
           .insert(orderItems);
 
-        if (itemsError) throw itemsError;
+        if (itemsError) {
+          console.error("Order items creation error:", itemsError);
+          throw itemsError;
+        }
+        
+        console.log("Order items created successfully");
 
         clearCart();
         toast({
@@ -120,10 +142,13 @@ const CheckoutPage = () => {
         window.location.href = data.url;
       }
     } catch (error) {
-      console.error('Checkout error:', error);
+      console.error('Checkout error details:', error);
+      console.error('Error type:', typeof error);
+      console.error('Error message:', error instanceof Error ? error.message : String(error));
+      
       toast({
         title: "Eroare",
-        description: "A apărut o eroare la procesarea comenzii. Încearcă din nou.",
+        description: `A apărut o eroare la procesarea comenzii: ${error instanceof Error ? error.message : 'Eroare necunoscută'}. Încearcă din nou.`,
         variant: "destructive"
       });
     } finally {
