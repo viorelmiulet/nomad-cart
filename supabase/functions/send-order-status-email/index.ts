@@ -28,6 +28,16 @@ const getStatusDisplayName = (status: string): string => {
   }
 };
 
+const normalizeFrom = (input: string): string | null => {
+  const s = (input || '').trim();
+  if (!s) return null;
+  const emailRegex = /^[^<>@\s]+@[^<>@\s]+\.[^<>@\s]+$/;
+  const nameEmailRegex = /^[^<>@]+<\s*[^<>@\s]+@[^<>@\s]+\.[^<>@\s]+\s*>$/;
+  if (emailRegex.test(s)) return s;
+  if (nameEmailRegex.test(s)) return s.replace(/\s+/g, ' ').replace(/\s*>/, '>');
+  return null;
+};
+
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -40,7 +50,16 @@ const handler = async (req: Request): Promise<Response> => {
     console.log(`Sending order status email to: ${customerEmail} for order: ${orderNumber} with status: ${newStatus}`);
 
     const statusDisplay = getStatusDisplayName(newStatus);
-    
+
+    const fromHeader = normalizeFrom(resendFrom);
+    if (!fromHeader) {
+      console.error('Invalid RESEND_FROM format. Expected "Name <email@domain>" or "email@domain". Received:', resendFrom);
+      return new Response(JSON.stringify({ error: 'Invalid RESEND_FROM format. Use "Name <email@domain>" or "email@domain".' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    console.log('Using RESEND_FROM:', fromHeader);
     const emailResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -48,7 +67,7 @@ const handler = async (req: Request): Promise<Response> => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: resendFrom,
+        from: fromHeader,
         to: [customerEmail],
         subject: `Actualizare comandă #${orderNumber}`,
         html: `
@@ -106,16 +125,21 @@ const handler = async (req: Request): Promise<Response> => {
       })
     });
 
-    const emailData = await emailResponse.json();
+    const emailData = await emailResponse.json().catch(() => ({}));
 
-    console.log("Email sent successfully:", emailData);
+    if (!emailResponse.ok || (emailData && (emailData.statusCode || emailData.error))) {
+      console.error('Resend API error:', emailData);
+      return new Response(JSON.stringify({ success: false, error: emailData }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      });
+    }
+
+    console.log('Email sent successfully:', emailData);
 
     return new Response(JSON.stringify({ success: true, emailData }), {
       status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        ...corsHeaders,
-      },
+      headers: { 'Content-Type': 'application/json', ...corsHeaders },
     });
   } catch (error: any) {
     console.error("Error in send-order-status-email function:", error);
