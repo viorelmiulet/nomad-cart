@@ -81,6 +81,7 @@ const AdminPage = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("products");
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);
   const [isEditProductOpen, setIsEditProductOpen] = useState(false);
   const [isOrderDetailsOpen, setIsOrderDetailsOpen] = useState(false);
@@ -539,7 +540,7 @@ const AdminPage = () => {
         </div>
 
         {/* Admin Tabs */}
-        <Tabs defaultValue="products" className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="products">Produse</TabsTrigger>
             <TabsTrigger value="orders">Comenzi</TabsTrigger>
