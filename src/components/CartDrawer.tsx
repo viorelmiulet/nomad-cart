@@ -1,11 +1,28 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Plus, Minus, Trash2 } from "lucide-react";
+import { ShoppingCart, Plus, Minus, Trash2, CreditCard, Banknote } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 const CartDrawer = () => {
   const { items, updateQuantity, removeItem, getTotalItems, getTotalPrice, clearCart, isOpen, setIsOpen } = useCart();
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash'>('card');
+
+  const getDiscountedPrice = () => {
+    const total = getTotalPrice();
+    if (paymentMethod === 'card') {
+      return total * 0.95; // 5% discount for card payments
+    }
+    return total;
+  };
+
+  const getDiscount = () => {
+    if (paymentMethod === 'card') {
+      return getTotalPrice() * 0.05;
+    }
+    return 0;
+  };
 
   const handleCheckout = () => {
     if (items.length === 0) {
@@ -17,9 +34,12 @@ const CartDrawer = () => {
       return;
     }
     
+    const finalPrice = getDiscountedPrice();
+    const discount = getDiscount();
+    
     toast({
       title: "Redirecționare către checkout",
-      description: `Total: ${getTotalPrice().toLocaleString('ro-RO')} Lei pentru ${getTotalItems()} produse.`,
+      description: `Total final: ${finalPrice.toLocaleString('ro-RO')} Lei${discount > 0 ? ` (discount ${discount.toLocaleString('ro-RO')} Lei)` : ''} pentru ${getTotalItems()} produse.`,
     });
     setIsOpen(false);
   };
@@ -96,11 +116,64 @@ const CartDrawer = () => {
               </div>
               
               <div className="border-t border-luxury-gold/30 pt-4 space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="font-semibold text-luxury-cream font-playfair text-lg">Total:</span>
-                  <span className="font-bold text-luxury-gold text-xl font-playfair drop-shadow-lg">
-                    {getTotalPrice().toLocaleString('ro-RO')} Lei
-                  </span>
+                {/* Payment Method Selection */}
+                <div className="space-y-3">
+                  <span className="font-semibold text-luxury-cream font-playfair text-sm">Metoda de plată:</span>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      variant={paymentMethod === 'card' ? 'default' : 'outline'}
+                      onClick={() => setPaymentMethod('card')}
+                      className={`h-12 flex items-center gap-2 ${
+                        paymentMethod === 'card' 
+                          ? 'bg-luxury-gradient text-luxury-dark' 
+                          : 'border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10'
+                      }`}
+                    >
+                      <CreditCard className="h-4 w-4" />
+                      Card
+                      {paymentMethod === 'card' && (
+                        <span className="text-xs bg-green-500 text-white px-1.5 py-0.5 rounded-full">-5%</span>
+                      )}
+                    </Button>
+                    <Button
+                      variant={paymentMethod === 'cash' ? 'default' : 'outline'}
+                      onClick={() => setPaymentMethod('cash')}
+                      className={`h-12 flex items-center gap-2 ${
+                        paymentMethod === 'cash' 
+                          ? 'bg-luxury-gradient text-luxury-dark' 
+                          : 'border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10'
+                      }`}
+                    >
+                      <Banknote className="h-4 w-4" />
+                      Numerar
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Price Summary */}
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-luxury-cream/80">Subtotal:</span>
+                    <span className="text-luxury-cream">
+                      {getTotalPrice().toLocaleString('ro-RO')} Lei
+                    </span>
+                  </div>
+                  
+                  {paymentMethod === 'card' && (
+                    <div className="flex justify-between items-center">
+                      <span className="text-green-400">Discount card (5%):</span>
+                      <span className="text-green-400">
+                        -{getDiscount().toLocaleString('ro-RO')} Lei
+                      </span>
+                    </div>
+                  )}
+                  
+                  <div className="flex justify-between items-center border-t border-luxury-gold/30 pt-2">
+                    <span className="font-semibold text-luxury-cream font-playfair text-lg">Total final:</span>
+                    <span className="font-bold text-luxury-gold text-xl font-playfair drop-shadow-lg">
+                      {getDiscountedPrice().toLocaleString('ro-RO')} Lei
+                    </span>
+                  </div>
                 </div>
                 
                 <div className="space-y-2">
