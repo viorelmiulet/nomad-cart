@@ -47,7 +47,7 @@ const handler = async (req: Request): Promise<Response> => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: "FurniLux <onboarding@resend.dev>",
+        from: "FurniLux <mvaperfectbusiness@gmail.com>",
         to: [customerEmail],
         subject: `Actualizare comandă #${orderNumber}`,
         html: `
