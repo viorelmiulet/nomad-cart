@@ -612,6 +612,7 @@ const AdminPage = () => {
                               <SelectItem value="pending">În așteptare</SelectItem>
                               <SelectItem value="processing">În procesare</SelectItem>
                               <SelectItem value="completed">Finalizată</SelectItem>
+                              <SelectItem value="preluata">Preluată</SelectItem>
                               <SelectItem value="cancelled">Anulată</SelectItem>
                             </SelectContent>
                           </Select>
