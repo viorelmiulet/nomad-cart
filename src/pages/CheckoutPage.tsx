@@ -28,7 +28,11 @@ const CheckoutPage = () => {
     county: '',
     city: '',
     street: '',
-    number: ''
+    number: '',
+    bloc: '',
+    floor: '',
+    apartment: '',
+    otherDetails: ''
   });
 
   useEffect(() => {
@@ -55,7 +59,17 @@ const CheckoutPage = () => {
 
   const handleCheckout = async () => {
     const fullName = `${customerData.firstName} ${customerData.lastName}`.trim();
-    const fullAddress = `${customerData.street} ${customerData.number}, ${customerData.city}, ${customerData.county}`.trim();
+    const addressParts = [
+      `${customerData.street} ${customerData.number}`,
+      customerData.bloc && `Bloc ${customerData.bloc}`,
+      customerData.floor && `Etaj ${customerData.floor}`,
+      customerData.apartment && `Ap. ${customerData.apartment}`,
+      customerData.city,
+      customerData.county,
+      customerData.otherDetails && `(${customerData.otherDetails})`
+    ].filter(Boolean);
+    
+    const fullAddress = addressParts.join(', ');
     
     if (!customerData.firstName || !customerData.lastName || !customerData.email || 
         !customerData.phone || !customerData.county || !customerData.city || 
@@ -281,6 +295,44 @@ const CheckoutPage = () => {
                     required
                   />
                 </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="bloc">Bloc</Label>
+                  <Input
+                    id="bloc"
+                    value={customerData.bloc}
+                    onChange={(e) => setCustomerData({...customerData, bloc: e.target.value})}
+                    placeholder="ex: A, B1, C2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="floor">Etaj</Label>
+                  <Input
+                    id="floor"
+                    value={customerData.floor}
+                    onChange={(e) => setCustomerData({...customerData, floor: e.target.value})}
+                    placeholder="ex: 3, Parter"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="apartment">Apartament</Label>
+                  <Input
+                    id="apartment"
+                    value={customerData.apartment}
+                    onChange={(e) => setCustomerData({...customerData, apartment: e.target.value})}
+                    placeholder="ex: 15, A3"
+                  />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="otherDetails">Alte detalii</Label>
+                <Input
+                  id="otherDetails"
+                  value={customerData.otherDetails}
+                  onChange={(e) => setCustomerData({...customerData, otherDetails: e.target.value})}
+                  placeholder="ex: lângă intersecția cu strada X, interfon defect"
+                />
               </div>
             </CardContent>
           </Card>
