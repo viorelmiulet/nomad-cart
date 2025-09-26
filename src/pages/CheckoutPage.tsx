@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { CreditCard, Banknote, ArrowLeft } from "lucide-react";
+import { CreditCard, Banknote } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const CheckoutPage = () => {
