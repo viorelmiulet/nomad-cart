@@ -1,20 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MessageCircle } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { MessageCircle } from "lucide-react";
+
 import heroCozyCpollection from "@/assets/hero-cozy-collection.jpg";
 
 const Hero = () => {
-  const handleExploreCollection = () => {
-    toast({
-      title: "Explorare Colecție",
-      description: "Vei fi redirecționat către pagina cu produse premium.",
-    });
-    // Scroll to products section
-    const productsSection = document.querySelector('#products-section');
-    if (productsSection) {
-      productsSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   const handleWhatsAppContact = () => {
     const phoneNumber = "0758433114";
@@ -46,15 +35,6 @@ const Hero = () => {
               Calitate premium, prețuri accesibile și livrare gratuită.
             </p>
             <div className="flex flex-col sm:flex-row gap-6">
-              <Button 
-                size="lg" 
-                onClick={handleExploreCollection}
-                className="bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/10 text-luxury-gold font-semibold px-8 py-4 h-14 text-lg transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-luxury-gold/20 group relative overflow-hidden"
-              >
-                <span className="relative z-10">Vezi Mobilierul</span>
-                <ArrowRight className="ml-2 h-5 w-5 relative z-10 group-hover:translate-x-1 transition-transform" />
-                <div className="absolute inset-0 bg-luxury-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-              </Button>
               <Button 
                 size="lg" 
                 variant="outline"
