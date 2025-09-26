@@ -192,14 +192,6 @@ const CheckoutPage = () => {
       
       <main className="container mx-auto px-4 py-8">
         <div className="mb-6">
-          <Button 
-            variant="outline" 
-            onClick={() => navigate('/')}
-            className="mb-4 bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 hover:text-white hover:border-white/40 transition-all duration-300 shadow-lg"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Înapoi la Mobilier
-          </Button>
           <h1 className="text-3xl font-bold">Finalizare Comandă</h1>
           <p className="text-muted-foreground">Completează datele pentru a plasa comanda</p>
         </div>
