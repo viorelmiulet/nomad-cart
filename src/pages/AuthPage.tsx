@@ -1,291 +1,333 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 import { z } from 'zod';
-import { Loader2, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 
-const emailSchema = z.string().trim().email({ message: "Adresă de email invalidă" });
-const passwordSchema = z.string().min(6, { message: "Parola trebuie să aibă cel puțin 6 caractere" });
-const nameSchema = z.string().trim().min(2, { message: "Numele trebuie să aibă cel puțin 2 caractere" }).max(50, { message: "Numele trebuie să aibă maxim 50 caractere" });
+// Validation schemas
+const loginSchema = z.object({
+  email: z.string().trim().email({ message: "Email invalid" }).max(255, { message: "Email-ul trebuie să aibă mai puțin de 255 de caractere" }),
+  password: z.string().min(6, { message: "Parola trebuie să aibă cel puțin 6 caractere" }).max(128, { message: "Parola trebuie să aibă mai puțin de 128 de caractere" })
+});
 
-export default function AuthPage() {
-  const { user, signIn, signUp, loading: authLoading } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState('login');
-  const { toast } = useToast();
+const signupSchema = z.object({
+  email: z.string().trim().email({ message: "Email invalid" }).max(255, { message: "Email-ul trebuie să aibă mai puțin de 255 de caractere" }),
+  password: z.string().min(6, { message: "Parola trebuie să aibă cel puțin 6 caractere" }).max(128, { message: "Parola trebuie să aibă mai puțin de 128 de caractere" }),
+  confirmPassword: z.string(),
+  displayName: z.string().trim().min(2, { message: "Numele trebuie să aibă cel puțin 2 caractere" }).max(100, { message: "Numele trebuie să aibă mai puțin de 100 de caractere" })
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Parolele nu se potrivesc",
+  path: ["confirmPassword"]
+});
+
+const AuthPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-
+  const { toast } = useToast();
+  const { user, signIn, signUp } = useAuth();
+  
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  
   // Login form state
-  const [loginEmail, setLoginEmail] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
-
+  const [loginData, setLoginData] = useState({
+    email: '',
+    password: ''
+  });
+  
   // Signup form state
-  const [signupEmail, setSignupEmail] = useState('');
-  const [signupPassword, setSignupPassword] = useState('');
-  const [signupName, setSignupName] = useState('');
+  const [signupData, setSignupData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+    displayName: ''
+  });
 
-  // Redirect authenticated users
+  // Redirect if already logged in
   useEffect(() => {
-    if (user && !authLoading) {
-      const from = location.state?.from?.pathname || '/';
-      navigate(from, { replace: true });
+    if (user) {
+      navigate('/');
     }
-  }, [user, authLoading, navigate, location]);
-
-  const validateForm = (formType: 'login' | 'signup') => {
-    try {
-      if (formType === 'login') {
-        emailSchema.parse(loginEmail);
-        passwordSchema.parse(loginPassword);
-      } else {
-        emailSchema.parse(signupEmail);
-        passwordSchema.parse(signupPassword);
-        nameSchema.parse(signupName);
-      }
-      return true;
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        toast({
-          title: "Eroare de validare",
-          description: error.issues[0].message,
-          variant: "destructive",
-        });
-      }
-      return false;
-    }
-  };
+  }, [user, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!validateForm('login')) return;
-    
-    setLoading(true);
-    
+    setIsLoading(true);
+
     try {
-      const { error } = await signIn(loginEmail, loginPassword);
+      const validatedData = loginSchema.parse(loginData);
       
+      const { error } = await signIn(validatedData.email, validatedData.password);
+
       if (error) {
-        let errorMessage = "Eroare la autentificare";
+        let errorMessage = "A apărut o eroare la autentificare";
         
-        if (error.message?.includes("Invalid login credentials")) {
+        if (error.message.includes('Invalid login credentials')) {
           errorMessage = "Email sau parolă incorectă";
-        } else if (error.message?.includes("Email not confirmed")) {
-          errorMessage = "Vă rugăm să vă confirmați email-ul";
-        } else if (error.message?.includes("Too many requests")) {
-          errorMessage = "Prea multe încercări. Vă rugăm să așteptați";
+        } else if (error.message.includes('Email not confirmed')) {
+          errorMessage = "Vă rugăm să vă confirmați email-ul înainte de a vă conecta";
+        } else if (error.message.includes('Too many requests')) {
+          errorMessage = "Prea multe încercări. Încercați din nou mai târziu";
         }
         
         toast({
-          title: "Eroare",
+          title: "Eroare autentificare",
           description: errorMessage,
           variant: "destructive",
         });
       } else {
         toast({
-          title: "Bun venit!",
-          description: "V-ați autentificat cu succes.",
+          title: "Bine ai venit!",
+          description: "Te-ai conectat cu succes.",
         });
+        navigate('/');
       }
     } catch (error) {
-      toast({
-        title: "Eroare",
-        description: "A apărut o eroare neașteptată.",
-        variant: "destructive",
-      });
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0];
+        toast({
+          title: "Date invalide",
+          description: firstError.message,
+          variant: "destructive",
+        });
+      }
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!validateForm('signup')) return;
-    
-    setLoading(true);
-    
+    setIsLoading(true);
+
     try {
-      const { error } = await signUp(signupEmail, signupPassword, signupName);
+      const validatedData = signupSchema.parse(signupData);
       
+      const { error } = await signUp(validatedData.email, validatedData.password, validatedData.displayName);
+
       if (error) {
-        let errorMessage = "Eroare la înregistrare";
+        let errorMessage = "A apărut o eroare la înregistrare";
         
-        if (error.message?.includes("User already registered")) {
-          errorMessage = "Acest email este deja înregistrat";
-        } else if (error.message?.includes("Password should be")) {
+        if (error.message.includes('User already registered')) {
+          errorMessage = "Există deja un cont cu acest email";
+        } else if (error.message.includes('Password should be at least 6 characters')) {
           errorMessage = "Parola trebuie să aibă cel puțin 6 caractere";
-        } else if (error.message?.includes("Invalid email")) {
-          errorMessage = "Adresă de email invalidă";
+        } else if (error.message.includes('Unable to validate email address')) {
+          errorMessage = "Adresa de email nu este validă";
         }
         
         toast({
-          title: "Eroare",
+          title: "Eroare înregistrare",
           description: errorMessage,
           variant: "destructive",
         });
       } else {
         toast({
           title: "Cont creat cu succes!",
-          description: "Vă rugăm să vă verificați email-ul pentru a confirma contul.",
+          description: "Vă rugăm să vă verificați email-ul pentru a vă confirma contul.",
         });
-        // Switch to login tab after successful signup
-        setActiveTab('login');
-        setLoginEmail(signupEmail);
+        // Reset form
+        setSignupData({
+          email: '',
+          password: '',
+          confirmPassword: '',
+          displayName: ''
+        });
       }
     } catch (error) {
-      toast({
-        title: "Eroare",
-        description: "A apărut o eroare neașteptată.",
-        variant: "destructive",
-      });
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0];
+        toast({
+          title: "Date invalide",
+          description: firstError.message,
+          variant: "destructive",
+        });
+      }
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted flex flex-col">
-      <div className="container mx-auto px-4 py-8">
-        <Button
-          variant="ghost"
-          onClick={() => navigate('/')}
-          className="mb-8"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Înapoi la magazin
-        </Button>
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-foreground">FurniLux</h1>
+          <p className="text-muted-foreground mt-2">Mobilier de lux pentru căminul tău</p>
+        </div>
 
-        <div className="max-w-md mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-2">FurniLux</h1>
-            <p className="text-muted-foreground">Autentifică-te sau creează un cont nou</p>
-          </div>
+        <Tabs defaultValue="login" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="login">Autentificare</TabsTrigger>
+            <TabsTrigger value="signup">Înregistrare</TabsTrigger>
+          </TabsList>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Autentificare</CardTitle>
-              <CardDescription>
-                Accesează contul tău sau creează unul nou pentru o experiență personalizată
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="login">Conectare</TabsTrigger>
-                  <TabsTrigger value="signup">Cont nou</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="login">
-                  <form onSubmit={handleLogin} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="login-email">Email</Label>
-                      <Input
-                        id="login-email"
-                        type="email"
-                        value={loginEmail}
-                        onChange={(e) => setLoginEmail(e.target.value)}
-                        placeholder="email@exemplu.com"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="login-password">Parolă</Label>
+          <TabsContent value="login">
+            <Card>
+              <CardHeader>
+                <CardTitle>Autentificare</CardTitle>
+                <CardDescription>
+                  Conectează-te la contul tău pentru a accesa istoricul comenzilor
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="login-email">Email</Label>
+                    <Input
+                      id="login-email"
+                      type="email"
+                      placeholder="email@exemplu.com"
+                      value={loginData.email}
+                      onChange={(e) => setLoginData(prev => ({ ...prev, email: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="login-password">Parola</Label>
+                    <div className="relative">
                       <Input
                         id="login-password"
-                        type="password"
-                        value={loginPassword}
-                        onChange={(e) => setLoginPassword(e.target.value)}
-                        placeholder="Introdu parola"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="••••••••"
+                        value={loginData.password}
+                        onChange={(e) => setLoginData(prev => ({ ...prev, password: e.target.value }))}
                         required
                       />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4 text-muted-foreground" />
+                        ) : (
+                          <Eye className="h-4 w-4 text-muted-foreground" />
+                        )}
+                      </Button>
                     </div>
-                    <Button type="submit" className="w-full" disabled={loading}>
-                      {loading ? (
-                        <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Se conectează...
-                        </>
-                      ) : (
-                        "Conectare"
-                      )}
-                    </Button>
-                  </form>
-                </TabsContent>
+                  </div>
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? "Se conectează..." : "Conectează-te"}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-                <TabsContent value="signup">
-                  <form onSubmit={handleSignup} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-name">Nume complet</Label>
-                      <Input
-                        id="signup-name"
-                        type="text"
-                        value={signupName}
-                        onChange={(e) => setSignupName(e.target.value)}
-                        placeholder="Nume Prenume"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-email">Email</Label>
-                      <Input
-                        id="signup-email"
-                        type="email"
-                        value={signupEmail}
-                        onChange={(e) => setSignupEmail(e.target.value)}
-                        placeholder="email@exemplu.com"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-password">Parolă</Label>
+          <TabsContent value="signup">
+            <Card>
+              <CardHeader>
+                <CardTitle>Înregistrare</CardTitle>
+                <CardDescription>
+                  Creează un cont pentru a beneficia de avantajele noastre
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSignup} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-name">Nume complet</Label>
+                    <Input
+                      id="signup-name"
+                      type="text"
+                      placeholder="Ion Popescu"
+                      value={signupData.displayName}
+                      onChange={(e) => setSignupData(prev => ({ ...prev, displayName: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-email">Email</Label>
+                    <Input
+                      id="signup-email"
+                      type="email"
+                      placeholder="email@exemplu.com"
+                      value={signupData.email}
+                      onChange={(e) => setSignupData(prev => ({ ...prev, email: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-password">Parola</Label>
+                    <div className="relative">
                       <Input
                         id="signup-password"
-                        type="password"
-                        value={signupPassword}
-                        onChange={(e) => setSignupPassword(e.target.value)}
-                        placeholder="Minim 6 caractere"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="••••••••"
+                        value={signupData.password}
+                        onChange={(e) => setSignupData(prev => ({ ...prev, password: e.target.value }))}
                         required
                       />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4 text-muted-foreground" />
+                        ) : (
+                          <Eye className="h-4 w-4 text-muted-foreground" />
+                        )}
+                      </Button>
                     </div>
-                    <Button type="submit" className="w-full" disabled={loading}>
-                      {loading ? (
-                        <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Se creează contul...
-                        </>
-                      ) : (
-                        "Creează cont"
-                      )}
-                    </Button>
-                  </form>
-                </TabsContent>
-              </Tabs>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-confirm-password">Confirmă parola</Label>
+                    <div className="relative">
+                      <Input
+                        id="signup-confirm-password"
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="••••••••"
+                        value={signupData.confirmPassword}
+                        onChange={(e) => setSignupData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      >
+                        {showConfirmPassword ? (
+                          <EyeOff className="h-4 w-4 text-muted-foreground" />
+                        ) : (
+                          <Eye className="h-4 w-4 text-muted-foreground" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? "Se înregistrează..." : "Înregistrează-te"}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
 
-              <div className="mt-6 text-center">
-                <p className="text-sm text-muted-foreground">
-                  Poți comanda și ca oaspete fără să creezi cont
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="text-center mt-6">
+          <Button
+            variant="link"
+            onClick={() => navigate('/')}
+            className="text-muted-foreground"
+          >
+            Înapoi la magazin
+          </Button>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default AuthPage;
