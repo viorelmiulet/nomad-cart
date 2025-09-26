@@ -6,178 +6,202 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { BarChart3, Users, Package, ShoppingCart, Settings, Eye, Edit, Trash2, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-
-interface Product {
-  id: string;
-  name: string;
-  description?: string;
-  price: number;
-  stock: number;
-  status: 'active' | 'inactive';
-  category_id?: string;
-  image_url?: string;
-  created_at: string;
-  updated_at: string;
-  categories?: {
-    name: string;
-  };
-}
 
 interface Category {
   id: string;
   name: string;
   slug: string;
-  description?: string;
+  description: string;
+}
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  status: string;
+  category_id: string;
+  categories?: {
+    id: string;
+    name: string;
+    slug: string;
+  };
 }
 
 interface Order {
   id: string;
   customer_name: string;
   customer_email: string;
-  customer_phone?: string;
+  customer_phone: string;
   total: number;
-  status: 'pending' | 'processing' | 'completed' | 'cancelled';
+  status: string;
   created_at: string;
-  updated_at: string;
 }
 
 const AdminPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isAddProductOpen, setIsAddProductOpen] = useState(false);
+  const [isEditProductOpen, setIsEditProductOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [isProductDialogOpen, setIsProductDialogOpen] = useState(false);
-  const [productForm, setProductForm] = useState({
-    name: '',
-    description: '',
-    price: '',
-    stock: '',
-    status: 'active',
-    category_id: '',
-    image_url: ''
-  });
   const { toast } = useToast();
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // Form states for new product
+  const [newProduct, setNewProduct] = useState({
+    name: "",
+    description: "",
+    price: "",
+    stock: "",
+    category_id: "",
+    status: "active"
+  });
 
+  // Fetch data
   const fetchData = async () => {
     try {
       setLoading(true);
       
-      // Fetch products with categories
-      const { data: productsData } = await supabase
-        .from('products')
-        .select(`
-          *,
-          categories (
-            name
-          )
-        `)
-        .order('created_at', { ascending: false });
-
       // Fetch categories
-      const { data: categoriesData } = await supabase
+      const { data: categoriesData, error: categoriesError } = await supabase
         .from('categories')
         .select('*')
         .order('name');
 
+      if (categoriesError) throw categoriesError;
+      setCategories(categoriesData || []);
+
+      // Fetch products with categories
+      const { data: productsData, error: productsError } = await supabase
+        .from('products')
+        .select(`
+          *,
+          categories (
+            id,
+            name,
+            slug
+          )
+        `)
+        .order('created_at', { ascending: false });
+
+      if (productsError) throw productsError;
+      setProducts(productsData || []);
+
       // Fetch orders
-      const { data: ordersData } = await supabase
+      const { data: ordersData, error: ordersError } = await supabase
         .from('orders')
         .select('*')
         .order('created_at', { ascending: false });
 
-      setProducts((productsData || []) as Product[]);
-      setCategories(categoriesData || []);
-      setOrders((ordersData || []) as Order[]);
+      if (ordersError) throw ordersError;
+      setOrders(ordersData || []);
+
     } catch (error) {
       console.error('Error fetching data:', error);
       toast({
         title: "Eroare",
         description: "Nu s-au putut încărca datele.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleProductSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Add new product
+  const handleAddProduct = async () => {
     try {
-      const productData = {
-        name: productForm.name,
-        description: productForm.description || null,
-        price: parseFloat(productForm.price),
-        stock: parseInt(productForm.stock),
-        status: productForm.status as 'active' | 'inactive',
-        category_id: productForm.category_id || null,
-        image_url: productForm.image_url || null
-      };
+      const { error } = await supabase
+        .from('products')
+        .insert([{
+          name: newProduct.name,
+          description: newProduct.description,
+          price: parseFloat(newProduct.price),
+          stock: parseInt(newProduct.stock),
+          category_id: newProduct.category_id,
+          status: newProduct.status
+        }]);
 
-      if (editingProduct) {
-        // Update existing product
-        const { error } = await supabase
-          .from('products')
-          .update(productData)
-          .eq('id', editingProduct.id);
+      if (error) throw error;
 
-        if (error) throw error;
+      toast({
+        title: "Succes",
+        description: "Produsul a fost adăugat cu succes!",
+      });
 
-        toast({
-          title: "Succes",
-          description: "Produsul a fost actualizat."
-        });
-      } else {
-        // Create new product
-        const { error } = await supabase
-          .from('products')
-          .insert([productData]);
-
-        if (error) throw error;
-
-        toast({
-          title: "Succes",
-          description: "Produsul a fost adăugat."
-        });
-      }
-
-      setIsProductDialogOpen(false);
-      setEditingProduct(null);
-      setProductForm({
-        name: '',
-        description: '',
-        price: '',
-        stock: '',
-        status: 'active',
-        category_id: '',
-        image_url: ''
+      setIsAddProductOpen(false);
+      setNewProduct({
+        name: "",
+        description: "",
+        price: "",
+        stock: "",
+        category_id: "",
+        status: "active"
       });
       fetchData();
     } catch (error) {
-      console.error('Error saving product:', error);
+      console.error('Error adding product:', error);
       toast({
         title: "Eroare",
-        description: "Nu s-a putut salva produsul.",
-        variant: "destructive"
+        description: "Nu s-a putut adăuga produsul.",
+        variant: "destructive",
       });
     }
   };
 
+  // Edit product
+  const handleEditProduct = async () => {
+    if (!editingProduct) return;
+
+    try {
+      const { error } = await supabase
+        .from('products')
+        .update({
+          name: editingProduct.name,
+          description: editingProduct.description,
+          price: editingProduct.price,
+          stock: editingProduct.stock,
+          category_id: editingProduct.category_id,
+          status: editingProduct.status
+        })
+        .eq('id', editingProduct.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Succes",
+        description: "Produsul a fost actualizat cu succes!",
+      });
+
+      setIsEditProductOpen(false);
+      setEditingProduct(null);
+      fetchData();
+    } catch (error) {
+      console.error('Error updating product:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-a putut actualiza produsul.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Delete product
   const handleDeleteProduct = async (productId: string) => {
-    if (!confirm('Ești sigur că vrei să ștergi acest produs?')) return;
+    if (!confirm("Ești sigur că vrei să ștergi acest produs?")) return;
 
     try {
       const { error } = await supabase
@@ -189,49 +213,22 @@ const AdminPage = () => {
 
       toast({
         title: "Succes",
-        description: "Produsul a fost șters."
+        description: "Produsul a fost șters cu succes!",
       });
-      
+
       fetchData();
     } catch (error) {
       console.error('Error deleting product:', error);
       toast({
         title: "Eroare",
         description: "Nu s-a putut șterge produsul.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
-  const handleEditProduct = (product: Product) => {
-    setEditingProduct(product);
-    setProductForm({
-      name: product.name,
-      description: product.description || '',
-      price: product.price.toString(),
-      stock: product.stock.toString(),
-      status: product.status,
-      category_id: product.category_id || '',
-      image_url: product.image_url || ''
-    });
-    setIsProductDialogOpen(true);
-  };
-
-  const handleNewProduct = () => {
-    setEditingProduct(null);
-    setProductForm({
-      name: '',
-      description: '',
-      price: '',
-      stock: '',
-      status: 'active',
-      category_id: '',
-      image_url: ''
-    });
-    setIsProductDialogOpen(true);
-  };
-
-  const updateOrderStatus = async (orderId: string, newStatus: 'pending' | 'processing' | 'completed' | 'cancelled') => {
+  // Update order status
+  const handleUpdateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
       const { error } = await supabase
         .from('orders')
@@ -242,16 +239,16 @@ const AdminPage = () => {
 
       toast({
         title: "Succes",
-        description: "Statusul comenzii a fost actualizat."
+        description: "Statusul comenzii a fost actualizat!",
       });
-      
+
       fetchData();
     } catch (error) {
       console.error('Error updating order status:', error);
       toast({
         title: "Eroare",
         description: "Nu s-a putut actualiza statusul comenzii.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -267,8 +264,8 @@ const AdminPage = () => {
     { title: "Vânzări Luna", value: `${orders.filter(order => {
       const orderDate = new Date(order.created_at);
       const now = new Date();
-      return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear() && order.status === 'completed';
-    }).reduce((total, order) => total + order.total, 0).toFixed(2)} RON`, icon: BarChart3, color: "bg-orange-500" },
+      return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
+    }).reduce((sum, order) => sum + order.total, 0).toFixed(0)} RON`, icon: BarChart3, color: "bg-orange-500" },
   ];
 
   const getStatusBadge = (status: string) => {
@@ -284,29 +281,24 @@ const AdminPage = () => {
   };
 
   const getStatusText = (status: string) => {
-    const texts = {
-      active: 'Activ',
-      inactive: 'Inactiv',
-      completed: 'Finalizată',
-      pending: 'În așteptare',
-      processing: 'În procesare',
-      cancelled: 'Anulată'
+    const statusText = {
+      active: "Activ",
+      inactive: "Inactiv",
+      completed: "Finalizată",
+      pending: "În așteptare",
+      processing: "În procesare",
+      cancelled: "Anulată",
     };
-    return texts[status as keyof typeof texts] || status;
+    return statusText[status as keyof typeof statusText] || status;
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
-        <main className="container mx-auto px-4 py-8">
-          <div className="flex justify-center items-center h-64">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-              <p className="mt-4 text-muted-foreground">Se încarcă...</p>
-            </div>
-          </div>
-        </main>
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">Încărcare...</div>
+        </div>
         <Footer />
       </div>
     );
@@ -358,10 +350,80 @@ const AdminPage = () => {
               </CardHeader>
               <CardContent>
                 <div className="mb-4">
-                  <Button onClick={handleNewProduct} className="bg-primary text-primary-foreground">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Adaugă Produs Nou
-                  </Button>
+                  <Dialog open={isAddProductOpen} onOpenChange={setIsAddProductOpen}>
+                    <DialogTrigger asChild>
+                      <Button className="bg-primary text-primary-foreground">
+                        <Plus className="mr-2 h-4 w-4" />
+                        Adaugă Produs Nou
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Adaugă Produs Nou</DialogTitle>
+                        <DialogDescription>
+                          Completează informațiile pentru noul produs.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="name" className="text-right">Nume</Label>
+                          <Input
+                            id="name"
+                            value={newProduct.name}
+                            onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}
+                            className="col-span-3"
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="description" className="text-right">Descriere</Label>
+                          <Input
+                            id="description"
+                            value={newProduct.description}
+                            onChange={(e) => setNewProduct({...newProduct, description: e.target.value})}
+                            className="col-span-3"
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="price" className="text-right">Preț</Label>
+                          <Input
+                            id="price"
+                            type="number"
+                            value={newProduct.price}
+                            onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
+                            className="col-span-3"
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="stock" className="text-right">Stoc</Label>
+                          <Input
+                            id="stock"
+                            type="number"
+                            value={newProduct.stock}
+                            onChange={(e) => setNewProduct({...newProduct, stock: e.target.value})}
+                            className="col-span-3"
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="category" className="text-right">Categorie</Label>
+                          <Select value={newProduct.category_id} onValueChange={(value) => setNewProduct({...newProduct, category_id: value})}>
+                            <SelectTrigger className="col-span-3">
+                              <SelectValue placeholder="Selectează categoria" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {categories.map((category) => (
+                                <SelectItem key={category.id} value={category.id}>
+                                  {category.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button onClick={handleAddProduct}>Adaugă Produs</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </div>
                 <Table>
                   <TableHeader>
@@ -378,7 +440,7 @@ const AdminPage = () => {
                     {products.map((product) => (
                       <TableRow key={product.id}>
                         <TableCell className="font-medium">{product.name}</TableCell>
-                        <TableCell>{product.categories?.name || 'Fără categorie'}</TableCell>
+                        <TableCell>{product.categories?.name || 'N/A'}</TableCell>
                         <TableCell>{product.price} RON</TableCell>
                         <TableCell>{product.stock}</TableCell>
                         <TableCell>
@@ -388,10 +450,21 @@ const AdminPage = () => {
                         </TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
-                            <Button variant="outline" size="sm" onClick={() => handleEditProduct(product)}>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setEditingProduct(product);
+                                setIsEditProductOpen(true);
+                              }}
+                            >
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button variant="outline" size="sm" onClick={() => handleDeleteProduct(product.id)}>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDeleteProduct(product.id)}
+                            >
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
@@ -417,9 +490,9 @@ const AdminPage = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>ID Comandă</TableHead>
                       <TableHead>Client</TableHead>
                       <TableHead>Email</TableHead>
+                      <TableHead>Telefon</TableHead>
                       <TableHead>Total</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Data</TableHead>
@@ -429,14 +502,14 @@ const AdminPage = () => {
                   <TableBody>
                     {orders.map((order) => (
                       <TableRow key={order.id}>
-                        <TableCell className="font-medium">#{order.id.slice(0, 8)}</TableCell>
-                        <TableCell>{order.customer_name}</TableCell>
+                        <TableCell className="font-medium">{order.customer_name}</TableCell>
                         <TableCell>{order.customer_email}</TableCell>
+                        <TableCell>{order.customer_phone}</TableCell>
                         <TableCell>{order.total} RON</TableCell>
                         <TableCell>
-                          <Select
-                            value={order.status}
-                            onValueChange={(value) => updateOrderStatus(order.id, value as any)}
+                          <Select 
+                            value={order.status} 
+                            onValueChange={(value) => handleUpdateOrderStatus(order.id, value)}
                           >
                             <SelectTrigger className="w-32">
                               <SelectValue />
@@ -449,13 +522,11 @@ const AdminPage = () => {
                             </SelectContent>
                           </Select>
                         </TableCell>
-                        <TableCell>{new Date(order.created_at).toLocaleDateString('ro-RO')}</TableCell>
+                        <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
                         <TableCell>
-                          <div className="flex space-x-2">
-                            <Button variant="outline" size="sm">
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                          </div>
+                          <Button variant="outline" size="sm">
+                            <Eye className="h-4 w-4" />
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -507,15 +578,19 @@ const AdminPage = () => {
                         <div className="space-y-3">
                           <div className="flex justify-between">
                             <span>Total Categorii:</span>
-                            <span className="font-semibold">{categories.length}</span>
+                            <span className="font-medium">{categories.length}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span>Produse Active:</span>
-                            <span className="font-semibold">{products.filter(p => p.status === 'active').length}</span>
+                            <span>Total Produse:</span>
+                            <span className="font-medium">{products.length}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span>Comenzi Finalizate:</span>
-                            <span className="font-semibold">{orders.filter(o => o.status === 'completed').length}</span>
+                            <span>Total Comenzi:</span>
+                            <span className="font-medium">{orders.length}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Produse în Stoc:</span>
+                            <span className="font-medium">{products.reduce((sum, p) => sum + p.stock, 0)}</span>
                           </div>
                         </div>
                       </CardContent>
@@ -527,110 +602,93 @@ const AdminPage = () => {
           </TabsContent>
         </Tabs>
 
-        {/* Product Dialog */}
-        <Dialog open={isProductDialogOpen} onOpenChange={setIsProductDialogOpen}>
-          <DialogContent className="max-w-md">
+        {/* Edit Product Dialog */}
+        <Dialog open={isEditProductOpen} onOpenChange={setIsEditProductOpen}>
+          <DialogContent>
             <DialogHeader>
-              <DialogTitle>
-                {editingProduct ? 'Editează Produs' : 'Adaugă Produs Nou'}
-              </DialogTitle>
+              <DialogTitle>Editează Produs</DialogTitle>
               <DialogDescription>
-                {editingProduct ? 'Modifică informațiile produsului.' : 'Completează informațiile pentru noul produs.'}
+                Modifică informațiile produsului.
               </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleProductSubmit} className="space-y-4">
-              <div>
-                <Label htmlFor="name">Nume Produs</Label>
-                <Input
-                  id="name"
-                  value={productForm.name}
-                  onChange={(e) => setProductForm({...productForm, name: e.target.value})}
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="description">Descriere</Label>
-                <Textarea
-                  id="description"
-                  value={productForm.description}
-                  onChange={(e) => setProductForm({...productForm, description: e.target.value})}
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="price">Preț (RON)</Label>
+            {editingProduct && (
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="edit-name" className="text-right">Nume</Label>
                   <Input
-                    id="price"
-                    type="number"
-                    step="0.01"
-                    value={productForm.price}
-                    onChange={(e) => setProductForm({...productForm, price: e.target.value})}
-                    required
+                    id="edit-name"
+                    value={editingProduct.name}
+                    onChange={(e) => setEditingProduct({...editingProduct, name: e.target.value})}
+                    className="col-span-3"
                   />
                 </div>
-                <div>
-                  <Label htmlFor="stock">Stoc</Label>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="edit-description" className="text-right">Descriere</Label>
                   <Input
-                    id="stock"
-                    type="number"
-                    value={productForm.stock}
-                    onChange={(e) => setProductForm({...productForm, stock: e.target.value})}
-                    required
+                    id="edit-description"
+                    value={editingProduct.description || ""}
+                    onChange={(e) => setEditingProduct({...editingProduct, description: e.target.value})}
+                    className="col-span-3"
                   />
                 </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="edit-price" className="text-right">Preț</Label>
+                  <Input
+                    id="edit-price"
+                    type="number"
+                    value={editingProduct.price}
+                    onChange={(e) => setEditingProduct({...editingProduct, price: parseFloat(e.target.value)})}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="edit-stock" className="text-right">Stoc</Label>
+                  <Input
+                    id="edit-stock"
+                    type="number"
+                    value={editingProduct.stock}
+                    onChange={(e) => setEditingProduct({...editingProduct, stock: parseInt(e.target.value)})}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="edit-category" className="text-right">Categorie</Label>
+                  <Select 
+                    value={editingProduct.category_id} 
+                    onValueChange={(value) => setEditingProduct({...editingProduct, category_id: value})}
+                  >
+                    <SelectTrigger className="col-span-3">
+                      <SelectValue placeholder="Selectează categoria" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="edit-status" className="text-right">Status</Label>
+                  <Select 
+                    value={editingProduct.status} 
+                    onValueChange={(value) => setEditingProduct({...editingProduct, status: value})}
+                  >
+                    <SelectTrigger className="col-span-3">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Activ</SelectItem>
+                      <SelectItem value="inactive">Inactiv</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-              <div>
-                <Label htmlFor="category">Categorie</Label>
-                <Select
-                  value={productForm.category_id}
-                  onValueChange={(value) => setProductForm({...productForm, category_id: value})}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selectează categoria" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="status">Status</Label>
-                <Select
-                  value={productForm.status}
-                  onValueChange={(value) => setProductForm({...productForm, status: value})}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="active">Activ</SelectItem>
-                    <SelectItem value="inactive">Inactiv</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="image_url">URL Imagine</Label>
-                <Input
-                  id="image_url"
-                  type="url"
-                  value={productForm.image_url}
-                  onChange={(e) => setProductForm({...productForm, image_url: e.target.value})}
-                  placeholder="https://..."
-                />
-              </div>
-              <div className="flex justify-end space-x-2">
-                <Button type="button" variant="outline" onClick={() => setIsProductDialogOpen(false)}>
-                  Anulează
-                </Button>
-                <Button type="submit">
-                  {editingProduct ? 'Actualizează' : 'Adaugă'}
-                </Button>
-              </div>
-            </form>
+            )}
+            <DialogFooter>
+              <Button onClick={handleEditProduct}>Salvează Modificările</Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       </main>
