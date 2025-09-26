@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer"; // Footer component
 import { Button } from "@/components/ui/button";
@@ -6,28 +6,269 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { BarChart3, Users, Package, ShoppingCart, Settings, Eye, Edit, Trash2 } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { BarChart3, Users, Package, ShoppingCart, Settings, Eye, Edit, Trash2, Plus } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+
+interface Product {
+  id: string;
+  name: string;
+  description?: string;
+  price: number;
+  stock: number;
+  status: 'active' | 'inactive';
+  category_id?: string;
+  image_url?: string;
+  created_at: string;
+  updated_at: string;
+  categories?: {
+    name: string;
+  };
+}
+
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+}
+
+interface Order {
+  id: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone?: string;
+  total: number;
+  status: 'pending' | 'processing' | 'completed' | 'cancelled';
+  created_at: string;
+  updated_at: string;
+}
 
 const AdminPage = () => {
-  // Mock data for demonstration
-  const [products] = useState([
-    { id: 1, name: "Canapea Modernă", category: "Living", price: 2500, stock: 15, status: "active" },
-    { id: 2, name: "Masă Dining", category: "Bucătărie", price: 1800, stock: 8, status: "active" },
-    { id: 3, name: "Dulap Dormitor", category: "Dormitor", price: 3200, stock: 5, status: "inactive" },
-    { id: 4, name: "Fotoliu Elegant", category: "Living", price: 1200, stock: 12, status: "active" },
-  ]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [isProductDialogOpen, setIsProductDialogOpen] = useState(false);
+  const [productForm, setProductForm] = useState({
+    name: '',
+    description: '',
+    price: '',
+    stock: '',
+    status: 'active',
+    category_id: '',
+    image_url: ''
+  });
+  const { toast } = useToast();
 
-  const [orders] = useState([
-    { id: 1, customer: "Ion Popescu", total: 2500, status: "completed", date: "2024-01-15" },
-    { id: 2, customer: "Maria Ionescu", total: 1800, status: "pending", date: "2024-01-14" },
-    { id: 3, customer: "Andrei Stoica", total: 4400, status: "processing", date: "2024-01-13" },
-  ]);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch products with categories
+      const { data: productsData } = await supabase
+        .from('products')
+        .select(`
+          *,
+          categories (
+            name
+          )
+        `)
+        .order('created_at', { ascending: false });
+
+      // Fetch categories
+      const { data: categoriesData } = await supabase
+        .from('categories')
+        .select('*')
+        .order('name');
+
+      // Fetch orders
+      const { data: ordersData } = await supabase
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      setProducts((productsData || []) as Product[]);
+      setCategories(categoriesData || []);
+      setOrders((ordersData || []) as Order[]);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-au putut încărca datele.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleProductSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      const productData = {
+        name: productForm.name,
+        description: productForm.description || null,
+        price: parseFloat(productForm.price),
+        stock: parseInt(productForm.stock),
+        status: productForm.status as 'active' | 'inactive',
+        category_id: productForm.category_id || null,
+        image_url: productForm.image_url || null
+      };
+
+      if (editingProduct) {
+        // Update existing product
+        const { error } = await supabase
+          .from('products')
+          .update(productData)
+          .eq('id', editingProduct.id);
+
+        if (error) throw error;
+
+        toast({
+          title: "Succes",
+          description: "Produsul a fost actualizat."
+        });
+      } else {
+        // Create new product
+        const { error } = await supabase
+          .from('products')
+          .insert([productData]);
+
+        if (error) throw error;
+
+        toast({
+          title: "Succes",
+          description: "Produsul a fost adăugat."
+        });
+      }
+
+      setIsProductDialogOpen(false);
+      setEditingProduct(null);
+      setProductForm({
+        name: '',
+        description: '',
+        price: '',
+        stock: '',
+        status: 'active',
+        category_id: '',
+        image_url: ''
+      });
+      fetchData();
+    } catch (error) {
+      console.error('Error saving product:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-a putut salva produsul.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDeleteProduct = async (productId: string) => {
+    if (!confirm('Ești sigur că vrei să ștergi acest produs?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', productId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Succes",
+        description: "Produsul a fost șters."
+      });
+      
+      fetchData();
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-a putut șterge produsul.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleEditProduct = (product: Product) => {
+    setEditingProduct(product);
+    setProductForm({
+      name: product.name,
+      description: product.description || '',
+      price: product.price.toString(),
+      stock: product.stock.toString(),
+      status: product.status,
+      category_id: product.category_id || '',
+      image_url: product.image_url || ''
+    });
+    setIsProductDialogOpen(true);
+  };
+
+  const handleNewProduct = () => {
+    setEditingProduct(null);
+    setProductForm({
+      name: '',
+      description: '',
+      price: '',
+      stock: '',
+      status: 'active',
+      category_id: '',
+      image_url: ''
+    });
+    setIsProductDialogOpen(true);
+  };
+
+  const updateOrderStatus = async (orderId: string, newStatus: 'pending' | 'processing' | 'completed' | 'cancelled') => {
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .update({ status: newStatus })
+        .eq('id', orderId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Succes",
+        description: "Statusul comenzii a fost actualizat."
+      });
+      
+      fetchData();
+    } catch (error) {
+      console.error('Error updating order status:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-a putut actualiza statusul comenzii.",
+        variant: "destructive"
+      });
+    }
+  };
 
   const stats = [
-    { title: "Total Produse", value: "124", icon: Package, color: "bg-blue-500" },
-    { title: "Comenzi Luna", value: "48", icon: ShoppingCart, color: "bg-green-500" },
-    { title: "Clienți Activi", value: "1,234", icon: Users, color: "bg-purple-500" },
-    { title: "Vânzări Luna", value: "85,240 RON", icon: BarChart3, color: "bg-orange-500" },
+    { title: "Total Produse", value: products.length.toString(), icon: Package, color: "bg-blue-500" },
+    { title: "Comenzi Luna", value: orders.filter(order => {
+      const orderDate = new Date(order.created_at);
+      const now = new Date();
+      return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
+    }).length.toString(), icon: ShoppingCart, color: "bg-green-500" },
+    { title: "Produse Active", value: products.filter(p => p.status === 'active').length.toString(), icon: Users, color: "bg-purple-500" },
+    { title: "Vânzări Luna", value: `${orders.filter(order => {
+      const orderDate = new Date(order.created_at);
+      const now = new Date();
+      return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear() && order.status === 'completed';
+    }).reduce((total, order) => total + order.total, 0).toFixed(2)} RON`, icon: BarChart3, color: "bg-orange-500" },
   ];
 
   const getStatusBadge = (status: string) => {
@@ -37,9 +278,39 @@ const AdminPage = () => {
       completed: "bg-green-100 text-green-800",
       pending: "bg-yellow-100 text-yellow-800",
       processing: "bg-blue-100 text-blue-800",
+      cancelled: "bg-red-100 text-red-800",
     };
     return variants[status as keyof typeof variants] || "bg-gray-100 text-gray-800";
   };
+
+  const getStatusText = (status: string) => {
+    const texts = {
+      active: 'Activ',
+      inactive: 'Inactiv',
+      completed: 'Finalizată',
+      pending: 'În așteptare',
+      processing: 'În procesare',
+      cancelled: 'Anulată'
+    };
+    return texts[status as keyof typeof texts] || status;
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="container mx-auto px-4 py-8">
+          <div className="flex justify-center items-center h-64">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+              <p className="mt-4 text-muted-foreground">Se încarcă...</p>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -87,8 +358,8 @@ const AdminPage = () => {
               </CardHeader>
               <CardContent>
                 <div className="mb-4">
-                  <Button className="bg-primary text-primary-foreground">
-                    <Package className="mr-2 h-4 w-4" />
+                  <Button onClick={handleNewProduct} className="bg-primary text-primary-foreground">
+                    <Plus className="mr-2 h-4 w-4" />
                     Adaugă Produs Nou
                   </Button>
                 </div>
@@ -107,23 +378,20 @@ const AdminPage = () => {
                     {products.map((product) => (
                       <TableRow key={product.id}>
                         <TableCell className="font-medium">{product.name}</TableCell>
-                        <TableCell>{product.category}</TableCell>
+                        <TableCell>{product.categories?.name || 'Fără categorie'}</TableCell>
                         <TableCell>{product.price} RON</TableCell>
                         <TableCell>{product.stock}</TableCell>
                         <TableCell>
                           <Badge className={getStatusBadge(product.status)}>
-                            {product.status === 'active' ? 'Activ' : 'Inactiv'}
+                            {getStatusText(product.status)}
                           </Badge>
                         </TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
-                            <Button variant="outline" size="sm">
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                            <Button variant="outline" size="sm">
+                            <Button variant="outline" size="sm" onClick={() => handleEditProduct(product)}>
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button variant="outline" size="sm">
+                            <Button variant="outline" size="sm" onClick={() => handleDeleteProduct(product.id)}>
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
@@ -151,6 +419,7 @@ const AdminPage = () => {
                     <TableRow>
                       <TableHead>ID Comandă</TableHead>
                       <TableHead>Client</TableHead>
+                      <TableHead>Email</TableHead>
                       <TableHead>Total</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Data</TableHead>
@@ -160,23 +429,31 @@ const AdminPage = () => {
                   <TableBody>
                     {orders.map((order) => (
                       <TableRow key={order.id}>
-                        <TableCell className="font-medium">#{order.id}</TableCell>
-                        <TableCell>{order.customer}</TableCell>
+                        <TableCell className="font-medium">#{order.id.slice(0, 8)}</TableCell>
+                        <TableCell>{order.customer_name}</TableCell>
+                        <TableCell>{order.customer_email}</TableCell>
                         <TableCell>{order.total} RON</TableCell>
                         <TableCell>
-                          <Badge className={getStatusBadge(order.status)}>
-                            {order.status === 'completed' ? 'Finalizată' : 
-                             order.status === 'pending' ? 'În așteptare' : 'În procesare'}
-                          </Badge>
+                          <Select
+                            value={order.status}
+                            onValueChange={(value) => updateOrderStatus(order.id, value as any)}
+                          >
+                            <SelectTrigger className="w-32">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="pending">În așteptare</SelectItem>
+                              <SelectItem value="processing">În procesare</SelectItem>
+                              <SelectItem value="completed">Finalizată</SelectItem>
+                              <SelectItem value="cancelled">Anulată</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </TableCell>
-                        <TableCell>{order.date}</TableCell>
+                        <TableCell>{new Date(order.created_at).toLocaleDateString('ro-RO')}</TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
                             <Button variant="outline" size="sm">
                               <Eye className="h-4 w-4" />
-                            </Button>
-                            <Button variant="outline" size="sm">
-                              <Edit className="h-4 w-4" />
                             </Button>
                           </div>
                         </TableCell>
@@ -224,22 +501,22 @@ const AdminPage = () => {
 
                     <Card>
                       <CardHeader>
-                        <CardTitle className="text-lg">Acțiuni Rapide</CardTitle>
+                        <CardTitle className="text-lg">Statistici</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-3">
-                          <Button variant="outline" className="w-full justify-start">
-                            <Settings className="mr-2 h-4 w-4" />
-                            Configurare Plăți
-                          </Button>
-                          <Button variant="outline" className="w-full justify-start">
-                            <Users className="mr-2 h-4 w-4" />
-                            Gestionare Utilizatori
-                          </Button>
-                          <Button variant="outline" className="w-full justify-start">
-                            <BarChart3 className="mr-2 h-4 w-4" />
-                            Rapoarte Vânzări
-                          </Button>
+                          <div className="flex justify-between">
+                            <span>Total Categorii:</span>
+                            <span className="font-semibold">{categories.length}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Produse Active:</span>
+                            <span className="font-semibold">{products.filter(p => p.status === 'active').length}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Comenzi Finalizate:</span>
+                            <span className="font-semibold">{orders.filter(o => o.status === 'completed').length}</span>
+                          </div>
                         </div>
                       </CardContent>
                     </Card>
@@ -249,6 +526,113 @@ const AdminPage = () => {
             </Card>
           </TabsContent>
         </Tabs>
+
+        {/* Product Dialog */}
+        <Dialog open={isProductDialogOpen} onOpenChange={setIsProductDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>
+                {editingProduct ? 'Editează Produs' : 'Adaugă Produs Nou'}
+              </DialogTitle>
+              <DialogDescription>
+                {editingProduct ? 'Modifică informațiile produsului.' : 'Completează informațiile pentru noul produs.'}
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleProductSubmit} className="space-y-4">
+              <div>
+                <Label htmlFor="name">Nume Produs</Label>
+                <Input
+                  id="name"
+                  value={productForm.name}
+                  onChange={(e) => setProductForm({...productForm, name: e.target.value})}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="description">Descriere</Label>
+                <Textarea
+                  id="description"
+                  value={productForm.description}
+                  onChange={(e) => setProductForm({...productForm, description: e.target.value})}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="price">Preț (RON)</Label>
+                  <Input
+                    id="price"
+                    type="number"
+                    step="0.01"
+                    value={productForm.price}
+                    onChange={(e) => setProductForm({...productForm, price: e.target.value})}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="stock">Stoc</Label>
+                  <Input
+                    id="stock"
+                    type="number"
+                    value={productForm.stock}
+                    onChange={(e) => setProductForm({...productForm, stock: e.target.value})}
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="category">Categorie</Label>
+                <Select
+                  value={productForm.category_id}
+                  onValueChange={(value) => setProductForm({...productForm, category_id: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selectează categoria" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="status">Status</Label>
+                <Select
+                  value={productForm.status}
+                  onValueChange={(value) => setProductForm({...productForm, status: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Activ</SelectItem>
+                    <SelectItem value="inactive">Inactiv</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="image_url">URL Imagine</Label>
+                <Input
+                  id="image_url"
+                  type="url"
+                  value={productForm.image_url}
+                  onChange={(e) => setProductForm({...productForm, image_url: e.target.value})}
+                  placeholder="https://..."
+                />
+              </div>
+              <div className="flex justify-end space-x-2">
+                <Button type="button" variant="outline" onClick={() => setIsProductDialogOpen(false)}>
+                  Anulează
+                </Button>
+                <Button type="submit">
+                  {editingProduct ? 'Actualizează' : 'Adaugă'}
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
       </main>
 
       <Footer />
