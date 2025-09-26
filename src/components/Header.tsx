@@ -4,14 +4,17 @@ import CartDrawer from "./CartDrawer";
 import SearchDialog from "./SearchDialog";
 import MobileMenu from "./MobileMenu";
 import { toast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import logoFurniLux from "@/assets/logo-furniLux-glass.png";
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, signOut } = useAuth();
+  
+  const isAdminPage = location.pathname === '/admin';
 
   const handleNavClick = (section: string) => {
     const routes: { [key: string]: string } = {
@@ -68,41 +71,49 @@ const Header = () => {
         </button>
         
         
-        <nav className="hidden md:flex items-center space-x-4 lg:space-x-8 text-sm lg:text-base font-medium font-inter relative z-10 mx-4">
-          <button onClick={() => handleNavClick("Acasă")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
-            Acasă
-            <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-          </button>
-          <button onClick={() => handleNavClick("Camera de zi")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
-            Camera de zi
-            <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-          </button>
-          <button onClick={() => handleNavClick("Dormitor")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
-            Dormitor
-            <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-          </button>
-          <button onClick={() => handleNavClick("Bucătărie")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
-            Bucătărie
-            <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-          </button>
-          <button onClick={() => handleNavClick("Hol")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
-            Hol
-            <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-          </button>
-          <button onClick={() => handleNavClick("Inspirații")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
-            Inspirații
-            <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-          </button>
-          <button onClick={() => handleNavClick("Blog")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
-            Blog
-            <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-          </button>
-        </nav>
+        {!isAdminPage && (
+          <nav className="hidden md:flex items-center space-x-4 lg:space-x-8 text-sm lg:text-base font-medium font-inter relative z-10 mx-4">
+            <button onClick={() => handleNavClick("Acasă")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
+              Acasă
+              <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
+            </button>
+            <button onClick={() => handleNavClick("Camera de zi")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
+              Camera de zi
+              <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
+            </button>
+            <button onClick={() => handleNavClick("Dormitor")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
+              Dormitor
+              <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
+            </button>
+            <button onClick={() => handleNavClick("Bucătărie")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
+              Bucătărie
+              <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
+            </button>
+            <button onClick={() => handleNavClick("Hol")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
+              Hol
+              <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
+            </button>
+            <button onClick={() => handleNavClick("Inspirații")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
+              Inspirații
+              <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
+            </button>
+            <button onClick={() => handleNavClick("Blog")} className="text-white/90 hover:text-luxury-gold transition-all duration-300 relative group whitespace-nowrap">
+              Blog
+              <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
+            </button>
+          </nav>
+        )}
+
+        {isAdminPage && (
+          <div className="hidden md:flex items-center space-x-4 text-sm lg:text-base font-medium font-inter relative z-10 mx-4">
+            <span className="text-white/90 font-semibold">Panou Administrator</span>
+          </div>
+        )}
 
         <div className="flex items-center space-x-2 md:space-x-4 relative z-10">
-          <SearchDialog />
+          {!isAdminPage && <SearchDialog />}
           
-          <CartDrawer />
+          {!isAdminPage && <CartDrawer />}
           
           {user ? (
             <DropdownMenu>
@@ -133,7 +144,7 @@ const Header = () => {
             </Button>
           )}
           
-          <MobileMenu onNavClick={handleNavClick} />
+          {!isAdminPage && <MobileMenu onNavClick={handleNavClick} />}
         </div>
       </div>
     </header>
