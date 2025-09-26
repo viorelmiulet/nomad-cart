@@ -45,6 +45,7 @@ interface Order {
   total: number;
   status: string;
   created_at: string;
+  order_items?: OrderItem[];
 }
 
 interface OrderItem {
@@ -129,10 +130,20 @@ const AdminPage = () => {
       if (productsError) throw productsError;
       setProducts(productsData || []);
 
-      // Fetch orders
+      // Fetch orders with order items and product details
       const { data: ordersData, error: ordersError } = await supabase
         .from('orders')
-        .select('*')
+        .select(`
+          *,
+          order_items (
+            *,
+            products (
+              id,
+              name,
+              image_url
+            )
+          )
+        `)
         .order('created_at', { ascending: false });
 
       if (ordersError) throw ordersError;
@@ -658,6 +669,7 @@ const AdminPage = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead>Produse</TableHead>
                       <TableHead>Client</TableHead>
                       <TableHead>Email</TableHead>
                       <TableHead>Telefon</TableHead>
@@ -670,6 +682,31 @@ const AdminPage = () => {
                   <TableBody>
                     {orders.map((order) => (
                       <TableRow key={order.id}>
+                        <TableCell>
+                          <div className="flex -space-x-2">
+                            {order.order_items?.slice(0, 3).map((item, index) => (
+                              <div key={item.id} className="relative">
+                                {item.products?.image_url ? (
+                                  <img 
+                                    src={item.products.image_url} 
+                                    alt={item.products.name}
+                                    className="w-10 h-10 object-cover rounded-lg border-2 border-background"
+                                    title={`${item.products.name} (${item.quantity}x)`}
+                                  />
+                                ) : (
+                                  <div className="w-10 h-10 bg-muted rounded-lg border-2 border-background flex items-center justify-center">
+                                    <Package className="h-4 w-4 text-muted-foreground" />
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                            {order.order_items && order.order_items.length > 3 && (
+                              <div className="w-10 h-10 bg-muted rounded-lg border-2 border-background flex items-center justify-center text-xs font-medium">
+                                +{order.order_items.length - 3}
+                              </div>
+                            )}
+                          </div>
+                        </TableCell>
                         <TableCell className="font-medium">{order.customer_name}</TableCell>
                         <TableCell>{order.customer_email}</TableCell>
                         <TableCell>{order.customer_phone}</TableCell>
