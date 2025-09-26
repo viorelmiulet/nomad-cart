@@ -1,14 +1,17 @@
-import { ShoppingCart, Search } from "lucide-react";
+import { ShoppingCart, Search, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CartDrawer from "./CartDrawer";
 import SearchDialog from "./SearchDialog";
 import MobileMenu from "./MobileMenu";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import logoFurniLux from "@/assets/logo-furniLux-glass.png";
 
 const Header = () => {
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
 
   const handleNavClick = (section: string) => {
     const routes: { [key: string]: string } = {
@@ -35,6 +38,14 @@ const Header = () => {
 
   const handleHomeClick = () => {
     navigate("/");
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    toast({
+      title: "Deconectat",
+      description: "V-ați deconectat cu succes.",
+    });
   };
 
   return (
@@ -92,6 +103,35 @@ const Header = () => {
           <SearchDialog />
           
           <CartDrawer />
+          
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-white/90 hover:text-luxury-gold hover:bg-white/10">
+                  <User className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem className="text-sm font-medium">
+                  {user.email}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Deconectare
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate('/auth')}
+              className="text-white/90 hover:text-luxury-gold hover:bg-white/10"
+            >
+              <User className="h-4 w-4 mr-2" />
+              Conectare
+            </Button>
+          )}
           
           <MobileMenu onNavClick={handleNavClick} />
         </div>
