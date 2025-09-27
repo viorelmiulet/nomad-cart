@@ -40,7 +40,7 @@ const Footer = () => {
                 <span className="text-luxury-dark font-bold text-lg font-playfair">F</span>
               </div>
               <span className="text-2xl font-bold font-playfair bg-luxury-gradient bg-clip-text text-transparent">
-                FurniLux
+                Mobila Nomad
               </span>
             </div>
             <p className="text-luxury-cream/80 font-inter leading-relaxed">
@@ -98,10 +98,10 @@ const Footer = () => {
               <li className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-luxury-gold" />
                 <button 
-                  onClick={() => handleContactClick("Email", "contact@furnilux.ro")}
+                  onClick={() => handleContactClick("Email", "contact@mobilanomad.ro")}
                   className="hover:text-luxury-gold transition-colors duration-300"
                 >
-                  contact@furnilux.ro
+                  contact@mobilanomad.ro
                 </button>
               </li>
               <li className="flex items-center space-x-3">
@@ -118,7 +118,7 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-luxury-gold/20 mt-12 pt-8 text-center">
-          <p className="text-luxury-cream/60 font-inter">&copy; 2024 FurniLux. Toate drepturile rezervate. | Design de lux pentru casa ta.</p>
+          <p className="text-luxury-cream/60 font-inter">&copy; 2024 Mobila Nomad. Toate drepturile rezervate. | Design de lux pentru casa ta.</p>
         </div>
       </div>
     </footer>

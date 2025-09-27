@@ -63,7 +63,7 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
         
         <SheetHeader className="relative z-10 pb-8">
           <SheetTitle className="text-2xl font-bold font-playfair bg-luxury-gradient bg-clip-text text-transparent">
-            FurniLux Menu
+            Mobila Nomad Menu
           </SheetTitle>
         </SheetHeader>
         

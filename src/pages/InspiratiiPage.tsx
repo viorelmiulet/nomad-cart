@@ -82,7 +82,7 @@ const InspiratiiPage = () => {
           <div className="text-center mb-16">
             <p className="text-lg text-luxury-cream/90 max-w-3xl mx-auto font-inter leading-relaxed">
               Descoperă idei și tendințe în designul interior. Inspiră-te din proiectele noastre 
-              și creează-ți casa de vis cu mobilierul premium FurniLux.
+              și creează-ți casa de vis cu mobilierul premium Mobila Nomad.
             </p>
           </div>
           

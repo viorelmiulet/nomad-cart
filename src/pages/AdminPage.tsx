@@ -815,7 +815,7 @@ const AdminPage = () => {
                         <div className="space-y-4">
                           <div>
                             <label className="text-sm font-medium">Nume Magazin</label>
-                            <p className="text-sm text-muted-foreground">FurniLux</p>
+                            <p className="text-sm text-muted-foreground">Mobila Nomad</p>
                           </div>
                           <div>
                             <label className="text-sm font-medium">Email Contact</label>

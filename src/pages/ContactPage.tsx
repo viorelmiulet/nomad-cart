@@ -242,7 +242,7 @@ const ContactPage = () => {
                       </div>
                       <div>
                         <p className="text-luxury-cream font-semibold">Email</p>
-                        <p className="text-luxury-cream/80 font-mono">contact@furnilux.ro</p>
+                        <p className="text-luxury-cream/80 font-mono">contact@mobilanomad.ro</p>
                       </div>
                     </div>
                     

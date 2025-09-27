@@ -63,7 +63,7 @@ const Header = () => {
           <div className="relative bg-glass-gradient backdrop-blur-xl border border-white/20 rounded-xl p-2 shadow-xl animate-glass-float">
             <img 
               src={logoFurniLux} 
-              alt="FurniLux Logo" 
+              alt="Mobila Nomad Logo"
               className="h-8 w-auto md:h-10 drop-shadow-xl transition-transform duration-300 hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-xl pointer-events-none"></div>

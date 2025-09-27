@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
 const resendApiKey = Deno.env.get("RESEND_API_KEY");
-const resendFrom = Deno.env.get("RESEND_FROM") || "FurniLux <onboarding@resend.dev>";
+const resendFrom = Deno.env.get("RESEND_FROM") || "Mobila Nomad <onboarding@resend.dev>";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -73,7 +73,7 @@ const handler = async (req: Request): Promise<Response> => {
         html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-            <h1 style="color: white; margin: 0; font-size: 28px;">FurniLux</h1>
+            <h1 style="color: white; margin: 0; font-size: 28px;">Mobila Nomad</h1>
             <p style="color: white; margin: 10px 0 0 0; opacity: 0.9;">Actualizare comandă</p>
           </div>
           
@@ -117,7 +117,7 @@ const handler = async (req: Request): Promise<Response> => {
             
             <p style="color: #999; font-size: 14px; margin: 0; text-align: center;">
               Cu drag,<br>
-              <strong>Echipa FurniLux</strong>
+              <strong>Echipa Mobila Nomad</strong>
             </p>
           </div>
         </div>

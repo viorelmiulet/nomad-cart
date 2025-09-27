@@ -34,7 +34,7 @@ const BlogPostPage = () => {
       
       <h3>5. Iluminat LED Personalizabil</h3>
       <p>Tehnologia LED permite acum controlul complet asupra atmosferei. Sistemele smart de iluminat cu temperatura culorii reglabilă și intensitate variabilă se integrează perfect în designul modern, oferind scenarii diferite pentru fiecare moment al zilei.</p>`,
-      author: "Design Team FurniLux",
+      author: "Design Team Mobila Nomad",
       date: "15 Martie 2025",
       readTime: "5 min",
       category: "Design",
@@ -115,7 +115,7 @@ const BlogPostPage = () => {
       
       <h3>De Ce Materialele Premium Valorează Investiția</h3>
       <p>Un fotoliu din piele italiană full-grain pe structură de stejar masiv poate dura peste 20 de ani cu îngrijire minimă. Calculul economic: 200€/an pentru un fotoliu de 4000€ versus 150€/an pentru înlocuirea unui fotoliu de 600€ la fiecare 4 ani. Calitatea nu costă - ea se amortizează.</p>`,
-      author: "Design Team FurniLux",
+      author: "Design Team Mobila Nomad",
       date: "8 Martie 2025",
       readTime: "7 min",
       category: "Materiale",

@@ -22,7 +22,7 @@ const BlogPage = () => {
       id: 1,
       title: "10 Tendințe în Design Interior pentru 2025",
       excerpt: "De la culorile calde și naturale la texturile organice, descoperă cum să îți transformi casa cu cele mai noi tendințe: mobilier durabil din lemn masiv, accesorii handmade, spații multifuncționale și iluminat LED personalizabil. Află cum să creezi un echilibru perfect între confort modern și eleganță tradițională.",
-      author: "Design Team FurniLux",
+      author: "Design Team Mobila Nomad",
       date: "15 Martie 2025",
       readTime: "5 min",
       image: "/api/placeholder/600/400",
@@ -58,7 +58,7 @@ const BlogPage = () => {
       id: 4,
       title: "Materialele Premium: Calitate și Durabilitate",
       excerpt: "Explorează lumea materialelor de lux: lemnul de stejar american vârsta de 50+ ani, pielea italiană full-grain, marmura Carrara și țesăturile belgiene hand-woven. Afli cum să identifici calitatea adevărată și de ce investiția în materiale premium se reflectă în durata de viață de peste 20 de ani.",
-      author: "Design Team FurniLux",
+      author: "Design Team Mobila Nomad",
       date: "8 Martie 2025",
       readTime: "7 min",
       image: "/api/placeholder/600/400", 
@@ -280,7 +280,7 @@ const BlogPage = () => {
             </Button>
             
             <h1 className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
-              Blog FurniLux
+              Blog Mobila Nomad
             </h1>
           </div>
           
