@@ -115,34 +115,36 @@ const Header = () => {
           
           {!isAdminPage && <CartDrawer />}
           
-          {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-white/90 hover:text-brand-gold hover:bg-white/10">
-                  <User className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem className="text-sm font-medium">
-                  {user.email}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Deconectare
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => navigate('/auth')}
-              className="text-white/90 hover:text-brand-gold hover:bg-white/10"
-            >
-              <User className="h-4 w-4 mr-2" />
-              Conectare
-            </Button>
-          )}
+          <div className="hidden md:block">
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="text-white/90 hover:text-brand-gold hover:bg-white/10">
+                    <User className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem className="text-sm font-medium">
+                    {user.email}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Deconectare
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => navigate('/auth')}
+                className="text-white/90 hover:text-brand-gold hover:bg-white/10"
+              >
+                <User className="h-4 w-4 mr-2" />
+                Conectare
+              </Button>
+            )}
+          </div>
           
           {!isAdminPage && <MobileMenu onNavClick={handleNavClick} />}
         </div>
