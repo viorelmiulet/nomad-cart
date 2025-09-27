@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import { Menu, User, LogOut } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface MobileMenuProps {
   onNavClick: (section: string) => void;
@@ -12,6 +13,7 @@ interface MobileMenuProps {
 const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
 
   const handleNavClick = (section: string) => {
     const routes: { [key: string]: string } = {
@@ -31,6 +33,15 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
       onNavClick(section);
     }
     setIsOpen(false);
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    setIsOpen(false);
+    toast({
+      title: "Deconectat",
+      description: "V-ați deconectat cu succes.",
+    });
   };
 
   const menuItems = [
@@ -80,6 +91,36 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
           ))}
           
           <div className="pt-8 space-y-4">
+            {user ? (
+              <>
+                <div className="p-4 bg-glass-gradient backdrop-blur-lg border border-white/10 rounded-xl text-brand-cream">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <User className="h-4 w-4" />
+                    <span className="text-sm font-medium">Conectat ca:</span>
+                  </div>
+                  <p className="text-xs text-brand-cream/80 truncate">{user.email}</p>
+                </div>
+                <button
+                  onClick={handleSignOut}
+                  className="w-full p-4 bg-red-600/80 backdrop-blur-lg border border-red-500/30 text-white rounded-xl transition-all duration-300 font-semibold shadow-xl hover:bg-red-600 transform hover:scale-[1.02] flex items-center justify-center space-x-2"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Deconectare</span>
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => {
+                  navigate("/auth");
+                  setIsOpen(false);
+                }}
+                className="w-full p-4 bg-glass-gradient backdrop-blur-lg border border-white/10 hover:bg-white/10 text-brand-cream rounded-xl transition-all duration-300 font-semibold shadow-xl hover:text-brand-gold transform hover:scale-[1.02] flex items-center justify-center space-x-2"
+              >
+                <User className="h-4 w-4" />
+                <span>Conectare / Creare cont</span>
+              </button>
+            )}
+            
             <button
               onClick={() => {
                 navigate("/contact");
@@ -89,7 +130,6 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
             >
               Contact
             </button>
-            
           </div>
         </nav>
       </SheetContent>
