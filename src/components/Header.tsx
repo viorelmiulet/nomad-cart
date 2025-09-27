@@ -55,24 +55,24 @@ const Header = () => {
     <header className="sticky top-0 z-50 w-full bg-hero-gradient backdrop-blur-xl border-b border-brand-gold/20 shadow-2xl relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95"></div>
       <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
-      <div className="container flex h-14 md:h-16 items-center justify-between relative z-10 px-4">
-        <button 
+      <div className="container flex h-12 md:h-14 lg:h-16 items-center justify-between relative z-10 px-4">
+        <button
           onClick={handleHomeClick}
-          className="flex items-center space-x-2 md:space-x-3 relative z-10 hover:scale-105 transition-transform duration-200"
+          className="flex items-center space-x-2 md:space-x-3 relative z-10 hover:scale-105 transition-transform duration-200 touch-manipulation"
         >
-          <div className="relative bg-glass-gradient backdrop-blur-xl border border-white/20 rounded-xl p-2 shadow-xl animate-glass-float">
+          <div className="relative bg-glass-gradient backdrop-blur-xl border border-white/20 rounded-lg md:rounded-xl p-1.5 md:p-2 shadow-xl animate-glass-float">
             <img 
               src={logoMobilaNomad} 
               alt="Mobila Nomad Logo"
-              className="h-8 w-auto md:h-10 drop-shadow-xl transition-transform duration-300 hover:scale-110"
+              className="h-6 w-auto md:h-8 lg:h-10 drop-shadow-xl transition-transform duration-300 hover:scale-110"
             />
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-xl pointer-events-none"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-lg md:rounded-xl pointer-events-none"></div>
           </div>
         </button>
         
         
         {!isAdminPage && (
-          <nav className="hidden md:flex items-center space-x-4 lg:space-x-8 text-sm lg:text-base font-medium font-inter relative z-10 mx-4">
+          <nav className="hidden md:flex items-center space-x-3 lg:space-x-6 xl:space-x-8 text-sm lg:text-base font-medium font-inter relative z-10 mx-4">
             <button onClick={() => handleNavClick("Acasă")} className="text-white/90 hover:text-brand-gold transition-all duration-300 relative group whitespace-nowrap">
               Acasă
               <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
@@ -110,7 +110,7 @@ const Header = () => {
           </div>
         )}
 
-        <div className="flex items-center space-x-2 md:space-x-4 relative z-10">
+        <div className="flex items-center space-x-1 md:space-x-2 lg:space-x-4 relative z-10">
           {!isAdminPage && <SearchDialog />}
           
           {!isAdminPage && <CartDrawer />}

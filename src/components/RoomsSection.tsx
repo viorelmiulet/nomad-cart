@@ -58,31 +58,31 @@ const RoomsSection = () => {
   };
 
   return (
-    <section className="py-16 bg-hero-gradient relative overflow-hidden">
+    <section className="py-12 md:py-16 bg-hero-gradient relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95"></div>
       <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-4 font-playfair text-brand-cream">
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 font-playfair text-brand-cream">
             Camerele
           </h2>
-          <p className="text-lg text-brand-cream/90 max-w-2xl mx-auto font-inter">
+          <p className="text-base md:text-lg text-brand-cream/90 max-w-2xl mx-auto font-inter px-4">
             Descoperă mobilierul perfect pentru fiecare cameră din casa ta
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {categories.map((category) => (
             <div 
               key={category.id}
               className="group cursor-pointer"
               onClick={() => handleCategoryClick(category.title)}
             >
-              <div className="relative overflow-hidden rounded-2xl bg-glass-gradient backdrop-blur-xl border border-white/10 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+              <div className="relative overflow-hidden rounded-xl md:rounded-2xl bg-glass-gradient backdrop-blur-xl border border-white/10 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 md:hover:-translate-y-2 touch-manipulation">
                 <div className="absolute inset-0 bg-liquid-gradient opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
                 
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-36 md:h-48 overflow-hidden">
                   <img 
                     src={category.image} 
                     alt={category.title}
@@ -91,12 +91,12 @@ const RoomsSection = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/60 via-transparent to-transparent"></div>
                 </div>
                 
-                <div className="relative p-6 bg-glass-gradient backdrop-blur-sm">
-                  <h3 className="text-xl font-bold mb-4 font-playfair text-brand-cream group-hover:text-brand-gold transition-colors">
+                <div className="relative p-4 md:p-6 bg-glass-gradient backdrop-blur-sm">
+                  <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 font-playfair text-brand-cream group-hover:text-brand-gold transition-colors">
                     {category.title}
                   </h3>
                   
-                  <ul className="space-y-2">
+                  <ul className="space-y-1.5 md:space-y-2">
                     {category.subcategories.map((sub, index) => (
                       <li key={index}>
                         <button
@@ -104,7 +104,7 @@ const RoomsSection = () => {
                             e.stopPropagation();
                             handleSubcategoryClick(sub);
                           }}
-                          className="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors duration-300 font-inter text-left"
+                          className="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors duration-300 font-inter text-left touch-manipulation py-1"
                         >
                           {sub}
                         </button>
@@ -114,7 +114,7 @@ const RoomsSection = () => {
                 </div>
                 
                 {/* Glass reflection effect */}
-                <div className="absolute top-4 left-4 w-16 h-16 bg-white/10 rounded-full blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-300"></div>
+                <div className="absolute top-2 left-2 md:top-4 md:left-4 w-8 h-8 md:w-16 md:h-16 bg-white/10 rounded-full blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-300"></div>
               </div>
             </div>
           ))}

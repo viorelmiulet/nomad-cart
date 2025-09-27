@@ -43,68 +43,68 @@ const CartDrawer = () => {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button size="icon" variant="ghost" className="relative h-12 w-12 bg-brand-gold/20 backdrop-blur-lg border-2 border-brand-gold/50 hover:bg-brand-gold/30 hover:border-brand-gold/70 rounded-xl group shadow-lg">
-          <ShoppingCart className="h-5 w-5 text-brand-gold group-hover:text-brand-cream transition-colors drop-shadow-sm" />
+        <Button size="icon" variant="ghost" className="relative h-10 w-10 md:h-12 md:w-12 bg-brand-gold/20 backdrop-blur-lg border-2 border-brand-gold/50 hover:bg-brand-gold/30 hover:border-brand-gold/70 rounded-lg md:rounded-xl group shadow-lg touch-manipulation">
+          <ShoppingCart className="h-4 w-4 md:h-5 md:w-5 text-brand-gold group-hover:text-brand-cream transition-colors drop-shadow-sm" />
           {getTotalItems() > 0 && (
-            <span className="absolute -top-1 -right-1 h-5 w-5 bg-brand-gradient text-xs font-bold rounded-full flex items-center justify-center text-brand-dark shadow-lg border border-brand-gold/50 animate-pulse">
+            <span className="absolute -top-1 -right-1 h-4 w-4 md:h-5 md:w-5 bg-brand-gradient text-xs font-bold rounded-full flex items-center justify-center text-brand-dark shadow-lg border border-brand-gold/50 animate-pulse">
               {getTotalItems()}
             </span>
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-96 bg-brand-dark/95 backdrop-blur-xl border-l border-brand-gold/30 shadow-2xl">
-        <SheetHeader>
-          <SheetTitle className="text-brand-gold font-playfair text-xl drop-shadow-lg">
+      <SheetContent className="w-full max-w-sm md:w-96 bg-brand-dark/95 backdrop-blur-xl border-l border-brand-gold/30 shadow-2xl">
+        <SheetHeader className="pb-4">
+          <SheetTitle className="text-brand-gold font-playfair text-lg md:text-xl drop-shadow-lg">
             Coșul de cumpărături
           </SheetTitle>
         </SheetHeader>
         
-        <div className="mt-6 space-y-4">
+        <div className="mt-4 space-y-4 h-full overflow-hidden flex flex-col">
           {items.length === 0 ? (
-            <div className="text-center py-12">
-              <ShoppingCart className="h-16 w-16 text-brand-gold/60 mx-auto mb-4 drop-shadow-lg" />
-              <p className="text-brand-cream/90 font-inter font-medium">Coșul tău este gol</p>
-              <p className="text-brand-cream/70 text-sm mt-2">Adaugă produse pentru a continua</p>
+            <div className="text-center py-8 md:py-12">
+              <ShoppingCart className="h-12 w-12 md:h-16 md:w-16 text-brand-gold/60 mx-auto mb-3 md:mb-4 drop-shadow-lg" />
+              <p className="text-brand-cream/90 font-inter font-medium text-sm md:text-base">Coșul tău este gol</p>
+              <p className="text-brand-cream/70 text-xs md:text-sm mt-2">Adaugă produse pentru a continua</p>
             </div>
           ) : (
             <>
-              <div className="space-y-4 max-h-96 overflow-y-auto">
+              <div className="space-y-3 md:space-y-4 flex-1 overflow-y-auto max-h-96 md:max-h-none">
                 {items.map((item) => (
-                  <div key={item.id} className="flex items-center space-x-3 p-3 bg-brand-gold/10 rounded-xl border border-brand-gold/20 shadow-md">
+                  <div key={item.id} className="flex items-center space-x-2 md:space-x-3 p-2 md:p-3 bg-brand-gold/10 rounded-lg md:rounded-xl border border-brand-gold/20 shadow-md">
                     <img 
                       src={item.image} 
                       alt={item.name}
-                      className="w-16 h-16 object-cover rounded-lg"
+                      className="w-12 h-12 md:w-16 md:h-16 object-cover rounded-md md:rounded-lg"
                     />
-                    <div className="flex-1">
-                      <h4 className="font-medium text-brand-cream text-sm">{item.name}</h4>
-                      <p className="text-brand-gold font-semibold drop-shadow-sm">{item.price.toLocaleString('ro-RO')} Lei</p>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium text-brand-cream text-xs md:text-sm truncate">{item.name}</h4>
+                      <p className="text-brand-gold font-semibold drop-shadow-sm text-xs md:text-sm">{item.price.toLocaleString('ro-RO')} Lei</p>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-1 md:space-x-2 flex-shrink-0">
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-8 w-8 text-brand-cream/80 hover:text-brand-gold hover:bg-brand-gold/10 rounded-md transition-all duration-200"
+                        className="h-6 w-6 md:h-8 md:w-8 text-brand-cream/80 hover:text-brand-gold hover:bg-brand-gold/10 rounded-md transition-all duration-200 touch-manipulation"
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                       >
-                        <Minus className="h-4 w-4" />
+                        <Minus className="h-3 w-3 md:h-4 md:w-4" />
                       </Button>
-                      <span className="text-brand-cream font-medium w-8 text-center">{item.quantity}</span>
+                      <span className="text-brand-cream font-medium w-6 md:w-8 text-center text-xs md:text-sm">{item.quantity}</span>
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-8 w-8 text-brand-cream/80 hover:text-brand-gold hover:bg-brand-gold/10 rounded-md transition-all duration-200"
+                        className="h-6 w-6 md:h-8 md:w-8 text-brand-cream/80 hover:text-brand-gold hover:bg-brand-gold/10 rounded-md transition-all duration-200 touch-manipulation"
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                       >
-                        <Plus className="h-4 w-4" />
+                        <Plus className="h-3 w-3 md:h-4 md:w-4" />
                       </Button>
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-md transition-all duration-200"
+                        className="h-6 w-6 md:h-8 md:w-8 text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-md transition-all duration-200 touch-manipulation"
                         onClick={() => removeItem(item.id)}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-3 w-3 md:h-4 md:w-4" />
                       </Button>
                     </div>
                   </div>
