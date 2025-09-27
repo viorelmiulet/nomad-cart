@@ -67,7 +67,7 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
       </SheetTrigger>
       <SheetContent 
         side="left" 
-        className="w-80 bg-hero-gradient backdrop-blur-xl border-r border-brand-gold/30 shadow-2xl"
+        className="w-80 bg-hero-gradient backdrop-blur-xl border-r border-brand-gold/30 shadow-2xl overflow-y-auto"
       >
         <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95"></div>
         <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
