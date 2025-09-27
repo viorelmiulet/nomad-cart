@@ -65,7 +65,7 @@ const ProductGrid = () => {
       isNew: true
     },
     {
-      id: "68599044-1e21-4809-8057-6a44a058fbee", // Reusing Fotoliu Elegant ID (will update DB later)
+      id: "f2b8c793-cf63-4fe7-cf61-25106f0a7596", // Unique ID for bookshelf
       name: "Bibliotecă Modulară",
       price: 1699,
       originalPrice: 1999,
@@ -75,7 +75,7 @@ const ProductGrid = () => {
       isOnSale: true
     },
     {
-      id: "2a28a172-ad86-4074-9dbc-7290a0bb820e", // Reusing Masă Dining ID (will update DB later)
+      id: "a9847ba8-5a0a-4ebb-c737-f6c26364afd7", // Unique ID for mattress
       name: "Saltea Memory Foam",
       price: 1299,
       image: mattressImage,
