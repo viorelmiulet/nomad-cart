@@ -61,7 +61,7 @@ const Hero = () => {
               </div>
               <div className="text-center mt-4 md:mt-6 relative z-10">
                 <h3 className="text-xl md:text-2xl font-bold text-brand-cream mb-2 font-playfair drop-shadow-lg">Colecții Speciale</h3>
-                <p className="text-sm md:text-base text-brand-cream/80 font-inter drop-shadow">Disponibile în showroom-ul nostru</p>
+                <p className="text-sm md:text-base text-brand-cream/80 font-inter drop-shadow">Disponibile pentru comandă</p>
               </div>
               
               {/* Glass reflection effect */}

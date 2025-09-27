@@ -107,10 +107,10 @@ const Footer = () => {
               <li className="flex items-center space-x-2 md:space-x-3">
                 <MapPin className="h-4 w-4 md:h-5 md:w-5 text-brand-gold flex-shrink-0" />
                 <button 
-                  onClick={() => handleContactClick("Adresă", "Showroom București")}
+                  onClick={() => handleContactClick("Adresă", "București")}
                   className="hover:text-brand-gold transition-colors duration-300 touch-manipulation py-1"
                 >
-                  Showroom București
+                  București
                 </button>
               </li>
             </ul>

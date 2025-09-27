@@ -251,8 +251,8 @@ const ContactPage = () => {
                         <MapPin className="h-6 w-6 text-luxury-gold" />
                       </div>
                       <div>
-                        <p className="text-luxury-cream font-semibold">Showroom</p>
-                        <p className="text-luxury-cream/80">Showroom Herăstrău, București</p>
+                        <p className="text-luxury-cream font-semibold">Locație</p>
+                        <p className="text-luxury-cream/80">București</p>
                       </div>
                     </div>
                     

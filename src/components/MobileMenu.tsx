@@ -90,18 +90,6 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
               Contact
             </button>
             
-            <button
-              onClick={() => {
-                toast({
-                  title: "Showroom",
-                  description: "Vizitează showroom-ul nostru din Herăstrău!",
-                });
-                setIsOpen(false);
-              }}
-              className="w-full p-4 border-2 border-brand-gold/50 bg-glass-gradient backdrop-blur-lg text-brand-cream hover:bg-white/10 hover:border-brand-gold/70 rounded-xl transition-all duration-300 font-semibold"
-            >
-              Showroom
-            </button>
           </div>
         </nav>
       </SheetContent>
