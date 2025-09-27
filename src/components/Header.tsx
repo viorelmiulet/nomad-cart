@@ -7,7 +7,7 @@ import { toast } from "@/hooks/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import logoFurniLux from "@/assets/logo-furniLux-glass.png";
+import logoMobilaNomad from "@/assets/logo-mobila-nomad.png";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ const Header = () => {
         >
           <div className="relative bg-glass-gradient backdrop-blur-xl border border-white/20 rounded-xl p-2 shadow-xl animate-glass-float">
             <img 
-              src={logoFurniLux} 
+              src={logoMobilaNomad} 
               alt="Mobila Nomad Logo"
               className="h-8 w-auto md:h-10 drop-shadow-xl transition-transform duration-300 hover:scale-110"
             />
