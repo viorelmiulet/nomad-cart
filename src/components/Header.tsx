@@ -4,7 +4,7 @@ import CartDrawer from "./CartDrawer";
 import SearchDialog from "./SearchDialog";
 import MobileMenu from "./MobileMenu";
 import { toast } from "@/hooks/use-toast";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import logoMobilaNomad from "@/assets/logo-mobila-nomad.png";
@@ -56,9 +56,10 @@ const Header = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95"></div>
       <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
       <div className="container flex h-12 md:h-14 lg:h-16 items-center justify-between relative z-10 px-4">
-        <button
-          onClick={handleHomeClick}
+        <Link
+          to="/"
           className="flex items-center space-x-2 md:space-x-3 relative z-10 hover:scale-105 transition-transform duration-200 touch-manipulation"
+          aria-label="Acasă"
         >
           <div className="relative bg-glass-gradient backdrop-blur-xl border border-white/20 rounded-lg md:rounded-xl p-1.5 md:p-2 shadow-xl animate-glass-float">
             <img 
@@ -68,7 +69,7 @@ const Header = () => {
             />
             <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-lg md:rounded-xl pointer-events-none"></div>
           </div>
-        </button>
+        </Link>
         
         
         {!isAdminPage && (
