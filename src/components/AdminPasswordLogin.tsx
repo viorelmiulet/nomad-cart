@@ -16,8 +16,8 @@ export function AdminPasswordLogin({ onLogin }: AdminPasswordLoginProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  // Admin password hash (SHA-256 of "admin123" - change this in production)
-  const ADMIN_PASSWORD_HASH = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
+  // Admin password hash (SHA-256 of "123456" - change this in production)
+  const ADMIN_PASSWORD_HASH = "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92";
 
   const hashPassword = async (password: string): Promise<string> => {
     const encoder = new TextEncoder();
