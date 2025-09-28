@@ -222,16 +222,18 @@ export function SupportChat() {
           {isOpen ? (
             <X className="h-7 w-7 transition-transform duration-300 group-hover:scale-110" />
           ) : (
-            <MessageCircle className="h-7 w-7 transition-transform duration-300 group-hover:scale-110" />
+            <>
+              <MessageCircle className="h-7 w-7 transition-transform duration-300 group-hover:scale-110" />
+              <div className="absolute -top-1 -right-1 h-3 w-3 bg-green-400 rounded-full animate-pulse"></div>
+            </>
           )}
-          {!isOpen && <div className="absolute -top-1 -right-1 h-3 w-3 bg-green-400 rounded-full animate-pulse"></div>}
         </div>
       </Button>
 
       {/* Chat Bubble */}
       {isOpen && (
-        <Card className="fixed bottom-24 right-6 w-80 h-96 z-40 shadow-2xl bg-gradient-to-br from-background via-background/95 to-muted/30 backdrop-blur-xl border-2 border-primary/20 animate-scale-in">
-          <CardHeader className="flex flex-row items-center justify-between border-b border-border/60 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 backdrop-blur-sm p-4">
+        <Card className="fixed bottom-24 right-6 w-80 h-96 z-40 shadow-2xl bg-gradient-to-br from-background/95 via-background/90 to-muted/60 backdrop-blur-xl border-2 border-primary/30 animate-scale-in">
+          <CardHeader className="flex flex-row items-center justify-between border-b border-border/80 bg-gradient-to-r from-primary/10 via-primary/20 to-primary/10 backdrop-blur-sm p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-primary/10 rounded-full">
                 <Headphones className="h-4 w-4 text-primary" />
@@ -248,11 +250,11 @@ export function SupportChat() {
           </CardHeader>
 
           <CardContent className="flex flex-col flex-1 p-4 space-y-3 overflow-hidden h-full">
-            {/* User Info Form - show if not authenticated or missing data */}
-            {(!user || !isDataComplete) && (
+            {/* User Info Form - show only if data is not complete */}
+            {!isDataComplete && (
               <div className="space-y-3">
                 <div className="text-center">
-                  <div className="inline-flex p-2 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full mb-2">
+                  <div className="inline-flex p-2 bg-gradient-to-br from-primary/30 to-primary/20 rounded-full mb-2">
                     <User className="h-5 w-5 text-primary" />
                   </div>
                   <h4 className="text-sm font-semibold text-foreground">
@@ -270,7 +272,7 @@ export function SupportChat() {
                       value={userName}
                       onChange={(e) => setUserName(e.target.value)}
                       placeholder="Numele tău"
-                      className="h-8 text-sm border-border/60 focus:border-primary/60 focus:ring-primary/20"
+                      className="h-8 text-sm border-border/80 focus:border-primary/80 focus:ring-primary/30 bg-background/80 backdrop-blur-sm"
                       disabled={user && !!userProfile?.display_name}
                     />
                   </div>
@@ -282,7 +284,7 @@ export function SupportChat() {
                       value={userEmail}
                       onChange={(e) => setUserEmail(e.target.value)}
                       placeholder="email@example.com"
-                      className="h-8 text-sm border-border/60 focus:border-primary/60 focus:ring-primary/20"
+                      className="h-8 text-sm border-border/80 focus:border-primary/80 focus:ring-primary/30 bg-background/80 backdrop-blur-sm"
                       disabled={!!user}
                     />
                   </div>
@@ -296,7 +298,7 @@ export function SupportChat() {
                         value={userPhone}
                         onChange={(e) => setUserPhone(e.target.value)}
                         placeholder="0721234567"
-                        className="h-8 pl-8 text-sm border-border/60 focus:border-primary/60 focus:ring-primary/20"
+                        className="h-8 pl-8 text-sm border-border/80 focus:border-primary/80 focus:ring-primary/30 bg-background/80 backdrop-blur-sm"
                       />
                     </div>
                   </div>
@@ -304,12 +306,12 @@ export function SupportChat() {
               </div>
             )}
 
-            {/* Messages Area */}
+            {/* Messages Area - show only when data is complete */}
             {isDataComplete && (
               <div className="flex-1 overflow-y-auto space-y-3 min-h-0 pr-2">
                 {messages.length === 0 ? (
                   <div className="text-center text-muted-foreground py-6">
-                    <div className="inline-flex p-2 bg-gradient-to-br from-primary/10 to-primary/5 rounded-full mb-2">
+                    <div className="inline-flex p-2 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full mb-2">
                       <MessageCircle className="h-5 w-5 opacity-60" />
                     </div>
                     <h4 className="text-sm font-medium mb-1">Începe conversația</h4>
@@ -352,33 +354,35 @@ export function SupportChat() {
               </div>
             )}
 
-            {/* Message Input */}
-            <div className="border-t border-border/40 pt-3 space-y-2">
-              <div className="flex space-x-2">
-                <div className="flex-1 relative">
-                  <Textarea
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    placeholder="Scrie mesajul..."
-                    className="min-h-[50px] resize-none text-xs border-border/60 focus:border-primary/60 focus:ring-primary/20 transition-all duration-200 bg-background/50"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        sendMessage();
-                      }
-                    }}
-                  />
+            {/* Message Input - show only when data is complete */}
+            {isDataComplete && (
+              <div className="border-t border-border/60 pt-3 space-y-2">
+                <div className="flex space-x-2">
+                  <div className="flex-1 relative">
+                    <Textarea
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      placeholder="Scrie mesajul..."
+                      className="min-h-[50px] resize-none text-xs border-border/80 focus:border-primary/80 focus:ring-primary/30 transition-all duration-200 bg-background/80 backdrop-blur-sm"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          sendMessage();
+                        }
+                      }}
+                    />
+                  </div>
+                  <Button
+                    onClick={sendMessage}
+                    disabled={isLoading || !userName.trim() || !userEmail.trim() || !userPhone.trim() || !newMessage.trim()}
+                    size="icon"
+                    className="self-end h-[50px] w-8 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 transition-all duration-200 hover:scale-105 shadow-lg"
+                  >
+                    <Send className="h-3 w-3" />
+                  </Button>
                 </div>
-                <Button
-                  onClick={sendMessage}
-                  disabled={isLoading || !userName.trim() || !userEmail.trim() || !userPhone.trim() || !newMessage.trim()}
-                  size="icon"
-                  className="self-end h-[50px] w-8 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 transition-all duration-200 hover:scale-105 shadow-lg"
-                >
-                  <Send className="h-3 w-3" />
-                </Button>
               </div>
-            </div>
+            )}
           </CardContent>
         </Card>
       )}
