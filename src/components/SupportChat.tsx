@@ -308,56 +308,54 @@ export function SupportChat() {
 
             {/* Messages Area - show only when data is complete */}
             {isDataComplete && (
-              <div className="flex-1 overflow-y-auto space-y-3 min-h-0 pr-2">
-                {messages.length === 0 ? (
-                  <div className="text-center text-muted-foreground py-6">
-                    <div className="inline-flex p-2 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full mb-2">
-                      <MessageCircle className="h-5 w-5 opacity-60" />
-                    </div>
-                    <h4 className="text-sm font-medium mb-1">Începe conversația</h4>
-                    <p className="text-xs">Trimite primul mesaj!</p>
-                  </div>
-                ) : (
-                  messages.map((msg) => (
-                    <div key={msg.id} className="space-y-2 animate-fade-in">
-                      {/* User message */}
-                      <div className="flex justify-end">
-                        <div className="bg-gradient-to-r from-primary to-primary/90 text-primary-foreground rounded-xl rounded-br-md px-3 py-2 max-w-[90%] shadow-md">
-                          <p className="text-xs leading-relaxed">{msg.message}</p>
-                          <p className="text-xs opacity-80 mt-1 flex items-center gap-1">
-                            <User className="h-2 w-2" />
-                            {new Date(msg.created_at).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' })}
-                          </p>
-                        </div>
+              <div className="flex-1 flex flex-col min-h-0">
+                <div className="flex-1 overflow-y-auto space-y-3 pr-2 pb-3">
+                  {messages.length === 0 ? (
+                    <div className="text-center text-muted-foreground py-6">
+                      <div className="inline-flex p-2 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full mb-2">
+                        <MessageCircle className="h-5 w-5 opacity-60" />
                       </div>
-                      
-                      {/* Admin response */}
-                      {msg.response && (
-                        <div className="flex justify-start">
-                          <div className="bg-gradient-to-r from-muted to-muted/80 rounded-xl rounded-bl-md px-3 py-2 max-w-[90%] shadow-md border border-border/50">
-                            <div className="flex items-center gap-1 mb-1">
-                              <Sparkles className="h-2 w-2 text-primary" />
-                              <span className="text-xs font-medium text-primary">Suport</span>
-                            </div>
-                            <p className="text-xs leading-relaxed text-foreground">{msg.response}</p>
-                            <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                              <Headphones className="h-2 w-2" />
-                              {new Date(msg.updated_at).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' })}
+                      <h4 className="text-sm font-medium mb-1">Începe conversația</h4>
+                      <p className="text-xs">Trimite primul mesaj!</p>
+                    </div>
+                  ) : (
+                    messages.map((msg) => (
+                      <div key={msg.id} className="space-y-2 animate-fade-in">
+                        {/* User message */}
+                        <div className="flex justify-end">
+                          <div className="bg-gradient-to-r from-primary to-primary/90 text-primary-foreground rounded-xl rounded-br-md px-3 py-2 max-w-[90%] shadow-md">
+                            <p className="text-xs leading-relaxed">{msg.message}</p>
+                            <p className="text-xs opacity-80 mt-1 flex items-center gap-1">
+                              <User className="h-2 w-2" />
+                              {new Date(msg.created_at).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' })}
                             </p>
                           </div>
                         </div>
-                      )}
-                    </div>
-                  ))
-                )}
-                <div ref={messagesEndRef} />
-              </div>
-            )}
+                        
+                        {/* Admin response */}
+                        {msg.response && (
+                          <div className="flex justify-start">
+                            <div className="bg-gradient-to-r from-muted to-muted/80 rounded-xl rounded-bl-md px-3 py-2 max-w-[90%] shadow-md border border-border/50">
+                              <div className="flex items-center gap-1 mb-1">
+                                <Sparkles className="h-2 w-2 text-primary" />
+                                <span className="text-xs font-medium text-primary">Suport</span>
+                              </div>
+                              <p className="text-xs leading-relaxed text-foreground">{msg.response}</p>
+                              <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                                <Headphones className="h-2 w-2" />
+                                {new Date(msg.updated_at).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' })}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  )}
+                  <div ref={messagesEndRef} />
+                </div>
 
-            {/* Message Input - show only when data is complete */}
-            {isDataComplete && (
-              <div className="border-t border-border/60 pt-3 space-y-2">
-                <div className="flex space-x-2">
+                {/* Message Input - integrated with chat area */}
+                <div className="flex space-x-2 pt-2">
                   <div className="flex-1 relative">
                     <Textarea
                       value={newMessage}
