@@ -180,13 +180,7 @@ const AdminPage = () => {
       // Fetch user roles
       const { data: rolesData, error: rolesError } = await supabase
         .from('user_roles')
-        .select(`
-          *,
-          profiles!inner (
-            user_id,
-            display_name
-          )
-        `);
+        .select('*');
 
       if (rolesError) throw rolesError;
       setUserRoles(rolesData || []);
