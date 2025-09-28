@@ -4,7 +4,7 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { MessageCircle, Send, X } from 'lucide-react';
+import { MessageCircle, Send, X, User, Headphones, Sparkles } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -136,66 +136,95 @@ export function SupportChat() {
       <DrawerTrigger asChild>
         <Button
           size="icon"
-          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-50 bg-primary hover:bg-primary/90"
+          className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-2xl z-50 bg-gradient-to-r from-primary via-primary/90 to-primary/80 hover:from-primary/90 hover:via-primary/80 hover:to-primary/70 transition-all duration-300 hover:scale-110 group border-2 border-white/20 backdrop-blur-sm"
         >
-          <MessageCircle className="h-6 w-6" />
+          <div className="relative">
+            <MessageCircle className="h-7 w-7 transition-transform duration-300 group-hover:scale-110" />
+            <div className="absolute -top-1 -right-1 h-3 w-3 bg-green-400 rounded-full animate-pulse"></div>
+          </div>
         </Button>
       </DrawerTrigger>
       
-      <DrawerContent className="max-h-[80vh] flex flex-col">
-        <DrawerHeader className="flex flex-row items-center justify-between border-b">
-          <DrawerTitle>Suport Client</DrawerTitle>
+      <DrawerContent className="max-h-[85vh] flex flex-col bg-gradient-to-br from-background via-background/95 to-muted/30 backdrop-blur-xl border-t-2 border-primary/20">
+        <DrawerHeader className="flex flex-row items-center justify-between border-b border-border/60 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 backdrop-blur-sm">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-primary/10 rounded-full">
+              <Headphones className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <DrawerTitle className="text-xl font-semibold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                Suport Client
+              </DrawerTitle>
+              <p className="text-sm text-muted-foreground">Suntem aici să te ajutăm</p>
+            </div>
+          </div>
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setIsOpen(false)}
+            className="hover:bg-destructive/10 hover:text-destructive transition-colors duration-200"
           >
             <X className="h-4 w-4" />
           </Button>
         </DrawerHeader>
 
-        <div className="flex flex-col flex-1 p-4 space-y-4 overflow-hidden">
+        <div className="flex flex-col flex-1 p-6 space-y-6 overflow-hidden">
           {/* User Info Form */}
           {!userEmail && (
-            <div className="space-y-3 border-b pb-4">
-              <div>
-                <Label htmlFor="user-name">Numele tău</Label>
-                <Input
-                  id="user-name"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  placeholder="Introdu numele tău"
-                />
+            <div className="space-y-4 border-b border-border/40 pb-6">
+              <div className="text-center mb-4">
+                <div className="inline-flex p-3 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full mb-3">
+                  <User className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground">Să facem cunoștință!</h3>
+                <p className="text-sm text-muted-foreground">Completează datele pentru a începe conversația</p>
               </div>
-              <div>
-                <Label htmlFor="user-email">Email</Label>
-                <Input
-                  id="user-email"
-                  type="email"
-                  value={userEmail}
-                  onChange={(e) => setUserEmail(e.target.value)}
-                  placeholder="email@example.com"
-                />
+              <div className="space-y-3">
+                <div className="space-y-2">
+                  <Label htmlFor="user-name" className="text-sm font-medium text-foreground">Numele tău</Label>
+                  <Input
+                    id="user-name"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
+                    placeholder="Introdu numele tău"
+                    className="border-border/60 focus:border-primary/60 focus:ring-primary/20 transition-all duration-200"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="user-email" className="text-sm font-medium text-foreground">Email</Label>
+                  <Input
+                    id="user-email"
+                    type="email"
+                    value={userEmail}
+                    onChange={(e) => setUserEmail(e.target.value)}
+                    placeholder="email@example.com"
+                    className="border-border/60 focus:border-primary/60 focus:ring-primary/20 transition-all duration-200"
+                  />
+                </div>
               </div>
             </div>
           )}
 
           {/* Messages Area */}
           {userEmail && (
-            <div className="flex-1 overflow-y-auto space-y-3 min-h-0">
+            <div className="flex-1 overflow-y-auto space-y-4 min-h-0 px-1">
               {messages.length === 0 ? (
-                <div className="text-center text-muted-foreground py-8">
-                  <MessageCircle className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                  <p>Trimite-ne primul tău mesaj!</p>
+                <div className="text-center text-muted-foreground py-12">
+                  <div className="inline-flex p-4 bg-gradient-to-br from-primary/10 to-primary/5 rounded-full mb-4">
+                    <MessageCircle className="h-8 w-8 opacity-60" />
+                  </div>
+                  <h3 className="text-lg font-medium mb-2">Începe conversația</h3>
+                  <p className="text-sm">Trimite-ne primul tău mesaj și îți vom răspunde rapid!</p>
                 </div>
               ) : (
                 messages.map((msg) => (
-                  <div key={msg.id} className="space-y-2">
+                  <div key={msg.id} className="space-y-3 animate-fade-in">
                     {/* User message */}
                     <div className="flex justify-end">
-                      <div className="bg-primary text-primary-foreground rounded-lg px-3 py-2 max-w-[80%]">
-                        <p className="text-sm">{msg.message}</p>
-                        <p className="text-xs opacity-70 mt-1">
+                      <div className="bg-gradient-to-r from-primary to-primary/90 text-primary-foreground rounded-2xl rounded-br-md px-4 py-3 max-w-[85%] shadow-lg">
+                        <p className="text-sm leading-relaxed">{msg.message}</p>
+                        <p className="text-xs opacity-80 mt-2 flex items-center gap-1">
+                          <User className="h-3 w-3" />
                           {new Date(msg.created_at).toLocaleString('ro-RO')}
                         </p>
                       </div>
@@ -204,10 +233,16 @@ export function SupportChat() {
                     {/* Admin response */}
                     {msg.response && (
                       <div className="flex justify-start">
-                        <div className="bg-muted rounded-lg px-3 py-2 max-w-[80%]">
-                          <p className="text-sm font-medium text-primary mb-1">Admin</p>
-                          <p className="text-sm">{msg.response}</p>
-                          <p className="text-xs text-muted-foreground mt-1">
+                        <div className="bg-gradient-to-r from-muted to-muted/80 rounded-2xl rounded-bl-md px-4 py-3 max-w-[85%] shadow-lg border border-border/50">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="flex items-center gap-1 text-primary text-xs font-medium">
+                              <Sparkles className="h-3 w-3" />
+                              <span>Echipa Suport</span>
+                            </div>
+                          </div>
+                          <p className="text-sm leading-relaxed text-foreground">{msg.response}</p>
+                          <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
+                            <Headphones className="h-3 w-3" />
                             {new Date(msg.updated_at).toLocaleString('ro-RO')}
                           </p>
                         </div>
@@ -221,27 +256,32 @@ export function SupportChat() {
           )}
 
           {/* Message Input */}
-          <div className="border-t pt-4 space-y-3">
-            <div className="flex space-x-2">
-              <Textarea
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Scrie mesajul tău aici..."
-                className="flex-1 min-h-[60px] resize-none"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                  }
-                }}
-              />
+          <div className="border-t border-border/40 pt-6 space-y-4 bg-gradient-to-r from-background via-background/80 to-background backdrop-blur-sm">
+            <div className="flex space-x-3">
+              <div className="flex-1 relative">
+                <Textarea
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder="Scrie mesajul tău aici..."
+                  className="min-h-[80px] resize-none pr-12 border-border/60 focus:border-primary/60 focus:ring-primary/20 transition-all duration-200 bg-background/50 backdrop-blur-sm"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      sendMessage();
+                    }
+                  }}
+                />
+                <div className="absolute bottom-2 right-2 text-xs text-muted-foreground">
+                  Enter pentru trimitere
+                </div>
+              </div>
               <Button
                 onClick={sendMessage}
                 disabled={isLoading || !userName.trim() || !userEmail.trim() || !newMessage.trim()}
                 size="icon"
-                className="self-end"
+                className="self-end h-[80px] w-12 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 transition-all duration-200 hover:scale-105 shadow-lg"
               >
-                <Send className="h-4 w-4" />
+                <Send className="h-5 w-5" />
               </Button>
             </div>
           </div>
