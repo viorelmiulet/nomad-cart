@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Filter, SortAsc, ChefHat, Utensils, CookingPot, Refrigerator, Zap } from "lucide-react";
+import { ArrowLeft, Filter, SortAsc, ChefHat, Utensils, CookingPot, Refrigerator } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import categoryKitchen from "@/assets/category-kitchen.jpg";
@@ -19,7 +19,6 @@ const BucatariePage = () => {
     { id: "toate", name: "Toate Produsele", icon: ChefHat },
     { id: "bucatarii-complete", name: "Bucătării Complete", icon: CookingPot },
     { id: "corpuri", name: "Corpuri Individuale", icon: Utensils },
-    { id: "electrocasnice", name: "Electrocasnice", icon: Zap },
     { id: "accesorii", name: "Accesorii", icon: Refrigerator },
   ];
 
@@ -78,12 +77,6 @@ const BucatariePage = () => {
         return products.filter(p => 
           p.name.toLowerCase().includes("corp") ||
           p.name.toLowerCase().includes("blat")
-        );
-      case "electrocasnice":
-        return products.filter(p => 
-          p.name.toLowerCase().includes("plită") ||
-          p.name.toLowerCase().includes("cuptor") ||
-          p.name.toLowerCase().includes("hotă")
         );
       case "accesorii":
         return products.filter(p => 
