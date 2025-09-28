@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -132,153 +132,155 @@ export function SupportChat() {
   }, [messages]);
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button
-          size="icon"
-          className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-2xl z-50 bg-gradient-to-r from-primary via-primary/90 to-primary/80 hover:from-primary/90 hover:via-primary/80 hover:to-primary/70 transition-all duration-300 hover:scale-110 group border-2 border-white/20 backdrop-blur-sm"
-        >
-          <div className="relative">
+    <>
+      {/* Floating Chat Button */}
+      <Button
+        onClick={() => setIsOpen(!isOpen)}
+        size="icon"
+        className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-2xl z-50 bg-gradient-to-r from-primary via-primary/90 to-primary/80 hover:from-primary/90 hover:via-primary/80 hover:to-primary/70 transition-all duration-300 hover:scale-110 group border-2 border-white/20 backdrop-blur-sm"
+      >
+        <div className="relative">
+          {isOpen ? (
+            <X className="h-7 w-7 transition-transform duration-300 group-hover:scale-110" />
+          ) : (
             <MessageCircle className="h-7 w-7 transition-transform duration-300 group-hover:scale-110" />
-            <div className="absolute -top-1 -right-1 h-3 w-3 bg-green-400 rounded-full animate-pulse"></div>
-          </div>
-        </Button>
-      </DialogTrigger>
-      
-      <DialogContent className="max-w-md w-full max-h-[600px] flex flex-col bg-gradient-to-br from-background via-background/95 to-muted/30 backdrop-blur-xl border-2 border-primary/20">
-        <DialogHeader className="flex flex-row items-center justify-between border-b border-border/60 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 backdrop-blur-sm pb-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-full">
-              <Headphones className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <DialogTitle className="text-xl font-semibold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                Suport Client
-              </DialogTitle>
-              <p className="text-sm text-muted-foreground">Suntem aici să te ajutăm</p>
-            </div>
-          </div>
-        </DialogHeader>
-
-        <div className="flex flex-col flex-1 p-4 space-y-4 overflow-hidden">
-          {/* User Info Form */}
-          {!userEmail && (
-            <div className="space-y-3 border-b border-border/40 pb-4">
-              <div className="text-center mb-4">
-                <div className="inline-flex p-2 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full mb-2">
-                  <User className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="text-base font-semibold text-foreground">Să facem cunoștință!</h3>
-                <p className="text-xs text-muted-foreground">Completează datele pentru a începe conversația</p>
-              </div>
-              <div className="space-y-3">
-                <div className="space-y-2">
-                  <Label htmlFor="user-name" className="text-sm font-medium text-foreground">Numele tău</Label>
-                  <Input
-                    id="user-name"
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
-                    placeholder="Introdu numele tău"
-                    className="border-border/60 focus:border-primary/60 focus:ring-primary/20 transition-all duration-200"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="user-email" className="text-sm font-medium text-foreground">Email</Label>
-                  <Input
-                    id="user-email"
-                    type="email"
-                    value={userEmail}
-                    onChange={(e) => setUserEmail(e.target.value)}
-                    placeholder="email@example.com"
-                    className="border-border/60 focus:border-primary/60 focus:ring-primary/20 transition-all duration-200"
-                  />
-                </div>
-              </div>
-            </div>
           )}
+          {!isOpen && <div className="absolute -top-1 -right-1 h-3 w-3 bg-green-400 rounded-full animate-pulse"></div>}
+        </div>
+      </Button>
 
-          {/* Messages Area */}
-          {userEmail && (
-            <div className="flex-1 overflow-y-auto space-y-3 min-h-0 px-1">
-              {messages.length === 0 ? (
-                <div className="text-center text-muted-foreground py-8">
-                  <div className="inline-flex p-3 bg-gradient-to-br from-primary/10 to-primary/5 rounded-full mb-3">
-                    <MessageCircle className="h-6 w-6 opacity-60" />
+      {/* Chat Bubble */}
+      {isOpen && (
+        <Card className="fixed bottom-24 right-6 w-80 h-96 z-40 shadow-2xl bg-gradient-to-br from-background via-background/95 to-muted/30 backdrop-blur-xl border-2 border-primary/20 animate-scale-in">
+          <CardHeader className="flex flex-row items-center justify-between border-b border-border/60 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 backdrop-blur-sm p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-primary/10 rounded-full">
+                <Headphones className="h-4 w-4 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                  Suport Client
+                </h3>
+                <p className="text-xs text-muted-foreground">Suntem aici să te ajutăm</p>
+              </div>
+            </div>
+          </CardHeader>
+
+          <CardContent className="flex flex-col flex-1 p-4 space-y-3 overflow-hidden h-full">
+            {/* User Info Form */}
+            {!userEmail && (
+              <div className="space-y-3">
+                <div className="text-center">
+                  <div className="inline-flex p-2 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full mb-2">
+                    <User className="h-5 w-5 text-primary" />
                   </div>
-                  <h3 className="text-base font-medium mb-1">Începe conversația</h3>
-                  <p className="text-xs">Trimite-ne primul tău mesaj și îți vom răspunde rapid!</p>
+                  <h4 className="text-sm font-semibold text-foreground">Să facem cunoștință!</h4>
+                  <p className="text-xs text-muted-foreground">Completează datele tale</p>
                 </div>
-              ) : (
-                messages.map((msg) => (
-                  <div key={msg.id} className="space-y-3 animate-fade-in">
-                    {/* User message */}
-                    <div className="flex justify-end">
-                      <div className="bg-gradient-to-r from-primary to-primary/90 text-primary-foreground rounded-2xl rounded-br-md px-4 py-3 max-w-[85%] shadow-lg">
-                        <p className="text-sm leading-relaxed">{msg.message}</p>
-                        <p className="text-xs opacity-80 mt-2 flex items-center gap-1">
-                          <User className="h-3 w-3" />
-                          {new Date(msg.created_at).toLocaleString('ro-RO')}
-                        </p>
-                      </div>
+                <div className="space-y-2">
+                  <div className="space-y-1">
+                    <Label htmlFor="user-name" className="text-xs font-medium text-foreground">Numele tău</Label>
+                    <Input
+                      id="user-name"
+                      value={userName}
+                      onChange={(e) => setUserName(e.target.value)}
+                      placeholder="Numele tău"
+                      className="h-8 text-sm border-border/60 focus:border-primary/60 focus:ring-primary/20"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="user-email" className="text-xs font-medium text-foreground">Email</Label>
+                    <Input
+                      id="user-email"
+                      type="email"
+                      value={userEmail}
+                      onChange={(e) => setUserEmail(e.target.value)}
+                      placeholder="email@example.com"
+                      className="h-8 text-sm border-border/60 focus:border-primary/60 focus:ring-primary/20"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Messages Area */}
+            {userEmail && (
+              <div className="flex-1 overflow-y-auto space-y-3 min-h-0 pr-2">
+                {messages.length === 0 ? (
+                  <div className="text-center text-muted-foreground py-6">
+                    <div className="inline-flex p-2 bg-gradient-to-br from-primary/10 to-primary/5 rounded-full mb-2">
+                      <MessageCircle className="h-5 w-5 opacity-60" />
                     </div>
-                    
-                    {/* Admin response */}
-                    {msg.response && (
-                      <div className="flex justify-start">
-                        <div className="bg-gradient-to-r from-muted to-muted/80 rounded-2xl rounded-bl-md px-4 py-3 max-w-[85%] shadow-lg border border-border/50">
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className="flex items-center gap-1 text-primary text-xs font-medium">
-                              <Sparkles className="h-3 w-3" />
-                              <span>Echipa Suport</span>
-                            </div>
-                          </div>
-                          <p className="text-sm leading-relaxed text-foreground">{msg.response}</p>
-                          <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
-                            <Headphones className="h-3 w-3" />
-                            {new Date(msg.updated_at).toLocaleString('ro-RO')}
+                    <h4 className="text-sm font-medium mb-1">Începe conversația</h4>
+                    <p className="text-xs">Trimite primul mesaj!</p>
+                  </div>
+                ) : (
+                  messages.map((msg) => (
+                    <div key={msg.id} className="space-y-2 animate-fade-in">
+                      {/* User message */}
+                      <div className="flex justify-end">
+                        <div className="bg-gradient-to-r from-primary to-primary/90 text-primary-foreground rounded-xl rounded-br-md px-3 py-2 max-w-[90%] shadow-md">
+                          <p className="text-xs leading-relaxed">{msg.message}</p>
+                          <p className="text-xs opacity-80 mt-1 flex items-center gap-1">
+                            <User className="h-2 w-2" />
+                            {new Date(msg.created_at).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' })}
                           </p>
                         </div>
                       </div>
-                    )}
-                  </div>
-                ))
-              )}
-              <div ref={messagesEndRef} />
-            </div>
-          )}
-
-          {/* Message Input */}
-          <div className="border-t border-border/40 pt-4 space-y-3 bg-gradient-to-r from-background via-background/80 to-background backdrop-blur-sm">
-            <div className="flex space-x-2">
-              <div className="flex-1 relative">
-                <Textarea
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Scrie mesajul tău aici..."
-                  className="min-h-[60px] resize-none pr-12 border-border/60 focus:border-primary/60 focus:ring-primary/20 transition-all duration-200 bg-background/50 backdrop-blur-sm text-sm"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      sendMessage();
-                    }
-                  }}
-                />
-                <div className="absolute bottom-1 right-1 text-xs text-muted-foreground">
-                  Enter
-                </div>
+                      
+                      {/* Admin response */}
+                      {msg.response && (
+                        <div className="flex justify-start">
+                          <div className="bg-gradient-to-r from-muted to-muted/80 rounded-xl rounded-bl-md px-3 py-2 max-w-[90%] shadow-md border border-border/50">
+                            <div className="flex items-center gap-1 mb-1">
+                              <Sparkles className="h-2 w-2 text-primary" />
+                              <span className="text-xs font-medium text-primary">Suport</span>
+                            </div>
+                            <p className="text-xs leading-relaxed text-foreground">{msg.response}</p>
+                            <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                              <Headphones className="h-2 w-2" />
+                              {new Date(msg.updated_at).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' })}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
+                <div ref={messagesEndRef} />
               </div>
-              <Button
-                onClick={sendMessage}
-                disabled={isLoading || !userName.trim() || !userEmail.trim() || !newMessage.trim()}
-                size="icon"
-                className="self-end h-[60px] w-10 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 transition-all duration-200 hover:scale-105 shadow-lg"
-              >
-                <Send className="h-4 w-4" />
-              </Button>
+            )}
+
+            {/* Message Input */}
+            <div className="border-t border-border/40 pt-3 space-y-2">
+              <div className="flex space-x-2">
+                <div className="flex-1 relative">
+                  <Textarea
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    placeholder="Scrie mesajul..."
+                    className="min-h-[50px] resize-none text-xs border-border/60 focus:border-primary/60 focus:ring-primary/20 transition-all duration-200 bg-background/50"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                      }
+                    }}
+                  />
+                </div>
+                <Button
+                  onClick={sendMessage}
+                  disabled={isLoading || !userName.trim() || !userEmail.trim() || !newMessage.trim()}
+                  size="icon"
+                  className="self-end h-[50px] w-8 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 transition-all duration-200 hover:scale-105 shadow-lg"
+                >
+                  <Send className="h-3 w-3" />
+                </Button>
+              </div>
             </div>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+          </CardContent>
+        </Card>
+      )}
+    </>
   );
 }
