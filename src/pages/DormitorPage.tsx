@@ -39,6 +39,19 @@ const DormitorPage = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
+        // Get dormitor category ID first
+        const { data: categoryData, error: categoryError } = await supabase
+          .from('categories')
+          .select('id')
+          .eq('slug', 'dormitor')
+          .single();
+
+        if (categoryError) {
+          console.error('Error fetching category:', categoryError);
+          return;
+        }
+
+        // Then fetch products with that category_id
         const { data, error } = await supabase
           .from('products')
           .select(`
@@ -48,13 +61,14 @@ const DormitorPage = () => {
               slug
             )
           `)
-          .eq('categories.slug', 'dormitor')
+          .eq('category_id', categoryData.id)
           .eq('status', 'active')
           .order('created_at', { ascending: false });
 
         if (error) {
           console.error('Error fetching products:', error);
         } else {
+          console.log('Fetched dormitor products:', data?.length || 0);
           setProducts(data || []);
           setFilteredProducts(data || []);
         }
