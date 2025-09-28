@@ -94,6 +94,8 @@ const AdminPage = () => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [productImages, setProductImages] = useState<ImageFile[]>([]);
   const [editProductImages, setEditProductImages] = useState<ImageFile[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
+  const [userRoles, setUserRoles] = useState<any[]>([]);
   const { toast } = useToast();
   const { user } = useAuth();
 
@@ -212,6 +214,29 @@ const AdminPage = () => {
 
       if (ordersError) throw ordersError;
       setOrders(ordersData || []);
+
+      // Fetch users (profiles)
+      const { data: usersData, error: usersError } = await supabase
+        .from('profiles')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (usersError) throw usersError;
+      setUsers(usersData || []);
+
+      // Fetch user roles
+      const { data: rolesData, error: rolesError } = await supabase
+        .from('user_roles')
+        .select(`
+          *,
+          profiles!inner (
+            user_id,
+            display_name
+          )
+        `);
+
+      if (rolesError) throw rolesError;
+      setUserRoles(rolesData || []);
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -525,6 +550,63 @@ const AdminPage = () => {
     }
   };
 
+  // Assign role to user
+  const handleAssignRole = async (userId: string, role: 'admin' | 'moderator' | 'user') => {
+    try {
+      const { error } = await supabase
+        .from('user_roles')
+        .insert({ user_id: userId, role });
+
+      if (error) throw error;
+
+      toast({
+        title: "Succes",
+        description: `Rolul ${role} a fost atribuit cu succes.`,
+      });
+
+      fetchData();
+    } catch (error) {
+      console.error('Error assigning role:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-a putut atribui rolul.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Remove role from user
+  const handleRemoveRole = async (userId: string, role: 'admin' | 'moderator' | 'user') => {
+    try {
+      const { error } = await supabase
+        .from('user_roles')
+        .delete()
+        .eq('user_id', userId)
+        .eq('role', role);
+
+      if (error) throw error;
+
+      toast({
+        title: "Succes",
+        description: `Rolul ${role} a fost eliminat cu succes.`,
+      });
+
+      fetchData();
+    } catch (error) {
+      console.error('Error removing role:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-a putut elimina rolul.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Get user roles for a specific user
+  const getUserRoles = (userId: string) => {
+    return userRoles.filter(role => role.user_id === userId);
+  };
+
   const stats = [
     { title: "Total Produse", value: products.length.toString(), icon: Package, color: "bg-blue-500" },
     { title: "Comenzi Luna", value: orders.filter(order => {
@@ -644,10 +726,11 @@ const AdminPage = () => {
 
         {/* Admin Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="products">Produse</TabsTrigger>
             <TabsTrigger value="orders">Comenzi</TabsTrigger>
             <TabsTrigger value="support">Suport Clienți</TabsTrigger>
+            <TabsTrigger value="users">Utilizatori</TabsTrigger>
             <TabsTrigger value="settings">Setări</TabsTrigger>
           </TabsList>
 
@@ -910,6 +993,98 @@ const AdminPage = () => {
               </CardHeader>
               <CardContent>
                 <AdminSupportChat />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Users Tab */}
+          <TabsContent value="users" className="space-y-6">
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-bold">Gestionare Utilizatori</h2>
+                <p className="text-muted-foreground">Vizualizează și gestionează utilizatorii înregistrați și rolurile lor</p>
+              </div>
+            </div>
+
+            <Card>
+              <CardContent className="p-0">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Utilizator</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Telefon</TableHead>
+                      <TableHead>Data Înregistrării</TableHead>
+                      <TableHead>Roluri</TableHead>
+                      <TableHead>Acțiuni</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {users.map((user) => {
+                      const userRolesList = getUserRoles(user.user_id);
+                      return (
+                        <TableRow key={user.id}>
+                          <TableCell>
+                            <div>
+                              <div className="font-medium">{user.display_name || 'Nu a fost specificat'}</div>
+                              <div className="text-sm text-muted-foreground">ID: {user.user_id.slice(0, 8)}</div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="text-sm">{user.user_id}</div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="text-sm">{user.phone || 'Nu a fost specificat'}</div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="text-sm">
+                              {new Date(user.created_at).toLocaleDateString('ro-RO')}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex flex-wrap gap-1">
+                              {userRolesList.length > 0 ? (
+                                userRolesList.map((role) => (
+                                  <Badge 
+                                    key={role.id} 
+                                    variant="secondary"
+                                    className="text-xs"
+                                  >
+                                    {role.role}
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="h-auto p-0 ml-1 text-red-500 hover:text-red-700"
+                                      onClick={() => handleRemoveRole(user.user_id, role.role)}
+                                    >
+                                      ×
+                                    </Button>
+                                  </Badge>
+                                ))
+                              ) : (
+                                <span className="text-sm text-muted-foreground">Fără roluri</span>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex gap-2">
+                              <Select onValueChange={(value) => handleAssignRole(user.user_id, value as 'admin' | 'moderator' | 'user')}>
+                                <SelectTrigger className="w-32">
+                                  <SelectValue placeholder="Atribuie rol" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="admin">Admin</SelectItem>
+                                  <SelectItem value="moderator">Moderator</SelectItem>
+                                  <SelectItem value="user">User</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
               </CardContent>
             </Card>
           </TabsContent>
