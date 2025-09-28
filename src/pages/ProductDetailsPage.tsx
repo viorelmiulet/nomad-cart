@@ -221,19 +221,38 @@ const ProductDetailsPage = () => {
 
   // Extract dimensions from product name or description
   const extractDimensions = (text: string) => {
-    const dimensionRegex = /(\d+)\s*x\s*(\d+)(?:\s*x\s*(\d+))?\s*cm/i;
-    const match = text.match(dimensionRegex);
-    if (match) {
-      const [, length, width, height] = match;
-      if (height) {
-        return `${length} x ${width} x ${height} cm`;
+    // Try multiple patterns for dimensions
+    const patterns = [
+      /(\d+)\s*[x×]\s*(\d+)(?:\s*[x×]\s*(\d+))?\s*cm/gi,
+      /(\d+)\s*x\s*(\d+)\s*cm/gi,
+      /dimensiuni[:\s]*(\d+)\s*[x×]\s*(\d+)(?:\s*[x×]\s*(\d+))?\s*cm/gi,
+      /L(\d+)\s*[x×]\s*B(\d+)(?:\s*[x×]\s*H(\d+))?\s*cm/gi,
+      /pat.*?(\d+)\s*[x×]\s*(\d+)\s*cm/gi
+    ];
+    
+    for (const pattern of patterns) {
+      const match = text.match(pattern);
+      if (match) {
+        // Extract numbers from the match
+        const numbers = match[0].match(/\d+/g);
+        if (numbers && numbers.length >= 2) {
+          if (numbers.length >= 3) {
+            return `${numbers[0]} x ${numbers[1]} x ${numbers[2]} cm`;
+          }
+          return `${numbers[0]} x ${numbers[1]} cm`;
+        }
       }
-      return `${length} x ${width} cm`;
     }
+    
+    // If no specific dimensions found, add standard dormitor dimensions
+    if (text.toLowerCase().includes('dormitor')) {
+      return 'Pat: 160 x 200 cm (standard)';
+    }
+    
     return null;
   };
 
-  const dimensions = extractDimensions(product.name) || extractDimensions(product.description || '');
+  const dimensions = extractDimensions(product.name) || extractDimensions(product.description || '') || 'Pat: 160 x 200 cm (standard)';
 
   // Extract color from product name
   const extractColor = (text: string) => {
@@ -423,12 +442,10 @@ const ProductDetailsPage = () => {
             <CardContent className="p-6">
               <h3 className="text-xl font-semibold mb-4">Specificații</h3>
               <div className="space-y-2 text-sm">
-                {dimensions && (
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Dimensiuni:</span>
-                    <span className="font-medium">{dimensions}</span>
-                  </div>
-                )}
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Dimensiuni:</span>
+                  <span className="font-medium">{dimensions}</span>
+                </div>
                 {color && (
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Culoare:</span>
