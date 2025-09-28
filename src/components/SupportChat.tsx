@@ -208,7 +208,7 @@ export function SupportChat() {
     scrollToBottom();
   }, [messages]);
 
-  const isDataComplete = user ? (userName && userEmail && userPhone) : true;
+  const isDataComplete = userName && userEmail && userPhone;
 
   return (
     <>
