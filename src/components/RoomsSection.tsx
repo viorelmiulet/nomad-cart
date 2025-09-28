@@ -23,10 +23,10 @@ const categories = [
     subcategories: ["Mese bucătărie", "Scaune bucătărie", "Dulapuri bucătărie", "Baruri", "Seturi bucătărie"]
   },
   {
-    id: "hol",
-    title: "Hol",
-    image: "/placeholder.svg", 
-    subcategories: ["Cuiere", "Pantofare", "Bănci hol", "Oglinzi", "Covorașe"]
+    id: "dormitor-complet",
+    title: "Dormitor Complet",
+    image: categoryBedroom, 
+    subcategories: ["Seturi dormitor", "Paturi matrimoniale", "Dulapuri XXL", "Comode cu oglindă", "Măsuțe toaletă"]
   },
   {
     id: "birou",

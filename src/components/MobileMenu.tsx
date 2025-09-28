@@ -21,7 +21,7 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
       "Camera de zi": "/camera-de-zi",
       "Dormitor": "/dormitor",
       "Bucătărie": "/bucatarie",
-      "Hol": "/hol",
+      "Dormitor Complet": "/dormitor-complet",
       "Inspirații": "/inspiratii",
       "Blog": "/blog"
     };
@@ -49,7 +49,7 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
     "Camera de zi",
     "Dormitor",
     "Bucătărie",
-    "Hol",
+    "Dormitor Complet",
     "Inspirații",
     "Blog"
   ];
