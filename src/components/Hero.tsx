@@ -23,14 +23,14 @@ const Hero = () => {
       
       <div className="container mx-auto px-4 py-12 md:py-20 lg:py-32 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-center">
-          <div className="text-brand-cream text-center lg:text-left">
-            <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-6 md:mb-8 font-playfair">
+          <div className="text-luxury-dark text-center lg:text-left">
+            <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-6 md:mb-8 font-playfair text-luxury-dark">
               Mii de piese de mobilier
               <span className="block bg-brand-gradient bg-clip-text text-transparent">
                 cu livrare gratuită
               </span>
             </h1>
-            <p className="text-lg md:text-xl text-brand-cream/90 mb-8 md:mb-10 leading-relaxed font-inter max-w-xl mx-auto lg:mx-0">
+            <p className="text-lg md:text-xl text-luxury-dark/80 mb-8 md:mb-10 leading-relaxed font-inter max-w-xl mx-auto lg:mx-0">
               Descoperă colecția noastră vastă de mobilier pentru toate camerele din casă. 
               Calitate superioară, prețuri accesibile și livrare gratuită.
             </p>
