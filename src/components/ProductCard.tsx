@@ -56,11 +56,6 @@ const ProductCard = ({
           />
           
           <div className="absolute top-4 left-4 flex gap-2 z-20">
-            {isNew && (
-              <Badge className="bg-glass-gradient backdrop-blur-lg text-black border border-white/20 font-semibold px-3 py-1 shadow-lg">
-                Nou
-              </Badge>
-            )}
             {isOnSale && (
               <Badge className="bg-brand-burgundy/80 backdrop-blur-lg text-brand-cream border border-white/20 font-semibold px-3 py-1 shadow-lg">
                 Ofertă Exclusivă
