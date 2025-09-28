@@ -1,4 +1,4 @@
-import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 import categoryLiving from "@/assets/category-living.jpg";
 import categoryBedroom from "@/assets/category-bedroom.jpg";
 import categoryKitchen from "@/assets/category-kitchen.jpg";
@@ -43,18 +43,29 @@ const categories = [
 ];
 
 const RoomsSection = () => {
-  const handleCategoryClick = (category: string) => {
-    toast({
-      title: `Categorie ${category}`,
-      description: `Explorează mobilierul pentru ${category}`,
-    });
+  const navigate = useNavigate();
+
+  // Map category IDs to their corresponding routes
+  const categoryRoutes: { [key: string]: string } = {
+    "camera-zi": "/camera-de-zi",
+    "dormitor": "/dormitor", 
+    "bucatarie": "/bucatarie",
+    "dormitor-complet": "/dormitor-complet",
+    "birou": "/birou",
+    "baie": "/baie"
+  };
+
+  const handleCategoryClick = (categoryId: string) => {
+    const route = categoryRoutes[categoryId];
+    if (route) {
+      navigate(route);
+    }
   };
 
   const handleSubcategoryClick = (subcategory: string) => {
-    toast({
-      title: `Subcategorie ${subcategory}`,
-      description: `Vizualizează produsele din categoria ${subcategory}`,
-    });
+    // For now, just prevent the event from bubbling up
+    // In the future, you could implement specific subcategory filtering
+    console.log(`Subcategory clicked: ${subcategory}`);
   };
 
   return (
@@ -77,7 +88,7 @@ const RoomsSection = () => {
             <div 
               key={category.id}
               className="group cursor-pointer"
-              onClick={() => handleCategoryClick(category.title)}
+              onClick={() => handleCategoryClick(category.id)}
             >
               <div className="relative overflow-hidden rounded-xl md:rounded-2xl bg-glass-gradient backdrop-blur-xl border border-white/10 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 md:hover:-translate-y-2 touch-manipulation">
                 <div className="absolute inset-0 bg-liquid-gradient opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
