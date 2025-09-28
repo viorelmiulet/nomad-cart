@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { MessageCircle, Clock, CheckCircle, Send } from 'lucide-react';
+import { MessageCircle, Clock, CheckCircle, Send, Trash2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -131,6 +131,42 @@ export function AdminSupportChat() {
     }
   };
 
+  const deleteMessage = async (messageId: string) => {
+    if (!confirm("Ești sigur că vrei să ștergi această conversație? Această acțiune nu poate fi anulată.")) {
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('support_messages')
+        .delete()
+        .eq('id', messageId);
+
+      if (error) throw error;
+
+      // Remove from local state
+      setMessages(prev => prev.filter(msg => msg.id !== messageId));
+      
+      // Clear selected message if it was deleted
+      if (selectedMessage?.id === messageId) {
+        setSelectedMessage(null);
+        setResponseText('');
+      }
+
+      toast({
+        title: "Conversație ștearsă",
+        description: "Conversația a fost ștearsă cu succes."
+      });
+    } catch (error) {
+      console.error('Error deleting message:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu am putut șterge conversația.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'pending':
@@ -199,6 +235,17 @@ export function AdminSupportChat() {
                         <p className="text-sm text-muted-foreground">{message.user_email}</p>
                       </div>
                       <div className="flex items-center gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            deleteMessage(message.id);
+                          }}
+                          className="h-8 w-8 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                         <Badge 
                           variant="secondary" 
                           className={`${getStatusColor(message.status)} text-white`}
@@ -300,6 +347,13 @@ export function AdminSupportChat() {
                       >
                         <CheckCircle className="h-4 w-4 mr-2" />
                         Închide
+                      </Button>
+                      <Button
+                        onClick={() => deleteMessage(selectedMessage.id)}
+                        variant="destructive"
+                        size="sm"
+                      >
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
