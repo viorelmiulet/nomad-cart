@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Filter, SortAsc, Bed, Armchair, Home, Package } from "lucide-react";
+import heroImage from "@/assets/hero-dormitor.jpg";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
@@ -119,8 +120,13 @@ const DormitorPage = () => {
       <Header />
       
       <main className="py-20 bg-hero-gradient relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-luxury-dark/90 via-luxury-navy/70 to-luxury-dark/95"></div>
-        <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${heroImage})` }}
+        />
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-luxury-dark/40 via-luxury-navy/30 to-luxury-dark/40"></div>
+        <div className="absolute inset-0 bg-liquid-gradient opacity-20 animate-liquid-flow"></div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex items-center justify-between mb-16">
