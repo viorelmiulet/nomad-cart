@@ -1,12 +1,20 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Filter, SortAsc } from "lucide-react";
+import { ArrowLeft, Filter, SortAsc, Bed, Armchair, Home, Package } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const DormitorPage = () => {
   const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState("toate");
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
 
   const handleGoBack = () => {
     navigate("/");
@@ -26,8 +34,71 @@ const DormitorPage = () => {
     });
   };
 
-  // No products to display - removed test products
-  const bedroomProducts: any[] = [];
+  // Fetch bedroom products from database
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select(`
+            *,
+            categories (
+              name,
+              slug
+            )
+          `)
+          .eq('categories.slug', 'dormitor')
+          .eq('status', 'active')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Error fetching products:', error);
+        } else {
+          setProducts(data || []);
+          setFilteredProducts(data || []);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Filter products based on selected category
+  useEffect(() => {
+    if (selectedCategory === "toate") {
+      setFilteredProducts(products);
+    } else {
+      const filtered = products.filter(product => {
+        const name = product.name.toLowerCase();
+        switch (selectedCategory) {
+          case "paturi":
+            return name.includes("pat");
+          case "comode":
+            return name.includes("comoda");
+          case "noptiere":
+            return name.includes("noptiere");
+          case "premium":
+            return product.price >= 1500;
+          default:
+            return true;
+        }
+      });
+      setFilteredProducts(filtered);
+    }
+  }, [selectedCategory, products]);
+
+  const categories = [
+    { id: "toate", name: "Toate Produsele", icon: Home },
+    { id: "paturi", name: "Paturi", icon: Bed },
+    { id: "comode", name: "Comode", icon: Armchair },
+    { id: "noptiere", name: "Noptiere", icon: Package },
+    { id: "premium", name: "Premium", icon: Bed },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -81,14 +152,57 @@ const DormitorPage = () => {
               dulapuri spațioase și saltele de înaltă calitate pentru un somn odihnitor.
             </p>
           </div>
+
+          {/* Category Filter */}
+          <div className="flex flex-wrap gap-4 justify-center mb-12">
+            {categories.map((category) => {
+              const IconComponent = category.icon;
+              return (
+                <Button
+                  key={category.id}
+                  variant={selectedCategory === category.id ? "default" : "outline"}
+                  onClick={() => setSelectedCategory(category.id)}
+                  className="flex items-center gap-2 bg-glass-gradient backdrop-blur-lg border-luxury-gold/30 text-luxury-cream hover:border-luxury-gold/50"
+                >
+                  <IconComponent className="h-4 w-4" />
+                  {category.name}
+                </Button>
+              );
+            })}
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            <div className="col-span-full text-center py-12">
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+              {[...Array(9)].map((_, index) => (
+                <div key={index} className="space-y-4">
+                  <Skeleton className="aspect-square rounded-lg bg-white/10" />
+                  <Skeleton className="h-4 w-3/4 bg-white/10" />
+                  <Skeleton className="h-4 w-1/2 bg-white/10" />
+                </div>
+              ))}
+            </div>
+          ) : filteredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+              {filteredProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  name={product.name}
+                  price={product.price}
+                  image={product.image_url}
+                  rating={4.5}
+                  reviews={Math.floor(Math.random() * 80) + 20}
+                  isNew={new Date(product.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
               <p className="text-luxury-cream/70 text-lg">
-                Produsele pentru dormitor vor fi afișate în curând
+                Nu au fost găsite produse pentru categoria selectată
               </p>
             </div>
-          </div>
+          )}
         </div>
       </main>
       
