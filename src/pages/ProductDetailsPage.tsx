@@ -219,6 +219,31 @@ const ProductDetailsPage = () => {
 
   const isNew = new Date(product.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
+  // Extract dimensions from product name or description
+  const extractDimensions = (text: string) => {
+    const dimensionRegex = /(\d+)\s*x\s*(\d+)(?:\s*x\s*(\d+))?\s*cm/i;
+    const match = text.match(dimensionRegex);
+    if (match) {
+      const [, length, width, height] = match;
+      if (height) {
+        return `${length} x ${width} x ${height} cm`;
+      }
+      return `${length} x ${width} cm`;
+    }
+    return null;
+  };
+
+  const dimensions = extractDimensions(product.name) || extractDimensions(product.description || '');
+
+  // Extract color from product name
+  const extractColor = (text: string) => {
+    const colorRegex = /culoare\s+([^,]+?)(?:,|$)/i;
+    const match = text.match(colorRegex);
+    return match ? match[1].trim() : null;
+  };
+
+  const color = extractColor(product.name) || extractColor(product.description || '');
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -398,6 +423,18 @@ const ProductDetailsPage = () => {
             <CardContent className="p-6">
               <h3 className="text-xl font-semibold mb-4">Specificații</h3>
               <div className="space-y-2 text-sm">
+                {dimensions && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Dimensiuni:</span>
+                    <span className="font-medium">{dimensions}</span>
+                  </div>
+                )}
+                {color && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Culoare:</span>
+                    <span className="font-medium">{color}</span>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Material:</span>
                   <span>MDF/PAL laminat</span>
@@ -407,8 +444,16 @@ const ProductDetailsPage = () => {
                   <span>România</span>
                 </div>
                 <div className="flex justify-between">
+                  <span className="text-muted-foreground">Garanție:</span>
+                  <span>24 luni</span>
+                </div>
+                <div className="flex justify-between">
                   <span className="text-muted-foreground">Cod produs:</span>
                   <span>{product.id.slice(0, 8).toUpperCase()}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Categorie:</span>
+                  <span>Dormitor Complet</span>
                 </div>
               </div>
             </CardContent>
