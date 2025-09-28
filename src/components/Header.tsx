@@ -146,7 +146,7 @@ const Header = () => {
                   <User className="h-4 w-4 mr-2" />
                   Profil
                 </DropdownMenuItem>
-                {isAdminPage || user.email === 'admin@mobilanomad.ro' ? (
+                {isAdminPage ? (
                   <DropdownMenuItem onClick={() => navigate('/admin')} className="cursor-pointer">
                     <User className="h-4 w-4 mr-2" />
                     Administrare

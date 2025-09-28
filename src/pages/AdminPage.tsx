@@ -1,3 +1,4 @@
+// Admin Page Component
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer"; // Footer component
@@ -110,7 +111,7 @@ const AdminPage = () => {
     status: "active"
   });
 
-  // Check if user is admin
+  // Initialize data when authenticated
   useEffect(() => {
     if (isAuthenticated) {
       fetchData();
