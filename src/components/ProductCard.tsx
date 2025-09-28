@@ -72,9 +72,9 @@ const ProductCard = ({
             size="icon"
             variant="secondary"
             onClick={handleToggleWishlist}
-            className={`absolute top-4 right-4 opacity-80 hover:opacity-100 transition-all duration-300 bg-white/90 backdrop-blur-lg border border-luxury-dark/20 hover:bg-white z-20 shadow-lg ${isInWishlist(id) ? 'text-red-500' : 'text-luxury-dark'}`}
+            className={`absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/20 z-20 shadow-lg`}
           >
-            <Heart className={`h-4 w-4 ${isInWishlist(id) ? 'fill-current' : ''}`} />
+            <Heart className={`h-4 w-4 ${isInWishlist(id) ? 'fill-current text-red-500' : 'text-luxury-dark'}`} />
           </Button>
           
           {/* Glass reflection */}
