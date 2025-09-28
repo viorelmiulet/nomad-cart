@@ -60,27 +60,28 @@ const Header = () => {
       <div className="container flex h-12 md:h-14 lg:h-16 items-center justify-between relative z-10 px-4">
         <Link
           to="/"
-          className="flex items-center space-x-2 md:space-x-3 relative z-10 hover:scale-105 transition-transform duration-200 touch-manipulation group"
+          className="flex items-center space-x-2 md:space-x-3 relative z-10 hover:scale-105 transition-transform duration-200 touch-manipulation group min-w-[44px] min-h-[44px]"
           aria-label="Acasă"
         >
-          <div className="relative bg-glass-gradient backdrop-blur-3xl border border-white/30 rounded-xl md:rounded-2xl p-2 md:p-3 shadow-2xl group-hover:shadow-brand-gold/30 transition-all duration-500 overflow-hidden">
-            {/* Liquid glass background layers */}
-            <div className="absolute inset-0 bg-liquid-gradient opacity-40 group-hover:opacity-60 transition-opacity duration-500 rounded-xl md:rounded-2xl"></div>
-            <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/20 to-transparent rounded-t-xl md:rounded-t-2xl"></div>
-            <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-brand-gold/10 to-transparent rounded-br-xl md:rounded-br-2xl"></div>
+          <div className="relative bg-glass-gradient backdrop-blur-2xl border border-white/20 rounded-lg md:rounded-xl p-1.5 md:p-2 lg:p-3 shadow-lg md:shadow-2xl transition-all duration-300 overflow-hidden">
+            {/* Simplified liquid glass background for mobile */}
+            <div className="absolute inset-0 bg-liquid-gradient opacity-30 md:opacity-40 group-hover:opacity-50 md:group-hover:opacity-60 transition-opacity duration-300 rounded-lg md:rounded-xl"></div>
+            <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/15 md:from-white/20 to-transparent rounded-t-lg md:rounded-t-xl"></div>
+            <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-brand-gold/5 md:from-brand-gold/10 to-transparent rounded-br-lg md:rounded-br-xl"></div>
             
-            {/* Floating glass particles */}
-            <div className="absolute top-1 left-1 w-2 h-2 bg-white/30 rounded-full blur-sm opacity-70"></div>
-            <div className="absolute bottom-1 right-1 w-1 h-1 bg-brand-gold/40 rounded-full blur-sm opacity-50"></div>
+            {/* Reduced glass particles for mobile performance */}
+            <div className="hidden md:block absolute top-1 left-1 w-2 h-2 bg-white/30 rounded-full blur-sm opacity-70"></div>
+            <div className="hidden md:block absolute bottom-1 right-1 w-1 h-1 bg-brand-gold/40 rounded-full blur-sm opacity-50"></div>
             
             <img 
               src={logoMobilaNomad} 
               alt="Mobila Nomad Logo"
-              className="h-6 w-auto md:h-8 lg:h-10 drop-shadow-2xl transition-transform duration-300 group-hover:scale-110 relative z-10"
+              className="h-5 w-auto sm:h-6 md:h-8 lg:h-10 drop-shadow-lg md:drop-shadow-2xl transition-transform duration-200 group-hover:scale-105 md:group-hover:scale-110 relative z-10"
+              loading="eager"
             />
             
-            {/* Glass reflection overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-brand-gold/5 rounded-xl md:rounded-2xl pointer-events-none group-hover:from-white/25 transition-all duration-300"></div>
+            {/* Simplified glass reflection for mobile */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 md:from-white/15 via-transparent to-brand-gold/5 rounded-lg md:rounded-xl pointer-events-none group-hover:from-white/20 md:group-hover:from-white/25 transition-all duration-200"></div>
           </div>
         </Link>
         
