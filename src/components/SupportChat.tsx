@@ -240,7 +240,7 @@ export function SupportChat() {
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-white">
-                  Chat Suport
+                  Suport Mobila Nomad
                 </h3>
                 <div className="flex items-center gap-2">
                   <span className="px-2 py-1 bg-yellow-500 text-slate-900 text-xs font-medium rounded">
