@@ -1,0 +1,41 @@
+-- Inserează produsele de paturi din linkul indicat în categoria "dormitor"
+WITH cat AS (
+  SELECT id FROM public.categories WHERE slug = 'dormitor'
+)
+INSERT INTO public.products (name, price, image_url, description, category_id, status)
+VALUES
+  -- Pat tapitat Lucas 140x200cm - diverse culori
+  ('Pat tapitat Lucas, 140 x 200 cm, culoare albastru', 1200, 'https://casaneciu.ro/wp-content/uploads/2024/05/image00006-1-scaled-300x300.jpeg', 'Pat tapitat fabricat în România cu livrare gratuită. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat tapitat Lucas, 140 x 200 cm, culoare crem', 1200, 'https://casaneciu.ro/wp-content/uploads/2024/05/image00021-1-scaled-300x300.jpeg', 'Pat tapitat fabricat în România cu livrare gratuită. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat tapitat Lucas, 140 x 200 cm, culoare gri', 1200, 'https://casaneciu.ro/wp-content/uploads/2024/05/image00061-scaled-300x300.jpeg', 'Pat tapitat fabricat în România cu livrare gratuită. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat tapitat Lucas, 140 x 200 cm, culoare portocaliu', 1200, 'https://casaneciu.ro/wp-content/uploads/2024/05/image00048-scaled-300x300.jpeg', 'Pat tapitat fabricat în România cu livrare gratuită. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat tapitat Lucas, 140 x 200 cm, culoare rosu', 1200, 'https://casaneciu.ro/wp-content/uploads/2024/05/image00033-1-scaled-300x300.jpeg', 'Pat tapitat fabricat în România cu livrare gratuită. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat tapitat Lucas, 140 x 200 cm, culoare verde', 1200, 'https://casaneciu.ro/wp-content/uploads/2024/05/image00067-scaled-300x300.jpeg', 'Pat tapitat fabricat în România cu livrare gratuită. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  
+  -- Pat tapitat Lucas 180x200cm - diverse culori  
+  ('Pat tapitat Lucas, 180 x 200 cm, culoare albastru', 1300, 'https://casaneciu.ro/wp-content/uploads/2024/05/image00006-1-scaled-300x300.jpeg', 'Pat tapitat fabricat în România cu livrare gratuită. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat tapitat Lucas, 180 x 200 cm, culoare crem', 1300, 'https://casaneciu.ro/wp-content/uploads/2024/05/image00021-1-scaled-300x300.jpeg', 'Pat tapitat fabricat în România cu livrare gratuită. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat tapitat Lucas, 180 x 200 cm, culoare gri', 1300, 'https://casaneciu.ro/wp-content/uploads/2024/05/image00061-scaled-300x300.jpeg', 'Pat tapitat fabricat în România cu livrare gratuită. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat tapitat Lucas, 180 x 200 cm, culoare portocaliu', 1300, 'https://casaneciu.ro/wp-content/uploads/2024/05/image00048-scaled-300x300.jpeg', 'Pat tapitat fabricat în România cu livrare gratuită. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat tapitat Lucas, 180 x 200 cm, culoare rosu', 1300, 'https://casaneciu.ro/wp-content/uploads/2024/05/image00033-1-scaled-300x300.jpeg', 'Pat tapitat fabricat în România cu livrare gratuită. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat tapitat Lucas, 180 x 200 cm, culoare verde', 1300, 'https://casaneciu.ro/wp-content/uploads/2024/05/image00067-scaled-300x300.jpeg', 'Pat tapitat fabricat în România cu livrare gratuită. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  
+  -- Pat standard Luiza 120x200cm - diverse culori
+  ('Pat standard Luiza, 120 x 200 cm, culoare alb', 500, 'https://casaneciu.ro/wp-content/uploads/2023/11/Dormitor-Luiza-alb-pat-scaled-300x300.jpg', 'Pat standard fabricat în România. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat standard Luiza, 120 x 200 cm, culoare gri antracit', 500, 'https://casaneciu.ro/wp-content/uploads/2025/04/20250411_1018_Pat-Gri-Antracit_remix_01jrhvb4cwe179v70rx29fn9xx-300x300.jpg', 'Pat standard fabricat în România. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat standard Luiza, 120 x 200 cm, culoare sonoma', 500, 'https://casaneciu.ro/wp-content/uploads/2023/10/Dormitor-Luiza-sonoma-pat-scaled-300x300.jpg', 'Pat standard fabricat în România. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat standard Luiza, 120 x 200 cm, culoare magia', 500, 'https://casaneciu.ro/wp-content/uploads/2023/10/Dormitor-Luiza-wenge-pat-scaled-300x300.jpg', 'Pat standard fabricat în România. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  
+  -- Alte modele de paturi
+  ('Pat Cairo 160x200 cm, culoare crem', 1390, 'https://casaneciu.ro/wp-content/uploads/2025/07/A9502DEB-378E-4552-84E1-28747FDA31EC-scaled-300x300.jpeg', 'Pat Cairo cu reducere 31%. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat Cizi 160x200 cm, culoare alb/auriu', 800, 'https://casaneciu.ro/wp-content/uploads/2023/11/image00014-scaled-300x300.jpeg', 'Pat Cizi fabricat în România cu livrare gratuită. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat Doha 160x200 cm, culoare gri', 1500, 'https://casaneciu.ro/wp-content/uploads/2025/07/A28EBA7F-9385-4813-B78C-A29A9B418428-scaled-300x300.jpeg', 'Pat Doha cu reducere 25%. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat Oslo 160x200 cm, culoare crem', 1500, 'https://casaneciu.ro/wp-content/uploads/2025/07/63A7D801-3B7C-4835-B4A7-69888A15D1B9-scaled-300x300.jpeg', 'Pat Oslo cu reducere 32%. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat Serenity 160x200 cm, culoare sonoma', 800, 'https://casaneciu.ro/wp-content/uploads/2024/08/image00006-1-scaled-300x300.jpeg', 'Pat Serenity. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat Star 160x200 cm, culoare alb', 800, 'https://casaneciu.ro/wp-content/uploads/2025/04/Dormitor-7-Star-Alb-8-1-scaled-300x300.jpg', 'Pat Star fabricat în România cu livrare gratuită. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat Star 160x200 cm, culoare sonoma/gri', 800, 'https://casaneciu.ro/wp-content/uploads/2025/04/Dormitor-7-Star-SonomaGri-8-1-scaled-300x300.jpg', 'Pat Star fabricat în România cu livrare gratuită. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat Zen 160x200 cm, culoare gri antracit', 800, 'https://casaneciu.ro/wp-content/uploads/2024/08/image00013-scaled-300x300.jpeg', 'Pat Zen. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat Kasia, culoare gri / argintiu', 1500, 'https://casaneciu.ro/wp-content/uploads/2025/09/6CDD5939-3E80-46B3-BACC-4709FF7559F5-300x300.jpeg', 'Pat Kasia fabricat în România cu livrare gratuită și reducere 29%. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat Kasia, culoare negru / auriu', 1500, 'https://casaneciu.ro/wp-content/uploads/2025/05/image00001-2-scaled-300x300.jpeg', 'Pat Kasia fabricat în România cu livrare gratuită și reducere 29%. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat Kasia, culoare negru / auriu cu 2 noptiere si saltea ortopedica 160 x 200 cm', 2860, 'https://casaneciu.ro/wp-content/uploads/2025/05/image00011-1-scaled-300x300.jpeg', 'Set complet Pat Kasia cu 2 noptiere și saltea ortopedică, fabricat în România cu livrare gratuită și reducere 21%. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active'),
+  ('Pat Kasia, culoare gri / argintiu cu saltea ortopedica 160 x 200 cm', 1875, 'https://casaneciu.ro/wp-content/uploads/2025/09/5DAAF807-65D3-4317-BFBE-09C299785497-300x300.jpeg', 'Pat Kasia cu saltea ortopedică, fabricat în România cu livrare gratuită și reducere 25%. În stoc: livrare în 3-5 zile lucrătoare.', (SELECT id FROM cat), 'active');
