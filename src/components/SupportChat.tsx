@@ -77,11 +77,14 @@ export function SupportChat() {
 
   // Load existing messages for the user email
   useEffect(() => {
-    if (userEmail && isOpen) {
-      loadMessages();
-      subscribeToMessages();
+    if (isOpen) {
+      const email = userEmail || `anonim_${Date.now()}@temp.com`;
+      if (email) {
+        loadMessages();
+        subscribeToMessages();
+      }
     }
-  }, [userEmail, isOpen]);
+  }, [isOpen]);
 
   const loadMessages = async () => {
     if (!userEmail) return;
@@ -131,32 +134,10 @@ export function SupportChat() {
   };
 
   const sendMessage = async () => {
-    if (!userName.trim() || !userEmail.trim() || !userPhone.trim() || !newMessage.trim()) {
+    if (!newMessage.trim()) {
       toast({
-        title: "Completează toate câmpurile",
-        description: "Te rog să completezi numele, email-ul, telefonul și mesajul.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(userEmail)) {
-      toast({
-        title: "Email invalid",
-        description: "Te rog să introduci o adresă de email validă.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    // Phone validation (Romanian format)
-    const phoneRegex = /^(\+40|0040|0)[0-9]{9}$/;
-    if (!phoneRegex.test(userPhone.replace(/\s/g, ''))) {
-      toast({
-        title: "Telefon invalid",
-        description: "Te rog să introduci un număr de telefon valid (ex: 0721234567).",
+        title: "Mesaj gol",
+        description: "Te rog să scrii un mesaj.",
         variant: "destructive"
       });
       return;
@@ -167,9 +148,9 @@ export function SupportChat() {
       const { error } = await supabase
         .from('support_messages')
         .insert({
-          user_name: userName.trim(),
-          user_email: userEmail.trim(),
-          user_phone: userPhone.trim(),
+          user_name: userName.trim() || 'Anonim',
+          user_email: userEmail.trim() || `anonim_${Date.now()}@temp.com`,
+          user_phone: userPhone.trim() || '',
           message: newMessage.trim()
         });
 
@@ -208,7 +189,7 @@ export function SupportChat() {
     scrollToBottom();
   }, [messages]);
 
-  const isDataComplete = userName && userEmail && userPhone;
+  const isDataComplete = true; // Always show chat interface
 
   return (
     <>
