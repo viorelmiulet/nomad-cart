@@ -1,15 +1,6 @@
-import ProductCard from "./ProductCard";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-
-// Import product images
-import sofaImage from "@/assets/product-sofa-modern.jpg";
-import diningTableImage from "@/assets/product-dining-table.jpg";
-import wardrobeImage from "@/assets/product-wardrobe.jpg";
-import armchairsImage from "@/assets/product-armchairs.jpg";
-import bookshelfImage from "@/assets/product-bookshelf.jpg";
-import mattressImage from "@/assets/product-mattress.jpg";
 
 const ProductGrid = () => {
   const navigate = useNavigate();
@@ -24,65 +15,8 @@ const ProductGrid = () => {
     }, 1000);
   };
 
-  const products = [
-    {
-      id: "68599044-1e21-4809-8057-6a44a058fbee", // Fotoliu Elegant from DB
-      name: "Canapea Modernă 3 Locuri",
-      price: 2999,
-      originalPrice: 3499,
-      image: sofaImage,
-      rating: 5,
-      reviews: 128,
-      isNew: true,
-      isOnSale: true
-    },
-    {
-      id: "2a28a172-ad86-4074-9dbc-7290a0bb820e", // Masă Dining from DB
-      name: "Masă de Dining Extensibilă",
-      price: 1899,
-      image: diningTableImage,
-      rating: 5,
-      reviews: 95,
-      isNew: true
-    },
-    {
-      id: "6db8b793-bf63-4fe7-bf61-25106f0a7595", // Dulap Dormitor from DB
-      name: "Dulap Dormitor cu Oglinzi", 
-      price: 3299,
-      originalPrice: 3799,
-      image: wardrobeImage,
-      rating: 4,
-      reviews: 67,
-      isOnSale: true
-    },
-    {
-      id: "398478a8-4a0a-4ebb-b737-f6c26364afd6", // Comoda Hol from DB (repurposed as fotolii)
-      name: "Set Fotolii Living x2",
-      price: 2399,
-      image: armchairsImage, 
-      rating: 4,
-      reviews: 45,
-      isNew: true
-    },
-    {
-      id: "f2b8c793-cf63-4fe7-cf61-25106f0a7596", // Unique ID for bookshelf
-      name: "Bibliotecă Modulară",
-      price: 1699,
-      originalPrice: 1999,
-      image: bookshelfImage,
-      rating: 4,
-      reviews: 89,
-      isOnSale: true
-    },
-    {
-      id: "a9847ba8-5a0a-4ebb-c737-f6c26364afd7", // Unique ID for mattress
-      name: "Saltea Memory Foam",
-      price: 1299,
-      image: mattressImage,
-      rating: 4, 
-      reviews: 34
-    }
-  ];
+  // No products to display - removed test products
+  const products: any[] = [];
 
   return (
     <section id="products-section" className="py-20 bg-hero-gradient relative overflow-hidden">
@@ -99,9 +33,11 @@ const ProductGrid = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {products.map((product) => (
-            <ProductCard key={product.id} {...product} />
-          ))}
+          <div className="col-span-full text-center py-12">
+            <p className="text-brand-cream/70 text-lg">
+              Produsele vor fi afișate în curând
+            </p>
+          </div>
         </div>
         
         <div className="text-center mt-16">
