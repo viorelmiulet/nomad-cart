@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react";
+import { Facebook, Instagram, MessageCircle, Mail, Phone, MapPin } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const Footer = () => {
@@ -7,6 +7,13 @@ const Footer = () => {
       title: `Conectare ${platform}`,
       description: `Vei fi redirecționat către pagina noastră de ${platform}.`,
     });
+  };
+
+  const handleWhatsAppClick = () => {
+    const phoneNumber = "40758433114"; // Number without + or spaces
+    const message = "Salut! Sunt interesat de produsele voastre de mobilier.";
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   const handleCategoryClick = (category: string) => {
@@ -56,9 +63,9 @@ const Footer = () => {
                 className="h-5 w-5 md:h-6 md:w-6 text-brand-cream/60 hover:text-brand-gold cursor-pointer transition-colors duration-300 touch-manipulation" 
                 onClick={() => handleSocialClick("Instagram")}
               />
-              <Twitter 
+              <MessageCircle 
                 className="h-5 w-5 md:h-6 md:w-6 text-brand-cream/60 hover:text-brand-gold cursor-pointer transition-colors duration-300 touch-manipulation" 
-                onClick={() => handleSocialClick("Twitter")}
+                onClick={handleWhatsAppClick}
               />
             </div>
           </div>
