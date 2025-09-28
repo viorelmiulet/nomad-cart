@@ -1,14 +1,9 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Filter, SortAsc } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-
-// Import product images
-import wardrobeImage from "@/assets/product-wardrobe.jpg";
-import mattressImage from "@/assets/product-mattress.jpg";
 
 const DormitorPage = () => {
   const navigate = useNavigate();
@@ -31,28 +26,8 @@ const DormitorPage = () => {
     });
   };
 
-  const bedroomProducts = [
-    {
-      id: "br1",
-      name: "Dulap Dormitor cu Oglinzi", 
-      price: 3299,
-      originalPrice: 3799,
-      image: wardrobeImage,
-      rating: 4,
-      reviews: 67,
-      isOnSale: true
-    },
-    {
-      id: "br2",
-      name: "Saltea Memory Foam Premium",
-      price: 1299,
-      originalPrice: 1599,
-      image: mattressImage,
-      rating: 4, 
-      reviews: 34,
-      isOnSale: true
-    }
-  ];
+  // No products to display - removed test products
+  const bedroomProducts: any[] = [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -108,9 +83,11 @@ const DormitorPage = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {bedroomProducts.map((product) => (
-              <ProductCard key={product.id} {...product} />
-            ))}
+            <div className="col-span-full text-center py-12">
+              <p className="text-luxury-cream/70 text-lg">
+                Produsele pentru dormitor vor fi afișate în curând
+              </p>
+            </div>
           </div>
         </div>
       </main>
