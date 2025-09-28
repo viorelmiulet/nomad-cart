@@ -36,19 +36,33 @@ const BirouPage = () => {
   const fetchOfficeProducts = async () => {
     try {
       setLoading(true);
+      
+      // Get birou category ID first
+      const { data: categoryData, error: categoryError } = await supabase
+        .from('categories')
+        .select('id')
+        .eq('slug', 'birou')
+        .single();
+
+      if (categoryError) {
+        console.error('Error fetching category:', categoryError);
+        return;
+      }
+
+      // Then fetch products with that category_id
       const { data, error } = await supabase
         .from('products')
         .select('id, name, price, image_url, description')
+        .eq('category_id', categoryData.id)
         .eq('status', 'active')
-        .in('category_id', [
-          (await supabase.from('categories').select('id').eq('slug', 'birou').single()).data?.id
-        ].filter(Boolean));
+        .order('name', { ascending: true });
 
       if (error) {
         console.error('Error fetching office products:', error);
         return;
       }
 
+      console.log('Fetched office products:', data?.length || 0, 'products');
       setProducts(data || []);
     } catch (error) {
       console.error('Error:', error);
@@ -62,7 +76,10 @@ const BirouPage = () => {
     
     switch (subcategory) {
       case "scaune-birou":
-        return products.filter(p => p.name.toLowerCase().includes("scaun de birou"));
+        return products.filter(p => 
+          p.name.toLowerCase().includes("scaun de birou") && 
+          !p.name.toLowerCase().includes("gaming")
+        );
       case "scaune-gaming":
         return products.filter(p => p.name.toLowerCase().includes("gaming"));
       case "scaune-vizitator":
@@ -71,7 +88,7 @@ const BirouPage = () => {
         return products.filter(p => 
           p.name.toLowerCase().includes("etajera") || 
           p.name.toLowerCase().includes("organizer") ||
-          p.name.toLowerCase().includes("modul")
+          p.name.toLowerCase().includes("modul tv")
         );
       case "fotolii":
         return products.filter(p => 
@@ -86,6 +103,8 @@ const BirouPage = () => {
   };
 
   const filteredProducts = filterProducts(products, selectedSubcategory);
+
+  console.log(`Total products: ${products.length}, Filtered (${selectedSubcategory}): ${filteredProducts.length}`);
 
   return (
     <div className="min-h-screen bg-background">
