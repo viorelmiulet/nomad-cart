@@ -80,16 +80,16 @@ const Header = () => {
               Acasă
               <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
             </button>
+            <button onClick={() => handleNavClick("Bucătării")} className="text-white/90 hover:text-brand-gold transition-all duration-300 relative group whitespace-nowrap">
+              Bucătării
+              <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
+            </button>
             <button onClick={() => handleNavClick("Camera de zi")} className="text-white/90 hover:text-brand-gold transition-all duration-300 relative group whitespace-nowrap">
               Camera de zi
               <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
             </button>
             <button onClick={() => handleNavClick("Dormitor")} className="text-white/90 hover:text-brand-gold transition-all duration-300 relative group whitespace-nowrap">
               Dormitor
-              <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-            </button>
-            <button onClick={() => handleNavClick("Bucătării")} className="text-white/90 hover:text-brand-gold transition-all duration-300 relative group whitespace-nowrap">
-              Bucătării
               <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
             </button>
             <button onClick={() => handleNavClick("Dormitoare Complete")} className="text-white/90 hover:text-brand-gold transition-all duration-300 relative group whitespace-nowrap">

@@ -47,9 +47,9 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
 
   const menuItems = [
     "Acasă",
+    "Bucătării",
     "Camera de zi",
     "Dormitor",
-    "Bucătării",
     "Dormitoare Complete",
     "Birou",
     "Electrocasnice",
