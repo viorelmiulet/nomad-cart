@@ -7,6 +7,7 @@ import { toast } from "@/hooks/use-toast";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import logoMobilaNomad from "@/assets/logo-mobila-nomad.png";
 
 const Header = () => {
@@ -115,6 +116,8 @@ const Header = () => {
           {!isAdminPage && <SearchDialog />}
           
           {!isAdminPage && <CartDrawer />}
+          
+          <ThemeToggle />
           
           {/* User authentication */}
           {user ? (
