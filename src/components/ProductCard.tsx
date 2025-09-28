@@ -72,7 +72,7 @@ const ProductCard = ({
             size="icon"
             variant="secondary"
             onClick={handleToggleWishlist}
-            className={`absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/20 z-20 shadow-lg`}
+            className={`absolute top-4 right-4 transition-all duration-300 bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/20 z-20 shadow-lg`}
           >
             <Heart className={`h-4 w-4 ${isInWishlist(id) ? 'fill-current text-red-500' : 'text-black'}`} />
           </Button>
