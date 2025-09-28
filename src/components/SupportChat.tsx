@@ -232,7 +232,7 @@ export function SupportChat() {
 
       {/* Chat Bubble */}
       {isOpen && (
-        <Card className="fixed bottom-24 right-6 w-80 h-80 z-40 shadow-2xl bg-slate-900 border border-slate-700 animate-scale-in">
+        <Card className="fixed bottom-24 right-6 w-80 h-[500px] z-40 shadow-2xl bg-slate-900 border border-slate-700 animate-scale-in">
           <CardHeader className="flex flex-row items-center justify-between border-b border-slate-700 bg-slate-800 p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-500 rounded-full">
