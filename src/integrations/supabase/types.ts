@@ -44,6 +44,45 @@ export type Database = {
         }
         Relationships: []
       }
+      company_info: {
+        Row: {
+          address: string | null
+          city: string | null
+          company_name: string
+          created_at: string
+          description: string | null
+          email: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          company_name?: string
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          company_name?: string
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           created_at: string
