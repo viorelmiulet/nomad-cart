@@ -193,10 +193,6 @@ export function SupportChat() {
       }
 
       setNewMessage('');
-      toast({
-        title: "Mesaj trimis!",
-        description: "Echipa de suport va răspunde în curând."
-      });
     } catch (error) {
       console.error('Error sending message:', error);
       toast({
