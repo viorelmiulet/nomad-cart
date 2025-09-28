@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -132,8 +132,8 @@ export function SupportChat() {
   }, [messages]);
 
   return (
-    <Drawer open={isOpen} onOpenChange={setIsOpen}>
-      <DrawerTrigger asChild>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
         <Button
           size="icon"
           className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-2xl z-50 bg-gradient-to-r from-primary via-primary/90 to-primary/80 hover:from-primary/90 hover:via-primary/80 hover:to-primary/70 transition-all duration-300 hover:scale-110 group border-2 border-white/20 backdrop-blur-sm"
@@ -143,41 +143,33 @@ export function SupportChat() {
             <div className="absolute -top-1 -right-1 h-3 w-3 bg-green-400 rounded-full animate-pulse"></div>
           </div>
         </Button>
-      </DrawerTrigger>
+      </DialogTrigger>
       
-      <DrawerContent className="max-h-[85vh] flex flex-col bg-gradient-to-br from-background via-background/95 to-muted/30 backdrop-blur-xl border-t-2 border-primary/20">
-        <DrawerHeader className="flex flex-row items-center justify-between border-b border-border/60 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 backdrop-blur-sm">
+      <DialogContent className="max-w-md w-full max-h-[600px] flex flex-col bg-gradient-to-br from-background via-background/95 to-muted/30 backdrop-blur-xl border-2 border-primary/20">
+        <DialogHeader className="flex flex-row items-center justify-between border-b border-border/60 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 backdrop-blur-sm pb-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-primary/10 rounded-full">
               <Headphones className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <DrawerTitle className="text-xl font-semibold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              <DialogTitle className="text-xl font-semibold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
                 Suport Client
-              </DrawerTitle>
+              </DialogTitle>
               <p className="text-sm text-muted-foreground">Suntem aici să te ajutăm</p>
             </div>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsOpen(false)}
-            className="hover:bg-destructive/10 hover:text-destructive transition-colors duration-200"
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        </DrawerHeader>
+        </DialogHeader>
 
-        <div className="flex flex-col flex-1 p-6 space-y-6 overflow-hidden">
+        <div className="flex flex-col flex-1 p-4 space-y-4 overflow-hidden">
           {/* User Info Form */}
           {!userEmail && (
-            <div className="space-y-4 border-b border-border/40 pb-6">
+            <div className="space-y-3 border-b border-border/40 pb-4">
               <div className="text-center mb-4">
-                <div className="inline-flex p-3 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full mb-3">
+                <div className="inline-flex p-2 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full mb-2">
                   <User className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground">Să facem cunoștință!</h3>
-                <p className="text-sm text-muted-foreground">Completează datele pentru a începe conversația</p>
+                <h3 className="text-base font-semibold text-foreground">Să facem cunoștință!</h3>
+                <p className="text-xs text-muted-foreground">Completează datele pentru a începe conversația</p>
               </div>
               <div className="space-y-3">
                 <div className="space-y-2">
@@ -207,14 +199,14 @@ export function SupportChat() {
 
           {/* Messages Area */}
           {userEmail && (
-            <div className="flex-1 overflow-y-auto space-y-4 min-h-0 px-1">
+            <div className="flex-1 overflow-y-auto space-y-3 min-h-0 px-1">
               {messages.length === 0 ? (
-                <div className="text-center text-muted-foreground py-12">
-                  <div className="inline-flex p-4 bg-gradient-to-br from-primary/10 to-primary/5 rounded-full mb-4">
-                    <MessageCircle className="h-8 w-8 opacity-60" />
+                <div className="text-center text-muted-foreground py-8">
+                  <div className="inline-flex p-3 bg-gradient-to-br from-primary/10 to-primary/5 rounded-full mb-3">
+                    <MessageCircle className="h-6 w-6 opacity-60" />
                   </div>
-                  <h3 className="text-lg font-medium mb-2">Începe conversația</h3>
-                  <p className="text-sm">Trimite-ne primul tău mesaj și îți vom răspunde rapid!</p>
+                  <h3 className="text-base font-medium mb-1">Începe conversația</h3>
+                  <p className="text-xs">Trimite-ne primul tău mesaj și îți vom răspunde rapid!</p>
                 </div>
               ) : (
                 messages.map((msg) => (
@@ -256,14 +248,14 @@ export function SupportChat() {
           )}
 
           {/* Message Input */}
-          <div className="border-t border-border/40 pt-6 space-y-4 bg-gradient-to-r from-background via-background/80 to-background backdrop-blur-sm">
-            <div className="flex space-x-3">
+          <div className="border-t border-border/40 pt-4 space-y-3 bg-gradient-to-r from-background via-background/80 to-background backdrop-blur-sm">
+            <div className="flex space-x-2">
               <div className="flex-1 relative">
                 <Textarea
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Scrie mesajul tău aici..."
-                  className="min-h-[80px] resize-none pr-12 border-border/60 focus:border-primary/60 focus:ring-primary/20 transition-all duration-200 bg-background/50 backdrop-blur-sm"
+                  className="min-h-[60px] resize-none pr-12 border-border/60 focus:border-primary/60 focus:ring-primary/20 transition-all duration-200 bg-background/50 backdrop-blur-sm text-sm"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
@@ -271,22 +263,22 @@ export function SupportChat() {
                     }
                   }}
                 />
-                <div className="absolute bottom-2 right-2 text-xs text-muted-foreground">
-                  Enter pentru trimitere
+                <div className="absolute bottom-1 right-1 text-xs text-muted-foreground">
+                  Enter
                 </div>
               </div>
               <Button
                 onClick={sendMessage}
                 disabled={isLoading || !userName.trim() || !userEmail.trim() || !newMessage.trim()}
                 size="icon"
-                className="self-end h-[80px] w-12 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 transition-all duration-200 hover:scale-105 shadow-lg"
+                className="self-end h-[60px] w-10 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 transition-all duration-200 hover:scale-105 shadow-lg"
               >
-                <Send className="h-5 w-5" />
+                <Send className="h-4 w-4" />
               </Button>
             </div>
           </div>
         </div>
-      </DrawerContent>
-    </Drawer>
+      </DialogContent>
+    </Dialog>
   );
 }
