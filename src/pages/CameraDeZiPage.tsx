@@ -1,15 +1,9 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Filter, SortAsc } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-
-// Import product images
-import sofaImage from "@/assets/product-sofa-modern.jpg";
-import armchairsImage from "@/assets/product-armchairs.jpg";
-import diningTableImage from "@/assets/product-dining-table.jpg";
 
 const CameraDeZiPage = () => {
   const navigate = useNavigate();
@@ -32,38 +26,8 @@ const CameraDeZiPage = () => {
     });
   };
 
-  const livingRoomProducts = [
-    {
-      id: "lr1",
-      name: "Canapea Modernă 3 Locuri",
-      price: 2999,
-      originalPrice: 3499,
-      image: sofaImage,
-      rating: 5,
-      reviews: 128,
-      isNew: true,
-      isOnSale: true
-    },
-    {
-      id: "lr2",
-      name: "Set Fotolii Living Luxury",
-      price: 2399,
-      image: armchairsImage, 
-      rating: 4,
-      reviews: 45,
-      isNew: true
-    },
-    {
-      id: "lr3",
-      name: "Masă de Cafea Design",
-      price: 899,
-      originalPrice: 1199,
-      image: diningTableImage,
-      rating: 4, 
-      reviews: 67,
-      isOnSale: true
-    }
-  ];
+  // No products to display - removed test products
+  const livingRoomProducts: any[] = [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -119,9 +83,11 @@ const CameraDeZiPage = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {livingRoomProducts.map((product) => (
-              <ProductCard key={product.id} {...product} />
-            ))}
+            <div className="col-span-full text-center py-12">
+              <p className="text-luxury-cream/70 text-lg">
+                Produsele pentru camera de zi vor fi afișate în curând
+              </p>
+            </div>
           </div>
         </div>
       </main>
