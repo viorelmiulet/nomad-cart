@@ -1,96 +1,253 @@
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Filter, SortAsc } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ArrowLeft, Filter, SortAsc, ChefHat, Utensils, CookingPot, Refrigerator, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import categoryKitchen from "@/assets/category-kitchen.jpg";
 
 const BucatariePage = () => {
   const navigate = useNavigate();
+  const [selectedSubcategory, setSelectedSubcategory] = useState("toate");
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleGoBack = () => {
-    navigate("/");
+  const subcategories = [
+    { id: "toate", name: "Toate Produsele", icon: ChefHat },
+    { id: "bucatarii-complete", name: "Bucătării Complete", icon: CookingPot },
+    { id: "corpuri", name: "Corpuri Individuale", icon: Utensils },
+    { id: "electrocasnice", name: "Electrocasnice", icon: Zap },
+    { id: "accesorii", name: "Accesorii", icon: Refrigerator },
+  ];
+
+  useEffect(() => {
+    fetchKitchenProducts();
+  }, []);
+
+  const fetchKitchenProducts = async () => {
+    try {
+      setLoading(true);
+      
+      // Get bucatarie category ID first
+      const { data: categoryData, error: categoryError } = await supabase
+        .from('categories')
+        .select('id')
+        .eq('slug', 'bucatarie')
+        .single();
+
+      if (categoryError) {
+        console.error('Error fetching category:', categoryError);
+        return;
+      }
+
+      // Then fetch products with that category_id
+      const { data, error } = await supabase
+        .from('products')
+        .select('id, name, price, image_url, description')
+        .eq('category_id', categoryData.id)
+        .eq('status', 'active')
+        .order('name', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching kitchen products:', error);
+        return;
+      }
+
+      console.log('Fetched kitchen products:', data?.length || 0, 'products');
+      setProducts(data || []);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleFilter = () => {
-    toast({
-      title: "Filtre",
-      description: "Sistemul de filtrare va fi implementat în curând.",
-    });
+  const filterProducts = (products: any[], subcategory: string) => {
+    if (subcategory === "toate") return products;
+    
+    switch (subcategory) {
+      case "bucatarii-complete":
+        return products.filter(p => 
+          p.name.toLowerCase().includes("bucătărie") &&
+          (p.name.toLowerCase().includes("completă") || p.name.toLowerCase().includes("cm"))
+        );
+      case "corpuri":
+        return products.filter(p => 
+          p.name.toLowerCase().includes("corp") ||
+          p.name.toLowerCase().includes("blat")
+        );
+      case "electrocasnice":
+        return products.filter(p => 
+          p.name.toLowerCase().includes("plită") ||
+          p.name.toLowerCase().includes("cuptor") ||
+          p.name.toLowerCase().includes("hotă")
+        );
+      case "accesorii":
+        return products.filter(p => 
+          p.name.toLowerCase().includes("organizator") ||
+          p.name.toLowerCase().includes("coș") ||
+          p.name.toLowerCase().includes("sistem") ||
+          p.name.toLowerCase().includes("set")
+        );
+      default:
+        return products;
+    }
   };
 
-  const handleSort = () => {
-    toast({
-      title: "Sortare",
-      description: "Opțiunile de sortare vor fi disponibile în curând.",
-    });
-  };
-
-  // No products to display - removed test products
-  const kitchenProducts: any[] = [];
+  const filteredProducts = filterProducts(products, selectedSubcategory);
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="py-20 bg-hero-gradient relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-luxury-dark/90 via-luxury-navy/70 to-luxury-dark/95"></div>
-        <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
+      {/* Hero Section */}
+      <section className="relative h-[40vh] min-h-[300px] overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${categoryKitchen})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/80 via-brand-dark/60 to-transparent" />
+        <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow" />
         
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="flex items-center justify-between mb-16">
-            <div className="flex items-center space-x-4">
+        <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
+          <div className="max-w-2xl">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-brand-cream font-playfair">
+              Bucătărie
+            </h1>
+            <p className="text-lg md:text-xl text-brand-cream/90 mb-6 font-inter">
+              Mobilier și electrocasnice pentru bucătăria ta de vis. Design funcțional și calitate superioară.
+            </p>
+            <div className="flex flex-wrap gap-4">
               <Button
-                onClick={handleGoBack}
+                onClick={() => navigate("/")}
                 variant="outline"
-                className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
+                className="border-white/30 text-white hover:bg-white/10"
               >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Înapoi la Home
-              </Button>
-              
-              <h1 className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
-                Bucătărie
-              </h1>
-            </div>
-            
-            <div className="hidden md:flex items-center space-x-4">
-              <Button
-                onClick={handleFilter}
-                variant="outline" 
-                className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
-              >
-                <Filter className="h-4 w-4 mr-2" />
-                Filtre
-              </Button>
-              
-              <Button
-                onClick={handleSort}
-                variant="outline"
-                className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
-              >
-                <SortAsc className="h-4 w-4 mr-2" />
-                Sortare
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Înapoi
               </Button>
             </div>
           </div>
-          
-          <div className="text-center mb-16">
-            <p className="text-lg text-luxury-cream/90 max-w-3xl mx-auto font-inter leading-relaxed">
-              Mobilier premium pentru bucătărie. Mese elegante, scaune confortabile și soluții de depozitare 
-              pentru o bucătărie funcțională și stilată.
+        </div>
+      </section>
+
+      {/* Subcategories Filter */}
+      <section className="py-8 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap gap-4 justify-center">
+            {subcategories.map((subcat) => {
+              const IconComponent = subcat.icon;
+              return (
+                <Button
+                  key={subcat.id}
+                  variant={selectedSubcategory === subcat.id ? "default" : "outline"}
+                  onClick={() => setSelectedSubcategory(subcat.id)}
+                  className="flex items-center gap-2"
+                >
+                  <IconComponent className="h-4 w-4" />
+                  {subcat.name}
+                </Button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-12 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground font-playfair">
+              De ce să alegi bucătăriile noastre?
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Calitate superioară și design funcțional pentru bucătăria perfectă
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            <div className="col-span-full text-center py-12">
-              <p className="text-luxury-cream/70 text-lg">
-                Produsele pentru bucătărie vor fi afișate în curând
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <ChefHat className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Design Funcțional</h3>
+              <p className="text-muted-foreground">
+                Spații optimizate și soluții inteligente pentru toate nevoile tale culinare.
+              </p>
+            </div>
+            
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CookingPot className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Calitate Premium</h3>
+              <p className="text-muted-foreground">
+                Materiale rezistente și finisaje de calitate pentru o durabilitate maximă.
+              </p>
+            </div>
+            
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Utensils className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Personalizare</h3>
+              <p className="text-muted-foreground">
+                Soluții la comandă adaptate perfect spațiului și stilului tău.
               </p>
             </div>
           </div>
         </div>
-      </main>
+      </section>
+
+      {/* Products Section */}
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground font-playfair">
+              Mobilier pentru Bucătărie
+            </h2>
+            <p className="text-muted-foreground">
+              Descoperă colecția noastră de {filteredProducts.length} produse pentru bucătăria ta
+            </p>
+          </div>
+          
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {[...Array(8)].map((_, index) => (
+                <div key={index} className="space-y-4">
+                  <Skeleton className="aspect-square rounded-lg" />
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                </div>
+              ))}
+            </div>
+          ) : filteredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  name={product.name}
+                  price={product.price}
+                  image={product.image_url || '/placeholder.svg'}
+                  rating={4.5}
+                  reviews={Math.floor(Math.random() * 50) + 10}
+                  isNew={new Date(product.created_at || Date.now()) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground text-lg">
+                Nu s-au găsit produse pentru categoria selectată.
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
       
       <Footer />
     </div>
