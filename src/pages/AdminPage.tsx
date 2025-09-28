@@ -15,6 +15,8 @@ import { BarChart3, Users, Package, ShoppingCart, Settings, Eye, Edit, Trash2, P
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAdminAuth } from "@/hooks/useAdminAuth";
+import { AdminPasswordLogin } from "@/components/AdminPasswordLogin";
 import ImageUpload from "@/components/ImageUpload";
 
 interface Category {
@@ -83,8 +85,6 @@ const AdminPage = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [checkingAdmin, setCheckingAdmin] = useState(true);
   const [activeTab, setActiveTab] = useState("products");
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);
   const [isEditProductOpen, setIsEditProductOpen] = useState(false);
@@ -98,6 +98,7 @@ const AdminPage = () => {
   const [userRoles, setUserRoles] = useState<any[]>([]);
   const { toast } = useToast();
   const { user } = useAuth();
+  const { isAuthenticated, isLoading: authLoading, login, logout } = useAdminAuth();
 
   // Form states for new product
   const [newProduct, setNewProduct] = useState({
@@ -110,61 +111,12 @@ const AdminPage = () => {
   });
 
   // Check if user is admin
-  const checkAdminRole = async () => {
-    if (!user) {
-      setCheckingAdmin(false);
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', user.id)
-        .eq('role', 'admin')
-        .single();
-
-      if (error && error.code !== 'PGRST116') {
-        console.error('Error checking admin role:', error);
-      }
-
-      setIsAdmin(!!data);
-    } catch (error) {
-      console.error('Error checking admin role:', error);
-    } finally {
-      setCheckingAdmin(false);
-    }
-  };
-
   useEffect(() => {
-    checkAdminRole();
-  }, [user]);
-
-  // Make first user admin (temporary function for setup)
-  const makeFirstAdmin = async () => {
-    if (!user) return;
-
-    try {
-      const { error } = await supabase
-        .from('user_roles')
-        .insert({ user_id: user.id, role: 'admin' });
-
-      if (error) throw error;
-
-      setIsAdmin(true);
-      toast({
-        title: "Admin creat cu succes!",
-        description: "Acum ai acces complet la panoul de administrare."
-      });
-    } catch (error) {
-      console.error('Error creating admin:', error);
-      toast({
-        title: "Eroare",
-        description: "Nu s-a putut crea admin-ul.",
-        variant: "destructive"
-      });
+    if (isAuthenticated) {
+      fetchData();
     }
-  };
+  }, [isAuthenticated]);
+
 
   // Fetch data
   const fetchData = async () => {
@@ -250,11 +202,6 @@ const AdminPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (isAdmin) {
-      fetchData();
-    }
-  }, [isAdmin]);
 
   // Upload images to Supabase Storage
   const uploadImages = async (images: ImageFile[], productId: string) => {
@@ -646,6 +593,24 @@ const AdminPage = () => {
     return statusText[status as keyof typeof statusText] || status;
   };
 
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p>Verificare acces...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login form if not authenticated
+  if (!isAuthenticated) {
+    return <AdminPasswordLogin onLogin={login} />;
+  }
+
+  // Show loading while fetching data
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
@@ -654,44 +619,6 @@ const AdminPage = () => {
           <div className="text-center">Încărcare...</div>
         </div>
         <Footer />
-      </div>
-    );
-  }
-
-  if (checkingAdmin) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p>Verificare permisiuni...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <CardTitle>Acces Restricționat</CardTitle>
-            <CardDescription>
-              Nu ai permisiuni de administrator pentru a accesa această pagină.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-center space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Dacă ești primul administrator, poți să îți creezi rolul de admin.
-            </p>
-            <Button 
-              onClick={makeFirstAdmin}
-              className="w-full"
-            >
-              Creează primul admin
-            </Button>
-          </CardContent>
-        </Card>
       </div>
     );
   }

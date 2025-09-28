@@ -109,6 +109,19 @@ const Header = () => {
         {isAdminPage && (
           <div className="hidden md:flex items-center space-x-4 text-sm lg:text-base font-medium font-inter relative z-10 mx-4">
             <span className="text-white/90 font-semibold">Panou Administrator</span>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => {
+                localStorage.removeItem('admin_authenticated');
+                localStorage.removeItem('admin_auth_time');
+                window.location.reload();
+              }}
+              className="text-white/90 hover:text-brand-gold hover:bg-white/10"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Ieșire
+            </Button>
           </div>
         )}
 
