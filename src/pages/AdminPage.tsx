@@ -641,16 +641,13 @@ const AdminPage = () => {
           ))}
         </div>
 
-        {/* Support Chat Section */}
-        <div className="mb-8">
-          <AdminSupportChat />
-        </div>
 
         {/* Admin Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="products">Produse</TabsTrigger>
             <TabsTrigger value="orders">Comenzi</TabsTrigger>
+            <TabsTrigger value="support">Suport Clienți</TabsTrigger>
             <TabsTrigger value="settings">Setări</TabsTrigger>
           </TabsList>
 
@@ -898,6 +895,21 @@ const AdminPage = () => {
                     ))}
                   </TableBody>
                 </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Support Tab */}
+          <TabsContent value="support">
+            <Card>
+              <CardHeader>
+                <CardTitle>Suport Clienți</CardTitle>
+                <CardDescription>
+                  Gestionează mesajele de suport de la clienți
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <AdminSupportChat />
               </CardContent>
             </Card>
           </TabsContent>
