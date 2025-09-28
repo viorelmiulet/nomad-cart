@@ -57,7 +57,7 @@ const ProductCard = ({
           
           <div className="absolute top-4 left-4 flex gap-2 z-20">
             {isNew && (
-              <Badge className="bg-glass-gradient backdrop-blur-lg text-brand-gold border border-white/20 font-semibold px-3 py-1 shadow-lg">
+              <Badge className="bg-glass-gradient backdrop-blur-lg text-black border border-white/20 font-semibold px-3 py-1 shadow-lg">
                 Nou
               </Badge>
             )}
@@ -74,7 +74,7 @@ const ProductCard = ({
             onClick={handleToggleWishlist}
             className={`absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/20 z-20 shadow-lg`}
           >
-            <Heart className={`h-4 w-4 ${isInWishlist(id) ? 'fill-current text-red-500' : 'text-luxury-dark'}`} />
+            <Heart className={`h-4 w-4 ${isInWishlist(id) ? 'fill-current text-red-500' : 'text-black'}`} />
           </Button>
           
           {/* Glass reflection */}
