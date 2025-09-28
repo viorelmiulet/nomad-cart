@@ -116,6 +116,44 @@ const Header = () => {
           
           {!isAdminPage && <CartDrawer />}
           
+          {/* User authentication */}
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-white/90 hover:text-brand-gold hover:bg-white/10">
+                  <User className="h-4 w-4 mr-2" />
+                  <span className="hidden sm:inline">{user.user_metadata?.display_name || user.email}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-background/95 backdrop-blur-xl border-border/50">
+                <DropdownMenuItem onClick={() => navigate('/auth')} className="cursor-pointer">
+                  <User className="h-4 w-4 mr-2" />
+                  Profil
+                </DropdownMenuItem>
+                {isAdminPage || user.email === 'admin@mobilanomad.ro' ? (
+                  <DropdownMenuItem onClick={() => navigate('/admin')} className="cursor-pointer">
+                    <User className="h-4 w-4 mr-2" />
+                    Administrare
+                  </DropdownMenuItem>
+                ) : null}
+                <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive">
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Deconectare
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate('/auth')} 
+              className="text-white/90 hover:text-brand-gold hover:bg-white/10"
+            >
+              <User className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Conectare</span>
+            </Button>
+          )}
+          
           {!isAdminPage && <MobileMenu onNavClick={handleNavClick} />}
         </div>
       </div>

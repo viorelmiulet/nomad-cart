@@ -90,7 +90,7 @@ const AuthPage = () => {
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const firstError = error.errors[0];
+        const firstError = error.issues[0];
         toast({
           title: "Date invalide",
           description: firstError.message,
@@ -142,7 +142,7 @@ const AuthPage = () => {
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const firstError = error.errors[0];
+        const firstError = error.issues[0];
         toast({
           title: "Date invalide",
           description: firstError.message,
