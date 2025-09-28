@@ -63,15 +63,15 @@ const Header = () => {
           className="flex items-center space-x-2 md:space-x-3 relative z-10 hover:scale-105 transition-transform duration-200 touch-manipulation group"
           aria-label="Acasă"
         >
-          <div className="relative bg-glass-gradient backdrop-blur-3xl border border-white/30 rounded-xl md:rounded-2xl p-2 md:p-3 shadow-2xl animate-glass-float group-hover:shadow-brand-gold/30 transition-all duration-500 overflow-hidden">
+          <div className="relative bg-glass-gradient backdrop-blur-3xl border border-white/30 rounded-xl md:rounded-2xl p-2 md:p-3 shadow-2xl group-hover:shadow-brand-gold/30 transition-all duration-500 overflow-hidden">
             {/* Liquid glass background layers */}
             <div className="absolute inset-0 bg-liquid-gradient opacity-40 group-hover:opacity-60 transition-opacity duration-500 rounded-xl md:rounded-2xl"></div>
             <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/20 to-transparent rounded-t-xl md:rounded-t-2xl"></div>
             <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-brand-gold/10 to-transparent rounded-br-xl md:rounded-br-2xl"></div>
             
             {/* Floating glass particles */}
-            <div className="absolute top-1 left-1 w-2 h-2 bg-white/30 rounded-full blur-sm opacity-70 animate-pulse"></div>
-            <div className="absolute bottom-1 right-1 w-1 h-1 bg-brand-gold/40 rounded-full blur-sm opacity-50 animate-pulse delay-500"></div>
+            <div className="absolute top-1 left-1 w-2 h-2 bg-white/30 rounded-full blur-sm opacity-70"></div>
+            <div className="absolute bottom-1 right-1 w-1 h-1 bg-brand-gold/40 rounded-full blur-sm opacity-50"></div>
             
             <img 
               src={logoMobilaNomad} 
@@ -81,9 +81,6 @@ const Header = () => {
             
             {/* Glass reflection overlay */}
             <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-brand-gold/5 rounded-xl md:rounded-2xl pointer-events-none group-hover:from-white/25 transition-all duration-300"></div>
-            
-            {/* Animated liquid flow */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 animate-liquid-flow rounded-xl md:rounded-2xl"></div>
           </div>
         </Link>
         
