@@ -19,16 +19,23 @@ const DormitorCompletPage = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
+        // Get dormitor-complet category ID first
+        const { data: categoryData, error: categoryError } = await supabase
+          .from('categories')
+          .select('id')
+          .eq('slug', 'dormitor-complet')
+          .single();
+
+        if (categoryError) {
+          console.error('Error fetching category:', categoryError);
+          return;
+        }
+
+        // Then fetch products with that category_id
         const { data, error } = await supabase
           .from('products')
-          .select(`
-            *,
-            categories (
-              name,
-              slug
-            )
-          `)
-          .eq('categories.slug', 'dormitor-complet')
+          .select('id, name, price, image_url, description, created_at')
+          .eq('category_id', categoryData.id)
           .eq('status', 'active')
           .order('created_at', { ascending: false });
 
