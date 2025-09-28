@@ -74,7 +74,7 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
         
         <SheetHeader className="relative z-10 pb-8">
           <SheetTitle className="text-2xl font-bold font-playfair bg-brand-gradient bg-clip-text text-transparent">
-            Mobila Nomad Meniu
+            Mobila Nomad
           </SheetTitle>
         </SheetHeader>
         
