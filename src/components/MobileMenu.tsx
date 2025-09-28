@@ -23,7 +23,7 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
       "Bucătărie": "/bucatarie",
       "Dormitor Complet": "/dormitor-complet",
       "Birou": "/birou",
-      "Inspirații": "/inspiratii",
+      "Electrocasnice": "/electrocasnice",
       "Blog": "/blog"
     };
     
@@ -52,7 +52,7 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
     "Bucătărie",
     "Dormitor Complet",
     "Birou",
-    "Inspirații",
+    "Electrocasnice",
     "Blog"
   ];
 
