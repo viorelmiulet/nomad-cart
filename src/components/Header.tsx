@@ -63,7 +63,7 @@ const Header = () => {
           className="flex items-center space-x-2 md:space-x-3 relative z-10 hover:scale-105 transition-transform duration-200 touch-manipulation"
           aria-label="Acasă"
         >
-          <div className="relative bg-glass-gradient backdrop-blur-xl border border-white/20 rounded-lg md:rounded-xl p-1.5 md:p-2 shadow-xl animate-glass-float">
+          <div className="relative bg-white/75 backdrop-blur-xl border border-white/20 rounded-lg md:rounded-xl p-1.5 md:p-2 shadow-xl animate-glass-float">
             <img 
               src={logoMobilaNomad} 
               alt="Mobila Nomad Logo"
