@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Filter, SortAsc, Bed, Armchair, Home, Package } from "lucide-react";
-import heroImage from "@/assets/hero-dormitor.jpg";
+import heroImage from "@/assets/hero-dormitor-new.jpg";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
