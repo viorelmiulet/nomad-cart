@@ -108,7 +108,7 @@ const BucatariePage = () => {
         <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
           <div className="max-w-2xl">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-brand-cream font-playfair">
-              Bucătărie
+              Bucătării
             </h1>
             <p className="text-lg md:text-xl text-brand-cream/90 mb-6 font-inter">
               Mobilier și electrocasnice pentru bucătăria ta de vis. Design funcțional și calitate superioară.
@@ -200,7 +200,7 @@ const BucatariePage = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground font-playfair">
-              Mobilier pentru Bucătărie
+              Mobilier pentru Bucătării
             </h2>
             <p className="text-muted-foreground">
               Descoperă colecția noastră de {filteredProducts.length} produse pentru bucătăria ta

@@ -18,13 +18,13 @@ const categories = [
   },
   {
     id: "bucatarie",
-    title: "Bucătărie", 
+    title: "Bucătării", 
     image: categoryKitchen,
     subcategories: ["Mese bucătărie", "Scaune bucătărie", "Dulapuri bucătărie", "Baruri", "Seturi bucătărie"]
   },
   {
     id: "dormitor-complet",
-    title: "Dormitor Complet",
+    title: "Dormitoare Complete",
     image: categoryBedroom, 
     subcategories: ["Seturi dormitor", "Paturi matrimoniale", "Dulapuri XXL", "Comode cu oglindă", "Măsuțe toaletă"]
   },

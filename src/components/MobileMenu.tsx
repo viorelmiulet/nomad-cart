@@ -20,8 +20,8 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
       "Acasă": "/",
       "Camera de zi": "/camera-de-zi",
       "Dormitor": "/dormitor",
-      "Bucătărie": "/bucatarie",
-      "Dormitor Complet": "/dormitor-complet",
+      "Bucătării": "/bucatarie",
+      "Dormitoare Complete": "/dormitor-complet",
       "Birou": "/birou",
       "Electrocasnice": "/electrocasnice",
       "Blog": "/blog"
@@ -49,8 +49,8 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
     "Acasă",
     "Camera de zi",
     "Dormitor",
-    "Bucătărie",
-    "Dormitor Complet",
+    "Bucătării",
+    "Dormitoare Complete",
     "Birou",
     "Electrocasnice",
     "Blog"

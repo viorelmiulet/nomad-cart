@@ -22,8 +22,8 @@ const Header = () => {
       "Acasă": "/",
       "Camera de zi": "/camera-de-zi",
       "Dormitor": "/dormitor",
-      "Bucătărie": "/bucatarie",
-      "Dormitor Complet": "/dormitor-complet",
+      "Bucătării": "/bucatarie",
+      "Dormitoare Complete": "/dormitor-complet",
       "Birou": "/birou",
       "Electrocasnice": "/electrocasnice",
       "Blog": "/blog"
@@ -88,12 +88,12 @@ const Header = () => {
               Dormitor
               <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
             </button>
-            <button onClick={() => handleNavClick("Bucătărie")} className="text-white/90 hover:text-brand-gold transition-all duration-300 relative group whitespace-nowrap">
-              Bucătărie
+            <button onClick={() => handleNavClick("Bucătării")} className="text-white/90 hover:text-brand-gold transition-all duration-300 relative group whitespace-nowrap">
+              Bucătării
               <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
             </button>
-            <button onClick={() => handleNavClick("Dormitor Complet")} className="text-white/90 hover:text-brand-gold transition-all duration-300 relative group whitespace-nowrap">
-              Dormitor Complet
+            <button onClick={() => handleNavClick("Dormitoare Complete")} className="text-white/90 hover:text-brand-gold transition-all duration-300 relative group whitespace-nowrap">
+              Dormitoare Complete
               <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
             </button>
             <button onClick={() => handleNavClick("Birou")} className="text-white/90 hover:text-brand-gold transition-all duration-300 relative group whitespace-nowrap">

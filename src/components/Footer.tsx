@@ -75,7 +75,7 @@ const Footer = () => {
             <ul className="space-y-2 md:space-y-3 text-brand-cream/70 font-inter text-sm md:text-base">
               <li><button onClick={() => handleCategoryClick("Living Confortabil")} className="hover:text-brand-gold transition-colors duration-300 text-left touch-manipulation py-1">Living Confortabil</button></li>
               <li><button onClick={() => handleCategoryClick("Dormitor Cozy")} className="hover:text-brand-gold transition-colors duration-300 text-left touch-manipulation py-1">Dormitor Cozy</button></li>
-              <li><button onClick={() => handleCategoryClick("Bucătărie Modernă")} className="hover:text-brand-gold transition-colors duration-300 text-left touch-manipulation py-1">Bucătărie Modernă</button></li>
+              <li><button onClick={() => handleCategoryClick("Bucătării Moderne")} className="hover:text-brand-gold transition-colors duration-300 text-left touch-manipulation py-1">Bucătării Moderne</button></li>
               <li><button onClick={() => handleCategoryClick("Birou Funcțional")} className="hover:text-brand-gold transition-colors duration-300 text-left touch-manipulation py-1">Birou Funcțional</button></li>
             </ul>
           </div>

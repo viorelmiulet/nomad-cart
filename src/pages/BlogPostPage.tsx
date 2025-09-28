@@ -145,7 +145,7 @@ const BlogPostPage = () => {
       author: "Elena Ionescu",
       date: "5 Martie 2025",
       readTime: "9 min",
-      category: "Bucătărie",
+      category: "Bucătării",
       likes: 167,
       views: 2340
     },

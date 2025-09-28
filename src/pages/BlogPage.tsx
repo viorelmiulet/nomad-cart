@@ -74,7 +74,7 @@ const BlogPage = () => {
       date: "5 Martie 2025",
       readTime: "9 min",
       image: "/api/placeholder/600/400",
-      category: "Bucătărie", 
+      category: "Bucătării", 
       likes: 167,
       views: 2340
     },

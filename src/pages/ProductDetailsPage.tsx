@@ -470,7 +470,7 @@ const ProductDetailsPage = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Categorie:</span>
-                  <span>Dormitor Complet</span>
+                  <span>Dormitoare Complete</span>
                 </div>
               </div>
             </CardContent>
