@@ -263,64 +263,79 @@ export function SupportChat() {
           </CardHeader>
 
           <CardContent className="flex flex-col flex-1 p-0 overflow-hidden h-full bg-slate-900">
-            {/* User Info Form - show only if data is not complete */}
-            {!isDataComplete && (
-              <div className="space-y-3 p-4">
-                <div className="text-center">
-                  <div className="inline-flex p-2 bg-blue-500/20 rounded-full mb-2">
-                    <User className="h-5 w-5 text-blue-400" />
-                  </div>
-                  <h4 className="text-sm font-semibold text-white">
-                    {user ? 'Completează datele' : 'Să facem cunoștință!'}
-                  </h4>
-                  <p className="text-xs text-slate-400">
-                    {user ? 'Avem nevoie de câteva detalii' : 'Completează datele tale'}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <div className="space-y-1">
-                    <Label htmlFor="user-name" className="text-xs font-medium text-white">Numele tău</Label>
-                    <Input
-                      id="user-name"
-                      value={userName}
-                      onChange={(e) => setUserName(e.target.value)}
-                      placeholder="Numele tău"
-                      className="h-8 text-sm border-slate-600 bg-slate-800 text-white placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500/20"
-                      disabled={user && !!userProfile?.display_name}
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="user-email" className="text-xs font-medium text-white">Email</Label>
-                    <Input
-                      id="user-email"
-                      type="email"
-                      value={userEmail}
-                      onChange={(e) => setUserEmail(e.target.value)}
-                      placeholder="email@example.com"
-                      className="h-8 text-sm border-slate-600 bg-slate-800 text-white placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500/20"
-                      disabled={!!user}
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="user-phone" className="text-xs font-medium text-white">Telefon</Label>
-                    <div className="relative">
-                      <Phone className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-slate-400" />
-                      <Input
-                        id="user-phone"
-                        type="tel"
-                        value={userPhone}
-                        onChange={(e) => setUserPhone(e.target.value)}
-                        placeholder="0721234567"
-                        className="h-8 pl-8 text-sm border-slate-600 bg-slate-800 text-white placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500/20"
-                      />
+            {!isDataComplete ? (
+              /* User Info Form - show only when data is not complete */
+              <div className="flex flex-col h-full">
+                <div className="flex-1 flex items-center justify-center p-4">
+                  <div className="space-y-4 w-full max-w-sm">
+                    <div className="text-center">
+                      <div className="inline-flex p-3 bg-blue-500/20 rounded-full mb-3">
+                        <User className="h-6 w-6 text-blue-400" />
+                      </div>
+                      <h4 className="text-lg font-semibold text-white mb-2">
+                        Să facem cunoștință!
+                      </h4>
+                      <p className="text-sm text-slate-400 mb-6">
+                        Pentru a putea utiliza chatul de suport, te rog să completezi datele tale
+                      </p>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="user-name" className="text-sm font-medium text-white">Numele tău *</Label>
+                        <Input
+                          id="user-name"
+                          value={userName}
+                          onChange={(e) => setUserName(e.target.value)}
+                          placeholder="Introduceți numele"
+                          className="h-10 text-sm border-slate-600 bg-slate-800 text-white placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500/20"
+                          disabled={user && !!userProfile?.display_name}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="user-email" className="text-sm font-medium text-white">Adresa de email *</Label>
+                        <Input
+                          id="user-email"
+                          type="email"
+                          value={userEmail}
+                          onChange={(e) => setUserEmail(e.target.value)}
+                          placeholder="email@example.com"
+                          className="h-10 text-sm border-slate-600 bg-slate-800 text-white placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500/20"
+                          disabled={!!user}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="user-phone" className="text-sm font-medium text-white">Numărul de telefon *</Label>
+                        <div className="relative">
+                          <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                          <Input
+                            id="user-phone"
+                            type="tel"
+                            value={userPhone}
+                            onChange={(e) => setUserPhone(e.target.value)}
+                            placeholder="0721234567"
+                            className="h-10 pl-10 text-sm border-slate-600 bg-slate-800 text-white placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500/20"
+                          />
+                        </div>
+                      </div>
+                      <div className="pt-2">
+                        <div className="text-xs text-slate-500 text-center mb-4">
+                          * Toate câmpurile sunt obligatorii
+                        </div>
+                        {isDataComplete && (
+                          <div className="text-center">
+                            <div className="inline-flex items-center gap-2 text-green-400 text-sm">
+                              <Sparkles className="h-4 w-4" />
+                              Gata! Acum poți începe conversația
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            )}
-
-            {/* Unified Chat Area - show only when data is complete */}
-            {isDataComplete && (
+            ) : (
+              /* Chat Area - show only when all data is complete */
               <div className="flex-1 flex flex-col min-h-0 p-4 bg-slate-900">
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto space-y-3 pr-2">
@@ -372,7 +387,7 @@ export function SupportChat() {
                   <div ref={messagesEndRef} />
                 </div>
 
-                {/* Message Input - seamlessly integrated */}
+                {/* Message Input */}
                 <div className="flex items-end space-x-2 mt-3 pt-3 border-t border-slate-700">
                   <div className="flex-1 relative">
                     <Textarea
@@ -390,7 +405,7 @@ export function SupportChat() {
                   </div>
                   <Button
                     onClick={sendMessage}
-                    disabled={isLoading || !userName.trim() || !userEmail.trim() || !userPhone.trim() || !newMessage.trim()}
+                    disabled={isLoading || !newMessage.trim()}
                     size="icon"
                     className="h-10 w-10 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all duration-200 hover:scale-105 shadow-lg"
                   >
