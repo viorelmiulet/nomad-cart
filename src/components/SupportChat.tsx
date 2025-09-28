@@ -233,21 +233,21 @@ export function SupportChat() {
       {/* Chat Bubble */}
       {isOpen && (
         <Card className="fixed bottom-24 right-6 w-80 h-[500px] z-40 shadow-2xl bg-slate-900 border border-slate-700 animate-scale-in">
-          <CardHeader className="flex flex-row items-center justify-between border-b border-slate-700 bg-slate-800 p-4">
+          <CardHeader className="flex flex-row items-center justify-between border-b border-slate-700 bg-gradient-to-r from-slate-800 to-slate-700 p-3 rounded-t-lg">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500 rounded-full">
+              <div className="p-2 bg-blue-500 rounded-full shadow-lg">
                 <Headphones className="h-4 w-4 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">
+                <h3 className="text-base font-semibold text-white">
                   Suport Mobila Nomad
                 </h3>
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-yellow-500 text-slate-900 text-xs font-medium rounded">
-                    Deschis
+                  <span className="px-2 py-0.5 bg-green-500 text-white text-xs font-medium rounded-full shadow-sm">
+                    Online
                   </span>
                   <span className="text-xs text-slate-300">
-                    Răspundem în cel mai scurt timp
+                    Răspundem rapid
                   </span>
                 </div>
               </div>
@@ -256,7 +256,7 @@ export function SupportChat() {
               onClick={() => setIsOpen(false)}
               variant="ghost"
               size="icon"
-              className="text-slate-400 hover:text-white hover:bg-slate-700"
+              className="h-8 w-8 text-slate-400 hover:text-white hover:bg-red-500/20 transition-all duration-200 rounded-full border border-slate-600 hover:border-red-400"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -269,42 +269,48 @@ export function SupportChat() {
                 <div className="flex-1 flex items-center justify-center p-4">
                   <div className="space-y-4 w-full max-w-sm">
                     <div className="text-center">
-                      <div className="inline-flex p-3 bg-blue-500/20 rounded-full mb-3">
-                        <User className="h-6 w-6 text-blue-400" />
+                      <div className="inline-flex p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full mb-3 shadow-lg">
+                        <User className="h-6 w-6 text-white" />
                       </div>
                       <h4 className="text-lg font-semibold text-white mb-2">
                         Să facem cunoștință!
                       </h4>
-                      <p className="text-sm text-slate-400 mb-6">
+                      <p className="text-sm text-slate-400 mb-6 leading-relaxed">
                         Pentru a putea utiliza chatul de suport, te rog să completezi datele tale
                       </p>
                     </div>
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <div className="space-y-2">
-                        <Label htmlFor="user-name" className="text-sm font-medium text-white">Numele tău *</Label>
+                        <Label htmlFor="user-name" className="text-sm font-medium text-white flex items-center gap-1">
+                          Numele tău <span className="text-red-400">*</span>
+                        </Label>
                         <Input
                           id="user-name"
                           value={userName}
                           onChange={(e) => setUserName(e.target.value)}
                           placeholder="Introduceți numele"
-                          className="h-10 text-sm border-slate-600 bg-slate-800 text-white placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500/20"
+                          className="h-10 text-sm border-slate-600 bg-slate-800 text-white placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500/20 transition-all duration-200"
                           disabled={user && !!userProfile?.display_name}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="user-email" className="text-sm font-medium text-white">Adresa de email *</Label>
+                        <Label htmlFor="user-email" className="text-sm font-medium text-white flex items-center gap-1">
+                          Adresa de email <span className="text-red-400">*</span>
+                        </Label>
                         <Input
                           id="user-email"
                           type="email"
                           value={userEmail}
                           onChange={(e) => setUserEmail(e.target.value)}
                           placeholder="email@example.com"
-                          className="h-10 text-sm border-slate-600 bg-slate-800 text-white placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500/20"
+                          className="h-10 text-sm border-slate-600 bg-slate-800 text-white placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500/20 transition-all duration-200"
                           disabled={!!user}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="user-phone" className="text-sm font-medium text-white">Numărul de telefon *</Label>
+                        <Label htmlFor="user-phone" className="text-sm font-medium text-white flex items-center gap-1">
+                          Numărul de telefon <span className="text-red-400">*</span>
+                        </Label>
                         <div className="relative">
                           <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
                           <Input
@@ -313,17 +319,17 @@ export function SupportChat() {
                             value={userPhone}
                             onChange={(e) => setUserPhone(e.target.value)}
                             placeholder="0721234567"
-                            className="h-10 pl-10 text-sm border-slate-600 bg-slate-800 text-white placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500/20"
+                            className="h-10 pl-10 text-sm border-slate-600 bg-slate-800 text-white placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500/20 transition-all duration-200"
                           />
                         </div>
                       </div>
-                      <div className="pt-2">
-                        <div className="text-xs text-slate-500 text-center mb-4">
-                          * Toate câmpurile sunt obligatorii
+                      <div className="pt-3">
+                        <div className="text-xs text-slate-400 text-center mb-3 bg-slate-800/50 p-2 rounded-lg border border-slate-700">
+                          <span className="text-red-400">*</span> Toate câmpurile sunt obligatorii
                         </div>
                         {isDataComplete && (
                           <div className="text-center">
-                            <div className="inline-flex items-center gap-2 text-green-400 text-sm">
+                            <div className="inline-flex items-center gap-2 text-green-400 text-sm bg-green-500/10 p-2 rounded-lg border border-green-500/20">
                               <Sparkles className="h-4 w-4" />
                               Gata! Acum poți începe conversația
                             </div>
