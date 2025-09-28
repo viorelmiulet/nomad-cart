@@ -1,21 +1,85 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ProductGrid from "@/components/ProductGrid";
+import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Bed, Armchair, ShoppingBag, ArrowRight } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
 import categoryBedroom from "@/assets/category-bedroom.jpg";
 
 const DormitorCompletPage = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState("toate");
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
+
+  // Fetch bedroom products from database
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select(`
+            *,
+            categories (
+              name,
+              slug
+            )
+          `)
+          .eq('categories.slug', 'dormitor-complet')
+          .eq('status', 'active')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Error fetching products:', error);
+        } else {
+          setProducts(data || []);
+          setFilteredProducts(data || []);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Filter products based on selected subcategory
+  useEffect(() => {
+    if (selectedSubcategory === "toate") {
+      setFilteredProducts(products);
+    } else {
+      const filtered = products.filter(product => {
+        const name = product.name.toLowerCase();
+        switch (selectedSubcategory) {
+          case "seturi":
+            return name.includes("complet") || name.includes("set");
+          case "diana":
+            return name.includes("diana");
+          case "robert":
+            return name.includes("robert");
+          case "premium":
+            return product.price >= 3000;
+          case "buget":
+            return product.price < 2000;
+          default:
+            return true;
+        }
+      });
+      setFilteredProducts(filtered);
+    }
+  }, [selectedSubcategory, products]);
 
   const subcategories = [
     { id: "toate", name: "Toate Produsele", icon: ShoppingBag },
-    { id: "seturi", name: "Seturi Dormitor", icon: Bed },
-    { id: "paturi", name: "Paturi Matrimoniale", icon: Bed },
-    { id: "dulapuri", name: "Dulapuri XXL", icon: Armchair },
-    { id: "comode", name: "Comode cu Oglindă", icon: Armchair },
-    { id: "masute", name: "Măsuțe Toaletă", icon: Armchair },
+    { id: "premium", name: "Seturi Premium", icon: Bed },
+    { id: "diana", name: "Colecția Diana", icon: Bed },
+    { id: "robert", name: "Colecția Robert", icon: Armchair },
+    { id: "buget", name: "Prețuri Mici", icon: ShoppingBag },
   ];
 
   return (
@@ -127,10 +191,40 @@ const DormitorCompletPage = () => {
               Mobilier pentru Dormitor Complet
             </h2>
             <p className="text-muted-foreground">
-              Descoperă colecția noastră de mobilier pentru un dormitor complet și armonios
+              Descoperă colecția noastră de {filteredProducts.length} produse pentru un dormitor complet și armonios
             </p>
           </div>
-          <ProductGrid />
+          
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {[...Array(8)].map((_, index) => (
+                <div key={index} className="space-y-4">
+                  <Skeleton className="aspect-square rounded-lg" />
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                </div>
+              ))}
+            </div>
+          ) : filteredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  name={product.name}
+                  price={product.price}
+                  image={product.image_url}
+                  rating={4.5}
+                  reviews={Math.floor(Math.random() * 50) + 10}
+                  isNew={new Date(product.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground text-lg">Nu au fost găsite produse pentru categoria selectată.</p>
+            </div>
+          )}
         </div>
       </section>
 
