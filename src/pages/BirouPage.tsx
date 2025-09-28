@@ -1,21 +1,91 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ProductGrid from "@/components/ProductGrid";
+import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
-import { Monitor, Armchair, BookOpen, Archive, Briefcase, ArrowRight, Users, Clock, TrendingUp } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { supabase } from "@/integrations/supabase/client";
+import { Monitor, Armchair, BookOpen, Archive, Briefcase, ArrowRight, Users, Clock, TrendingUp, Gamepad2, Eye, Sofa } from "lucide-react";
+
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  image_url: string | null;
+  description: string | null;
+}
 
 const BirouPage = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState("toate");
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const subcategories = [
     { id: "toate", name: "Toate Produsele", icon: Briefcase },
-    { id: "birouri", name: "Birouri", icon: Monitor },
-    { id: "scaune", name: "Scaune Birou", icon: Armchair },
-    { id: "biblioteci", name: "Biblioteci", icon: BookOpen },
-    { id: "dulapuri", name: "Dulapuri Birou", icon: Archive },
-    { id: "accesorii", name: "Accesorii Birou", icon: Briefcase },
+    { id: "scaune-birou", name: "Scaune Birou", icon: Armchair },
+    { id: "scaune-gaming", name: "Scaune Gaming", icon: Gamepad2 },
+    { id: "scaune-vizitator", name: "Scaune Vizitator", icon: Eye },
+    { id: "depozitare", name: "Depozitare", icon: Archive },
+    { id: "fotolii", name: "Fotolii & Canapele", icon: Sofa },
   ];
+
+  useEffect(() => {
+    fetchOfficeProducts();
+  }, []);
+
+  const fetchOfficeProducts = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('products')
+        .select('id, name, price, image_url, description')
+        .eq('status', 'active')
+        .in('category_id', [
+          (await supabase.from('categories').select('id').eq('slug', 'birou').single()).data?.id
+        ].filter(Boolean));
+
+      if (error) {
+        console.error('Error fetching office products:', error);
+        return;
+      }
+
+      setProducts(data || []);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filterProducts = (products: Product[], subcategory: string) => {
+    if (subcategory === "toate") return products;
+    
+    switch (subcategory) {
+      case "scaune-birou":
+        return products.filter(p => p.name.toLowerCase().includes("scaun de birou"));
+      case "scaune-gaming":
+        return products.filter(p => p.name.toLowerCase().includes("gaming"));
+      case "scaune-vizitator":
+        return products.filter(p => p.name.toLowerCase().includes("vizitator"));
+      case "depozitare":
+        return products.filter(p => 
+          p.name.toLowerCase().includes("etajera") || 
+          p.name.toLowerCase().includes("organizer") ||
+          p.name.toLowerCase().includes("modul")
+        );
+      case "fotolii":
+        return products.filter(p => 
+          p.name.toLowerCase().includes("fotoliu") || 
+          p.name.toLowerCase().includes("canapea") ||
+          p.name.toLowerCase().includes("recliner") ||
+          p.name.toLowerCase().includes("coltar")
+        );
+      default:
+        return products;
+    }
+  };
+
+  const filteredProducts = filterProducts(products, selectedSubcategory);
 
   return (
     <div className="min-h-screen bg-background">
@@ -234,7 +304,47 @@ const BirouPage = () => {
               Descoperă colecția noastră de mobilier profesional pentru casa ta
             </p>
           </div>
-          <ProductGrid />
+          
+          {/* Product Count */}
+          <div className="text-center mb-6">
+            <p className="text-sm text-muted-foreground">
+              {filteredProducts.length} produse găsite
+            </p>
+          </div>
+
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="space-y-4">
+                  <Skeleton className="h-48 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                </div>
+              ))}
+            </div>
+          ) : filteredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  name={product.name}
+                  price={product.price}
+                  image={product.image_url || '/placeholder.svg'}
+                  rating={4.5}
+                  reviews={Math.floor(Math.random() * 50) + 10}
+                  isNew={Math.random() > 0.7}
+                  isOnSale={Math.random() > 0.6}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">
+                Nu s-au găsit produse pentru categoria selectată.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
