@@ -1,13 +1,9 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Filter, SortAsc } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-
-// Import product images
-import diningTableImage from "@/assets/product-dining-table.jpg";
 
 const BucatariePage = () => {
   const navigate = useNavigate();
@@ -30,17 +26,8 @@ const BucatariePage = () => {
     });
   };
 
-  const kitchenProducts = [
-    {
-      id: "k1", 
-      name: "Masă de Dining Extensibilă",
-      price: 1899,
-      image: diningTableImage,
-      rating: 5,
-      reviews: 95,
-      isNew: true
-    }
-  ];
+  // No products to display - removed test products
+  const kitchenProducts: any[] = [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -96,9 +83,11 @@ const BucatariePage = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {kitchenProducts.map((product) => (
-              <ProductCard key={product.id} {...product} />
-            ))}
+            <div className="col-span-full text-center py-12">
+              <p className="text-luxury-cream/70 text-lg">
+                Produsele pentru bucătărie vor fi afișate în curând
+              </p>
+            </div>
           </div>
         </div>
       </main>
