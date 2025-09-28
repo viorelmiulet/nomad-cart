@@ -325,12 +325,19 @@ export function SupportChat() {
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto space-y-3 pr-2">
                   {messages.length === 0 ? (
-                    <div className="text-center text-slate-400 py-6">
-                      <div className="inline-flex p-2 bg-blue-500/20 rounded-full mb-2">
-                        <MessageCircle className="h-5 w-5 opacity-60" />
+                    <div className="space-y-3">
+                      {/* Welcome message from Mobila Nomad */}
+                      <div className="flex justify-start items-start gap-2 animate-fade-in">
+                        <div className="p-1 bg-slate-700 rounded-full flex-shrink-0 mt-1">
+                          <Headphones className="h-3 w-3 text-slate-300" />
+                        </div>
+                        <div className="bg-slate-700 rounded-2xl rounded-bl-sm px-3 py-2 max-w-[75%] shadow-md">
+                          <p className="text-sm leading-relaxed text-white">Buna ziua! Cu ce va putem ajuta?</p>
+                          <p className="text-xs text-slate-400 mt-1">
+                            {new Date().toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        </div>
                       </div>
-                      <h4 className="text-sm font-medium mb-1 text-white">Începe conversația</h4>
-                      <p className="text-xs">Trimite primul mesaj!</p>
                     </div>
                   ) : (
                     messages.map((msg) => (
