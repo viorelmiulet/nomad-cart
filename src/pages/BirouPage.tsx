@@ -5,7 +5,7 @@ import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
-import { Monitor, Armchair, BookOpen, Archive, Briefcase, ArrowRight, Users, Clock, TrendingUp, Gamepad2, Eye, Sofa } from "lucide-react";
+import { Utensils, Users2, Home, Coffee, Star, ArrowRight, Users, Clock, TrendingUp, ChefHat, Heart, Sparkles } from "lucide-react";
 
 interface Product {
   id: string;
@@ -21,19 +21,19 @@ const BirouPage = () => {
   const [loading, setLoading] = useState(true);
 
   const subcategories = [
-    { id: "toate", name: "Toate Produsele", icon: Briefcase },
-    { id: "scaune-birou", name: "Scaune Birou", icon: Armchair },
-    { id: "scaune-gaming", name: "Scaune Gaming", icon: Gamepad2 },
-    { id: "scaune-vizitator", name: "Scaune Vizitator", icon: Eye },
-    { id: "depozitare", name: "Depozitare", icon: Archive },
-    { id: "fotolii", name: "Fotolii & Canapele", icon: Sofa },
+    { id: "toate", name: "Toate Seturile", icon: Utensils },
+    { id: "set-masa-6-scaune", name: "Set Masă + 6 Scaune", icon: Users2 },
+    { id: "set-extensibil", name: "Mese Extensibile", icon: Home },
+    { id: "set-gradina", name: "Seturi Grădină", icon: Coffee },
+    { id: "set-premium", name: "Seturi Premium", icon: Star },
+    { id: "set-modern", name: "Design Modern", icon: Sparkles },
   ];
 
   useEffect(() => {
-    fetchOfficeProducts();
+    fetchDiningProducts();
   }, []);
 
-  const fetchOfficeProducts = async () => {
+  const fetchDiningProducts = async () => {
     try {
       setLoading(true);
       
@@ -62,7 +62,7 @@ const BirouPage = () => {
         return;
       }
 
-      console.log('Fetched office products:', data?.length || 0, 'products');
+      console.log('Fetched dining products:', data?.length || 0, 'products');
       setProducts(data || []);
     } catch (error) {
       console.error('Error:', error);
@@ -75,27 +75,34 @@ const BirouPage = () => {
     if (subcategory === "toate") return products;
     
     switch (subcategory) {
-      case "scaune-birou":
+      case "set-masa-6-scaune":
         return products.filter(p => 
-          p.name.toLowerCase().includes("scaun de birou") && 
-          !p.name.toLowerCase().includes("gaming")
+          p.name.toLowerCase().includes("6 scaune") ||
+          p.name.toLowerCase().includes("masa si")
         );
-      case "scaune-gaming":
-        return products.filter(p => p.name.toLowerCase().includes("gaming"));
-      case "scaune-vizitator":
-        return products.filter(p => p.name.toLowerCase().includes("vizitator"));
-      case "depozitare":
+      case "set-extensibil":
         return products.filter(p => 
-          p.name.toLowerCase().includes("etajera") || 
-          p.name.toLowerCase().includes("organizer") ||
-          p.name.toLowerCase().includes("modul tv")
+          p.name.toLowerCase().includes("extensibil") ||
+          p.name.toLowerCase().includes("130") ||
+          p.name.toLowerCase().includes("170")
         );
-      case "fotolii":
+      case "set-gradina":
         return products.filter(p => 
-          p.name.toLowerCase().includes("fotoliu") || 
-          p.name.toLowerCase().includes("canapea") ||
-          p.name.toLowerCase().includes("recliner") ||
-          p.name.toLowerCase().includes("coltar")
+          p.name.toLowerCase().includes("gradina") ||
+          p.name.toLowerCase().includes("terasa") ||
+          p.name.toLowerCase().includes("fotolii")
+        );
+      case "set-premium":
+        return products.filter(p => 
+          p.name.toLowerCase().includes("diva") ||
+          p.name.toLowerCase().includes("regal") ||
+          p.price >= 1700
+        );
+      case "set-modern":
+        return products.filter(p => 
+          p.name.toLowerCase().includes("model") ||
+          p.name.toLowerCase().includes("modern") ||
+          p.name.toLowerCase().includes("negru")
         );
       default:
         return products;
@@ -117,24 +124,24 @@ const BirouPage = () => {
         <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
           <div className="max-w-2xl">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-white font-playfair">
-              Birou de Acasă
+              Mese și Scaune
             </h1>
             <p className="text-lg md:text-xl text-white/90 mb-6 font-inter">
-              Creează spațiul de lucru perfect pentru productivitate maximă și confort zilnic
+              Descoperă seturi complete de mese și scaune pentru mesele perfecte în familie
             </p>
             <div className="flex flex-wrap gap-4">
               <Button 
                 size="lg" 
                 className="bg-brand-gold hover:bg-brand-gold/90 text-brand-dark font-semibold"
               >
-                Explorează Birourile <ArrowRight className="ml-2 h-4 w-4" />
+                Explorează Seturile <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
               <Button 
                 size="lg" 
                 variant="outline"
                 className="border-white/30 text-white hover:bg-white/10"
               >
-                Scaune Ergonomice
+                Mese Extensibile
               </Button>
             </div>
           </div>
@@ -168,10 +175,10 @@ const BirouPage = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground font-playfair">
-              Munca de acasă în cifre
+              Masa în familie în cifre
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              De ce investiția într-un birou de calitate este esențială pentru succesul tău
+              De ce investiția într-un set de masă și scaune de calitate transformă casa ta
             </p>
           </div>
           
@@ -180,9 +187,9 @@ const BirouPage = () => {
               <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <TrendingUp className="h-8 w-8 text-blue-600" />
               </div>
-              <h3 className="text-2xl font-bold mb-2 text-blue-600">+35%</h3>
+              <h3 className="text-2xl font-bold mb-2 text-blue-600">+50%</h3>
               <p className="text-muted-foreground">
-                Creșterea productivității cu un spațiu de lucru organizat
+                Mai mult timp petrecut împreună la masa cu un set confortabil
               </p>
             </div>
             
@@ -190,9 +197,9 @@ const BirouPage = () => {
               <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Clock className="h-8 w-8 text-green-600" />
               </div>
-              <h3 className="text-2xl font-bold mb-2 text-green-600">8 ore/zi</h3>
+              <h3 className="text-2xl font-bold mb-2 text-green-600">2-3 ore/zi</h3>
               <p className="text-muted-foreground">
-                Timpul mediu petrecut la birou - confortul este esențial
+                Timpul mediu petrecut la masă - confortul și designul contează
               </p>
             </div>
             
@@ -200,9 +207,9 @@ const BirouPage = () => {
               <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="h-8 w-8 text-purple-600" />
               </div>
-              <h3 className="text-2xl font-bold mb-2 text-purple-600">60%</h3>
+              <h3 className="text-2xl font-bold mb-2 text-purple-600">85%</h3>
               <p className="text-muted-foreground">
-                Din români lucrează de acasă cel puțin o parte din timp
+                Din familii consideră masa comună ca fiind foarte importantă
               </p>
             </div>
           </div>
@@ -214,51 +221,51 @@ const BirouPage = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground font-playfair">
-              De ce să investești într-un birou de calitate?
+              De ce să investești într-un set de masă și scaune de calitate?
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Un spațiu de lucru bine amenajat îți transformă întreaga experiență profesională
+              Un set de masă frumos și confortabil transformă momentele în familie în amintiri prețioase
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Monitor className="h-8 w-8 text-primary" />
+                <Heart className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Productivitate</h3>
+              <h3 className="text-xl font-semibold mb-2">Confort</h3>
               <p className="text-muted-foreground">
-                Un spațiu organizat îți crește eficiența și concentrarea.
+                Scaune confortabile pentru mese lungi și conversații plăcute.
               </p>
             </div>
             
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Armchair className="h-8 w-8 text-primary" />
+                <Users className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Ergonomie</h3>
+              <h3 className="text-xl font-semibold mb-2">Socializare</h3>
               <p className="text-muted-foreground">
-                Mobilier ergonomic pentru confort pe termen lung și sănătate.
+                Spațiu perfect pentru întâlniri în familie și cu prietenii.
               </p>
             </div>
             
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <BookOpen className="h-8 w-8 text-primary" />
+                <Home className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Organizare</h3>
+              <h3 className="text-xl font-semibold mb-2">Design</h3>
               <p className="text-muted-foreground">
-                Sisteme de depozitare inteligente pentru tot ce ai nevoie.
+                Seturi elegante care completează perfect decorul casei tale.
               </p>
             </div>
             
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Briefcase className="h-8 w-8 text-primary" />
+                <ChefHat className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Profesionalism</h3>
+              <h3 className="text-xl font-semibold mb-2">Versatilitate</h3>
               <p className="text-muted-foreground">
-                Un decor profesional pentru meetingurile online.
+                De la micul dejun la cina festivă - perfect pentru orice ocazie.
               </p>
             </div>
           </div>
@@ -270,42 +277,42 @@ const BirouPage = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground font-playfair">
-              Cum să îți amenajezi biroul perfect
+              Cum să alegi setul perfect de masă și scaune
             </h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold">1. Alege locația potrivită</h3>
+              <h3 className="text-xl font-semibold">1. Măsoară spațiul disponibil</h3>
               <p className="text-muted-foreground">
-                Preferă o zonă cu lumină naturală, departe de distracții și zgomot.
+                Asigură-te că ai suficient spațiu pentru masă și scaune când sunt scoase.
               </p>
               
-              <h3 className="text-xl font-semibold">2. Investește în ergonomie</h3>
+              <h3 className="text-xl font-semibold">2. Alege dimensiunea potrivită</h3>
               <p className="text-muted-foreground">
-                Un scaun bun și un birou la înălțimea corectă sunt esențiale pentru sănătate.
+                Pentru 6 persoane, o masă de 160-180cm lungime este ideală.
               </p>
               
-              <h3 className="text-xl font-semibold">3. Organizează cablurile</h3>
+              <h3 className="text-xl font-semibold">3. Consideră extensibilitatea</h3>
               <p className="text-muted-foreground">
-                Folosește soluții de management al cablurilor pentru un aspect curat.
+                Mesele extensibile sunt perfecte pentru ocazii speciale cu mai mulți invitați.
               </p>
             </div>
             
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold">4. Adaugă depozitare</h3>
+              <h3 className="text-xl font-semibold">4. Alege materialele</h3>
               <p className="text-muted-foreground">
-                Rafturi, sertare și organizatoare îți mențin spațiul ordonat.
+                Materialele rezistente la pete și ușor de curățat sunt ideale pentru familie.
               </p>
               
-              <h3 className="text-xl font-semibold">5. Personalizează</h3>
+              <h3 className="text-xl font-semibold">5. Testează confortul</h3>
               <p className="text-muted-foreground">
-                Adaugă plante, fotografii sau obiecte care te inspiră.
+                Scaunele trebuie să fie confortabile pentru mese lungi și conversații.
               </p>
               
-              <h3 className="text-xl font-semibold">6. Gândește la iluminat</h3>
+              <h3 className="text-xl font-semibold">6. Potrivește cu decorul</h3>
               <p className="text-muted-foreground">
-                O lampă de birou bună reduce oboseala ochilor și crește confortul.
+                Alege un stil care se integrează frumos în restul decorului casei tale.
               </p>
             </div>
           </div>
@@ -317,10 +324,10 @@ const BirouPage = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground font-playfair">
-              Mobilier pentru Birou de Acasă
+              Seturi Complete de Mese și Scaune
             </h2>
             <p className="text-muted-foreground">
-              Descoperă colecția noastră de mobilier profesional pentru casa ta
+              Descoperă colecția noastră de seturi elegante pentru masa perfectă în familie
             </p>
           </div>
           
