@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer"; // Footer component
 import { AdminSupportChat } from "@/components/AdminSupportChat";
 import { CompanyInfoEditor } from "@/components/CompanyInfoEditor";
+import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -649,7 +650,8 @@ const AdminPage = () => {
 
         {/* Admin Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="products">Produse</TabsTrigger>
             <TabsTrigger value="orders">Comenzi</TabsTrigger>
             <TabsTrigger value="support">Suport Clienți</TabsTrigger>
@@ -657,6 +659,11 @@ const AdminPage = () => {
             <TabsTrigger value="company">Companie</TabsTrigger>
             <TabsTrigger value="settings">Setări</TabsTrigger>
           </TabsList>
+
+          {/* Analytics Tab */}
+          <TabsContent value="analytics">
+            <AnalyticsDashboard />
+          </TabsContent>
 
           {/* Products Tab */}
           <TabsContent value="products">

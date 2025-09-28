@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { AnalyticsTracker } from "@/components/AnalyticsTracker";
 import { SupportChat } from "@/components/SupportChat";
 import Index from "./pages/Index";
 import ProductsPage from "./pages/ProductsPage";
@@ -41,30 +42,32 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/products" element={<ProductsPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/mobilier" element={<MobilierPage />} />
-          <Route path="/camera-de-zi" element={<CameraDeZiPage />} />
-          <Route path="/dormitor" element={<DormitorPage />} />
-          <Route path="/bucatarie" element={<BucatariePage />} />
-          
-          <Route path="/inspiratii" element={<InspiratiiPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:id" element={<BlogPostPage />} />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
-          <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
-          <Route path="/admin" element={
-            <ProtectedRoute>
-              <AdminPage />
-            </ProtectedRoute>
-          } />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AnalyticsTracker>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/products" element={<ProductsPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/mobilier" element={<MobilierPage />} />
+            <Route path="/camera-de-zi" element={<CameraDeZiPage />} />
+            <Route path="/dormitor" element={<DormitorPage />} />
+            <Route path="/bucatarie" element={<BucatariePage />} />
+            
+            <Route path="/inspiratii" element={<InspiratiiPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:id" element={<BlogPostPage />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
+            <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
+            <Route path="/admin" element={
+              <ProtectedRoute>
+                <AdminPage />
+              </ProtectedRoute>
+            } />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AnalyticsTracker>
         <SupportChat />
       </BrowserRouter>
       </TooltipProvider>
