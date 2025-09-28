@@ -40,7 +40,7 @@ const ProductCard = ({
   };
 
   return (
-    <Card className="group overflow-hidden border-0 bg-glass-gradient backdrop-blur-xl shadow-2xl hover:shadow-luxury-gold/20 transition-all duration-500 transform hover:-translate-y-3 hover:scale-[1.02] rounded-2xl border border-white/10 relative">
+    <Card className="group overflow-hidden border-0 bg-glass-gradient backdrop-blur-xl shadow-2xl hover:shadow-brand-gold/20 transition-all duration-500 transform hover:-translate-y-3 hover:scale-[1.02] rounded-2xl border border-white/10 relative">
       <div className="absolute inset-0 bg-liquid-gradient opacity-20 group-hover:opacity-30 transition-opacity duration-500 rounded-2xl"></div>
       <div className="relative overflow-hidden rounded-t-2xl z-10">
         <img 
@@ -51,12 +51,12 @@ const ProductCard = ({
         
         <div className="absolute top-4 left-4 flex gap-2 z-20">
           {isNew && (
-            <Badge className="bg-glass-gradient backdrop-blur-lg text-luxury-gold border border-white/20 font-semibold px-3 py-1 shadow-lg">
+            <Badge className="bg-glass-gradient backdrop-blur-lg text-brand-gold border border-white/20 font-semibold px-3 py-1 shadow-lg">
               Nou
             </Badge>
           )}
           {isOnSale && (
-            <Badge className="bg-luxury-burgundy/80 backdrop-blur-lg text-luxury-cream border border-white/20 font-semibold px-3 py-1 shadow-lg">
+            <Badge className="bg-brand-burgundy/80 backdrop-blur-lg text-brand-cream border border-white/20 font-semibold px-3 py-1 shadow-lg">
               Ofertă Exclusivă
             </Badge>
           )}
@@ -66,7 +66,7 @@ const ProductCard = ({
           size="icon"
           variant="secondary"
           onClick={handleToggleWishlist}
-          className={`absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/20 z-20 shadow-lg ${isInWishlist(id) ? 'text-red-500' : 'text-luxury-gold'}`}
+          className={`absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/20 z-20 shadow-lg ${isInWishlist(id) ? 'text-red-500' : 'text-brand-gold'}`}
         >
           <Heart className={`h-4 w-4 ${isInWishlist(id) ? 'fill-current' : ''}`} />
         </Button>
@@ -76,7 +76,7 @@ const ProductCard = ({
       </div>
       
       <CardContent className="p-8 relative z-10 bg-glass-gradient backdrop-blur-sm">
-        <h3 className="font-semibold text-xl mb-3 group-hover:text-luxury-gold transition-colors font-playfair">
+        <h3 className="font-semibold text-xl mb-3 group-hover:text-brand-gold transition-colors font-playfair">
           {name}
         </h3>
         
@@ -86,7 +86,7 @@ const ProductCard = ({
               <Star
                 key={i}
                 className={`h-4 w-4 ${
-                  i < rating ? "text-luxury-gold fill-current" : "text-gray-300"
+                  i < rating ? "text-brand-gold fill-current" : "text-gray-300"
                 }`}
               />
             ))}
@@ -96,7 +96,7 @@ const ProductCard = ({
         
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <span className="text-2xl font-bold text-luxury-gold font-playfair">
+            <span className="text-2xl font-bold text-brand-gold font-playfair">
               {price.toLocaleString('ro-RO')} Lei
             </span>
             {originalPrice && (
@@ -109,13 +109,13 @@ const ProductCard = ({
         
         <Button 
           onClick={handleAddToCart}
-          className="w-full bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/10 transition-all duration-300 text-luxury-gold font-semibold py-3 h-12 text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] group relative overflow-hidden"
+          className="w-full bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/10 transition-all duration-300 text-brand-gold font-semibold py-3 h-12 text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] group relative overflow-hidden"
         >
           <span className="relative z-10 flex items-center">
             <ShoppingCart className="mr-2 h-5 w-5" />
             Adaugă în Coș
           </span>
-          <div className="absolute inset-0 bg-luxury-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+          <div className="absolute inset-0 bg-brand-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
         </Button>
       </CardContent>
     </Card>
