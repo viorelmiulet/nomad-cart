@@ -276,6 +276,14 @@ export function AdminSupportChat() {
                       onChange={(e) => setResponseText(e.target.value)}
                       placeholder="Scrie răspunsul pentru client..."
                       className="min-h-[120px]"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          if (responseText.trim() && !isLoading) {
+                            sendResponse();
+                          }
+                        }
+                      }}
                     />
                     <div className="flex gap-2">
                       <Button
