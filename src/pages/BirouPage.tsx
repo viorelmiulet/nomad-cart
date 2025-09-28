@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { Utensils, Users2, Home, Coffee, Star, ArrowRight, Users, Clock, TrendingUp, ChefHat, Heart, Sparkles } from "lucide-react";
+import heroMeseScaune from "@/assets/hero-mese-scaune.jpg";
 
 interface Product {
   id: string;
@@ -119,7 +120,12 @@ const BirouPage = () => {
       
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[300px] overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
-        <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow" />
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${heroMeseScaune})` }}
+        />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-liquid-gradient opacity-20 animate-liquid-flow" />
         
         <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
           <div className="max-w-2xl">
