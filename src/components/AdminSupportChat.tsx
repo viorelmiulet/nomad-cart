@@ -96,10 +96,6 @@ export function AdminSupportChat() {
 
       setResponseText('');
       setSelectedMessage(null);
-      toast({
-        title: "Răspuns trimis!",
-        description: "Clientul va fi notificat despre răspuns."
-      });
     } catch (error) {
       console.error('Error sending response:', error);
       toast({

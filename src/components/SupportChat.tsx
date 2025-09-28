@@ -75,25 +75,34 @@ export function SupportChat() {
     }
   };
 
-  // Load existing messages for the user email
+  // Load existing messages for the current session
   useEffect(() => {
     if (isOpen) {
-      const email = userEmail || `anonim_${Date.now()}@temp.com`;
-      if (email) {
-        loadMessages();
-        subscribeToMessages();
-      }
+      const sessionEmail = userEmail || getSessionEmail();
+      setUserEmail(sessionEmail);
+      loadMessages();
+      subscribeToMessages();
     }
   }, [isOpen]);
 
+  const getSessionEmail = () => {
+    let sessionEmail = localStorage.getItem('anonymous_session_email');
+    if (!sessionEmail) {
+      sessionEmail = `anonim_${Date.now()}@temp.com`;
+      localStorage.setItem('anonymous_session_email', sessionEmail);
+    }
+    return sessionEmail;
+  };
+
   const loadMessages = async () => {
-    if (!userEmail) return;
+    const sessionEmail = userEmail || getSessionEmail();
+    if (!sessionEmail) return;
 
     try {
       const { data, error } = await supabase
         .from('support_messages')
         .select('*')
-        .eq('user_email', userEmail)
+        .eq('user_email', sessionEmail)
         .order('created_at', { ascending: true });
 
       if (error) throw error;
@@ -104,6 +113,7 @@ export function SupportChat() {
   };
 
   const subscribeToMessages = () => {
+    const sessionEmail = userEmail || getSessionEmail();
     const channel = supabase
       .channel('support-messages')
       .on(
@@ -112,7 +122,7 @@ export function SupportChat() {
           event: '*',
           schema: 'public',
           table: 'support_messages',
-          filter: `user_email=eq.${userEmail || `anonim_${Date.now()}@temp.com`}`
+          filter: `user_email=eq.${sessionEmail}`
         },
         (payload) => {
           if (payload.eventType === 'INSERT') {
@@ -177,7 +187,7 @@ export function SupportChat() {
         .from('support_messages')
         .insert({
           user_name: userName.trim() || 'Anonim',
-          user_email: userEmail.trim() || `anonim_${Date.now()}@temp.com`,
+          user_email: userEmail.trim() || getSessionEmail(),
           user_phone: userPhone.trim() || '',
           message: newMessage.trim()
         });
