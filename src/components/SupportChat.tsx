@@ -249,10 +249,10 @@ export function SupportChat() {
             </div>
           </CardHeader>
 
-          <CardContent className="flex flex-col flex-1 p-4 space-y-3 overflow-hidden h-full">
+          <CardContent className="flex flex-col flex-1 p-0 overflow-hidden h-full">
             {/* User Info Form - show only if data is not complete */}
             {!isDataComplete && (
-              <div className="space-y-3">
+              <div className="space-y-3 p-4">
                 <div className="text-center">
                   <div className="inline-flex p-2 bg-gradient-to-br from-primary/30 to-primary/20 rounded-full mb-2">
                     <User className="h-5 w-5 text-primary" />
@@ -306,10 +306,11 @@ export function SupportChat() {
               </div>
             )}
 
-            {/* Messages Area - show only when data is complete */}
+            {/* Unified Chat Area - show only when data is complete */}
             {isDataComplete && (
-              <div className="flex-1 flex flex-col min-h-0">
-                <div className="flex-1 overflow-y-auto space-y-3 pr-2 pb-3">
+              <div className="flex-1 flex flex-col min-h-0 p-4">
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto space-y-3 pr-2">
                   {messages.length === 0 ? (
                     <div className="text-center text-muted-foreground py-6">
                       <div className="inline-flex p-2 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full mb-2">
@@ -354,8 +355,8 @@ export function SupportChat() {
                   <div ref={messagesEndRef} />
                 </div>
 
-                {/* Message Input - integrated with chat area */}
-                <div className="flex space-x-2 pt-2">
+                {/* Message Input - seamlessly integrated */}
+                <div className="flex space-x-2 mt-3">
                   <div className="flex-1 relative">
                     <Textarea
                       value={newMessage}
