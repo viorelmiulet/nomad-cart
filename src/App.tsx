@@ -10,6 +10,7 @@ import { AnalyticsTracker } from "@/components/AnalyticsTracker";
 import { SupportChat } from "@/components/SupportChat";
 import Index from "./pages/Index";
 import ProductsPage from "./pages/ProductsPage";
+import ProductDetailsPage from "./pages/ProductDetailsPage";
 import ContactPage from "./pages/ContactPage";
 import MobilierPage from "./pages/MobilierPage";
 import CameraDeZiPage from "./pages/CameraDeZiPage";
@@ -49,6 +50,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/products" element={<ProductsPage />} />
+            <Route path="/product/:id" element={<ProductDetailsPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/mobilier" element={<MobilierPage />} />
             <Route path="/camera-de-zi" element={<CameraDeZiPage />} />
