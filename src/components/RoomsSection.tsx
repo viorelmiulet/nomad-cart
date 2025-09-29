@@ -27,18 +27,6 @@ const categories = [
     title: "Dormitoare Complete",
     image: categoryBedroom, 
     subcategories: ["Seturi dormitor", "Paturi matrimoniale", "Dulapuri XXL", "Comode cu oglindă", "Măsuțe toaletă"]
-  },
-  {
-    id: "birou",
-    title: "Birou de acasă",
-    image: "/placeholder.svg",
-    subcategories: ["Birouri", "Scaune birou", "Biblioteci", "Dulapuri birou", "Accesorii birou"]
-  },
-  {
-    id: "baie",
-    title: "Baie", 
-    image: "/placeholder.svg",
-    subcategories: ["Mobilier baie", "Oglinzi baie", "Dulapuri baie", "Rafturi baie", "Accesorii"]
   }
 ];
 
@@ -50,9 +38,7 @@ const RoomsSection = () => {
     "camera-zi": "/camera-de-zi",
     "dormitor": "/dormitor", 
     "bucatarie": "/bucatarie",
-    "dormitor-complet": "/dormitor-complet",
-    "birou": "/birou",
-    "baie": "/baie"
+    "dormitor-complet": "/dormitor-complet"
   };
 
   const handleCategoryClick = (categoryId: string) => {
