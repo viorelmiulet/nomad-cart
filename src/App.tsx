@@ -34,54 +34,56 @@ import ProtectedRoute from "./components/ProtectedRoute";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
-      <AuthProvider>
-        <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AnalyticsTracker>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/products" element={<ProductsPage />} />
-            <Route path="/product/:id" element={<ProductDetailsPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/mobilier" element={<MobilierPage />} />
-            <Route path="/camera-de-zi" element={<CameraDeZiPage />} />
-            <Route path="/dormitor" element={<DormitorPage />} />
-            <Route path="/dormitor-complet" element={<DormitorCompletPage />} />
-            <Route path="/bucatarie" element={<BucatariePage />} />
-            <Route path="/mese-si-scaune" element={<BirouPage />} />
-            <Route path="/baie" element={<BaiePage />} />
-            
-            <Route path="/electrocasnice" element={<ElectrocasnicePage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:id" element={<BlogPostPage />} />
-            <Route path="/auth" element={<AuthPage />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
-            <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
-            <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
-            <Route path="/admin" element={
-              <ProtectedRoute>
-                <AdminPage />
-              </ProtectedRoute>
-            } />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AnalyticsTracker>
-        <SupportChat />
-      </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
+  <div className="overflow-x-hidden max-w-full">
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <AuthProvider>
+          <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AnalyticsTracker>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/products" element={<ProductsPage />} />
+              <Route path="/product/:id" element={<ProductDetailsPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/mobilier" element={<MobilierPage />} />
+              <Route path="/camera-de-zi" element={<CameraDeZiPage />} />
+              <Route path="/dormitor" element={<DormitorPage />} />
+              <Route path="/dormitor-complet" element={<DormitorCompletPage />} />
+              <Route path="/bucatarie" element={<BucatariePage />} />
+              <Route path="/mese-si-scaune" element={<BirouPage />} />
+              <Route path="/baie" element={<BaiePage />} />
+              
+              <Route path="/electrocasnice" element={<ElectrocasnicePage />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:id" element={<BlogPostPage />} />
+              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
+              <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
+              <Route path="/admin" element={
+                <ProtectedRoute>
+                  <AdminPage />
+                </ProtectedRoute>
+              } />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AnalyticsTracker>
+          <SupportChat />
+        </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  </div>
 );
 
 export default App;
