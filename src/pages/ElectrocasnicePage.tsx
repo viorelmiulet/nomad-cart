@@ -35,123 +35,123 @@ const ElectrocasnicePage = () => {
   const frigiderProducts = [
     {
       id: 1,
-      name: "Combina frigorifica VORTEX VK27SWH02V",
-      price: 999,
+      name: "Combina frigorifica Samsung RB38C775CB1/EF",
+      price: 4199,
       originalPrice: null,
-      image: "/images/electrocasnice/frigider-negru-modern.webp",
+      image: "/images/electrocasnice/samsung-rb38c775cb1-ef-real.webp",
       rating: 5,
-      features: ["268L", "H 170cm", "Clasa E", "Alb"],
-      description: "Combină frigorifică VORTEX cu capacitate de 268L și design modern"
+      features: ["No Frost", "387L", "H 203cm", "Clasa E", "SpaceMax"],
+      description: "Combină frigorifică Samsung premium cu tehnologie SpaceMax și AI Energy Mode"
     },
     {
       id: 2,
-      name: "Combina frigorifica ARCTIC AK54305M40S",
-      price: 1403,
-      originalPrice: 2140,
-      image: "/images/electrocasnice/frigider-argintiu-modern.webp",
+      name: "Combina frigorifica Beko RCNA406E40ZXBRN",
+      price: 2899,
+      originalPrice: 3199,
+      image: "/images/electrocasnice/beko-rcna406e40zxbrn-real.webp",
       rating: 4,
-      features: ["291L", "H 181cm", "Clasa E", "Argintiu"],
-      description: "Combină frigorifică ARCTIC cu tehnologie Garden Fresh, capacitate 291L"
+      features: ["NeoFrost", "386L", "H 203cm", "Clasa E", "Argintiu"],
+      description: "Combină frigorifică Beko cu tehnologie NeoFrost și capacitate mare"
     },
     {
       id: 3,
-      name: "Combina frigorifica BEKO B5RCNA406HXB1",
-      price: 2696,
-      originalPrice: 3076,
-      image: "/images/electrocasnice/frigider-beko-alb.webp",
-      rating: 4,
-      features: ["No Frost", "355L", "H 203cm", "Clasa C", "Argintiu"],
-      description: "Combină frigorifică BEKO cu sistem No Frost și capacitate mare de 355L"
+      name: "Combina frigorifica LG GBB92STBAP",
+      price: 3699,
+      originalPrice: null,
+      image: "/images/electrocasnice/lg-gbb92stbap-real.webp",
+      rating: 5,
+      features: ["Total No Frost", "384L", "H 203cm", "Clasa A", "Door Cooling"],
+      description: "Combină frigorifică LG cu tehnologie Door Cooling și eficiență energetică clasa A"
     },
     {
       id: 4,
-      name: "Combina frigorifica ARCTIC AK60406M40NFMT",
-      price: 2108,
-      originalPrice: null,
-      image: "/images/electrocasnice/frigider-electrolux-inox.webp",
-      rating: 5,
-      features: ["Full No Frost", "362L", "H 203cm", "Clasa A"],
-      description: "Combină frigorifică ARCTIC premium cu Full No Frost și capacitate 362L"
+      name: "Combina frigorifica Arctic AK60366M40MT",
+      price: 1899,
+      originalPrice: 2299,
+      image: "/images/electrocasnice/arctic-ak60366m40mt-real.webp",
+      rating: 4,
+      features: ["Multi Air Flow", "362L", "H 185cm", "Clasa E", "Alb"],
+      description: "Combină frigorifică Arctic cu sistem Multi Air Flow și design modern"
     },
     {
       id: 5,
-      name: "Combina frigorifica SAMSUNG RB33B610ESA/EF",
-      price: 2299,
-      originalPrice: 2499,
-      image: "/images/electrocasnice/frigider-argintiu-modern.webp",
-      rating: 5,
-      features: ["No Frost", "344L", "H 185cm", "Clasa E", "All-Around Cooling"],
-      description: "Combină frigorifică Samsung cu tehnologie No Frost și All-Around Cooling"
+      name: "Combina frigorifica Heinner HC-V336XA+",
+      price: 1599,
+      originalPrice: 1899,
+      image: "/images/electrocasnice/heinner-hc-v336xa-real.webp",
+      rating: 4,
+      features: ["No Frost", "336L", "H 185cm", "Clasa E", "Inox"],
+      description: "Combină frigorifică Heinner cu sistem No Frost și finisaj inox elegant"
     },
     {
       id: 6,
-      name: "Combina frigorifica BEKO RCSA406K40XBN",
-      price: 1596,
-      originalPrice: 2129,
-      image: "/images/electrocasnice/frigider-beko-alb.webp",
-      rating: 4,
-      features: ["386L", "H 202.5cm", "Clasa E", "Argintiu"],
-      description: "Combină frigorifică BEKO cu capacitate mare de 386L și eficiență energetică"
+      name: "Combina frigorifica Whirlpool W7X 93A OX",
+      price: 4899,
+      originalPrice: null,
+      image: "/images/electrocasnice/whirlpool-w7x-93a-ox-real.webp",
+      rating: 5,
+      features: ["6th Sense", "368L", "H 195cm", "Clasa E", "Supreme No Frost"],
+      description: "Combină frigorifică Whirlpool premium cu tehnologie 6th Sense"
     },
     {
       id: 7,
-      name: "Combina frigorifica GORENJE NRK619EPXL4",
-      price: 1799,
-      originalPrice: 2199,
-      image: "/images/electrocasnice/frigider-argintiu-modern.webp",
-      rating: 4,
-      features: ["No Frost Plus", "304L", "H 186cm", "Clasa E", "Argintiu"],
-      description: "Combină frigorifică GORENJE cu sistem No Frost Plus și design elegant"
+      name: "Combina frigorifica Liebherr CNPel 4813",
+      price: 7299,
+      originalPrice: null,
+      image: "/images/electrocasnice/liebherr-cnpel-4813-real.webp",
+      rating: 5,
+      features: ["BioFresh", "344L", "H 201cm", "Clasa C", "Premium"],
+      description: "Combină frigorifică Liebherr premium cu tehnologie BioFresh și calitate germană"
     },
     {
       id: 8,
-      name: "Combina frigorifica SAMSUNG RB38C650EB1/EF",
-      price: 3799,
-      originalPrice: null,
-      image: "/images/electrocasnice/frigider-electrolux-inox.webp",
-      rating: 5,
-      features: ["No Frost", "386L", "H 203cm", "Clasa E", "Dozator apa"],
-      description: "Combină frigorifică Samsung premium cu dozator de apă și sistem No Frost"
+      name: "Combina frigorifica Gorenje NRK6192AXL4",
+      price: 2199,
+      originalPrice: 2599,
+      image: "/images/electrocasnice/lg-gbb72pzefn.webp",
+      rating: 4,
+      features: ["No Frost Plus", "307L", "H 185cm", "Clasa E", "Argintiu"],
+      description: "Combină frigorifică Gorenje cu sistem No Frost Plus și design elegant"
     },
     {
       id: 9,
-      name: "Combina frigorifica LG GBP62DSXVH",
-      price: 2899,
+      name: "Combina frigorifica Electrolux LNT5MF36U0",
+      price: 3899,
       originalPrice: null,
-      image: "/images/electrocasnice/frigider-argintiu-modern.webp",
+      image: "/images/electrocasnice/frigider-alb-modern.webp",
       rating: 5,
-      features: ["No Frost", "384L", "H 203cm", "Clasa E", "Door Cooling"],
-      description: "Combină frigorifică LG cu tehnologie Door Cooling și eficiență energetică"
+      features: ["No Frost", "360L", "H 201cm", "Clasa E", "TwinTech"],
+      description: "Combină frigorifică Electrolux cu tehnologie TwinTech și design scandinav"
     },
     {
       id: 10,
-      name: "Combina frigorifica LIEBHERR CNPel 4813",
-      price: 7299,
-      originalPrice: null,
-      image: "/images/electrocasnice/frigider-electrolux-inox.webp",
-      rating: 5,
-      features: ["BioFresh", "344L", "H 201cm", "Clasa A+++", "Premium"],
-      description: "Combină frigorifică LIEBHERR premium cu tehnologie BioFresh și clasa A+++"
+      name: "Combina frigorifica Candy CCBS 6182XH",
+      price: 1699,
+      originalPrice: 1999,
+      image: "/images/electrocasnice/frigider-alb-candy.webp",
+      rating: 4,
+      features: ["No Frost", "307L", "H 185cm", "Clasa E", "Inox"],
+      description: "Combină frigorifică Candy cu sistem No Frost și raport calitate-preț excelent"
     },
     {
       id: 11,
-      name: "Combina frigorifica BOSCH KGN36VWEA",
+      name: "Combina frigorifica Bosch KGN39VLEB",
       price: 3299,
       originalPrice: null,
       image: "/images/electrocasnice/frigider-alb-modern.webp",
       rating: 5,
-      features: ["No Frost", "324L", "H 186cm", "Clasa E", "VitaFresh"],
-      description: "Combină frigorifică BOSCH cu sistem VitaFresh și design modern alb"
+      features: ["No Frost", "366L", "H 203cm", "Clasa E", "VitaFresh"],
+      description: "Combină frigorifică Bosch cu sistem VitaFresh și tehnologie germană"
     },
     {
       id: 12,
-      name: "Combina frigorifica WHIRLPOOL W7 931A OX",
-      price: 4199,
-      originalPrice: null,
+      name: "Combina frigorifica Hotpoint HAFC8 TO32SX",
+      price: 2299,
+      originalPrice: 2699,
       image: "/images/electrocasnice/frigider-argintiu-modern.webp",
       rating: 4,
-      features: ["No Frost", "368L", "H 195cm", "Clasa E", "6th Sense"],
-      description: "Combină frigorifică WHIRLPOOL cu tehnologie 6th Sense și capacitate mare"
+      features: ["No Frost", "335L", "H 189cm", "Clasa E", "Active Oxygen"],
+      description: "Combină frigorifică Hotpoint cu tehnologie Active Oxygen pentru prospețime optimă"
     }
   ];
 
