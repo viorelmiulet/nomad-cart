@@ -142,23 +142,38 @@ const Header = () => {
           </div>
         )}
 
-        <div className="flex items-center space-x-1 md:space-x-2 lg:space-x-4 relative z-10">
-          {!isAdminPage && <SearchDialog />}
+        <div className="flex items-center space-x-1 sm:space-x-2 relative z-10">
+          {/* Mobile-first layout with better spacing */}
+          {!isAdminPage && (
+            <>
+              <SearchDialog />
+              <CartDrawer />
+            </>
+          )}
           
-          {!isAdminPage && <CartDrawer />}
+          {/* Hide theme toggle on small screens to save space */}
+          <div className="hidden sm:block">
+            <ThemeToggle />
+          </div>
           
-          <ThemeToggle />
-          
-          {/* User authentication */}
+          {/* User authentication - simplified for mobile */}
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-white/90 hover:text-brand-gold hover:bg-white/10">
-                  <User className="h-4 w-4 mr-2" />
-                  <span className="hidden sm:inline">{user.user_metadata?.display_name || user.email}</span>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-white/90 hover:text-brand-gold hover:bg-white/10 min-w-[44px] min-h-[44px] p-2"
+                >
+                  <User className="h-4 w-4" />
+                  <span className="hidden md:inline ml-2">{user.user_metadata?.display_name || user.email}</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-background/95 backdrop-blur-xl border-border/50">
+              <DropdownMenuContent 
+                align="end" 
+                className="bg-background/95 backdrop-blur-xl border-border/50 w-56"
+                sideOffset={5}
+              >
                 <DropdownMenuItem onClick={() => navigate('/auth')} className="cursor-pointer">
                   <User className="h-4 w-4 mr-2" />
                   Profil
@@ -180,10 +195,10 @@ const Header = () => {
               variant="ghost" 
               size="sm" 
               onClick={() => navigate('/auth')} 
-              className="text-white/90 hover:text-brand-gold hover:bg-white/10"
+              className="text-white/90 hover:text-brand-gold hover:bg-white/10 min-w-[44px] min-h-[44px] p-2"
             >
-              <User className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Conectare</span>
+              <User className="h-4 w-4" />
+              <span className="hidden md:inline ml-2">Conectare</span>
             </Button>
           )}
           
