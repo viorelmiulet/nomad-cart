@@ -48,7 +48,7 @@ const ProductsPage = () => {
               </Button>
               
               <h1 className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
-                Produse Populare - Top 6
+                Produse Populare
               </h1>
             </div>
             
