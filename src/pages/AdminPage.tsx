@@ -846,16 +846,19 @@ const AdminPage = () => {
                             className="col-span-3"
                           />
                         </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="price" className="text-right">Preț</Label>
-                          <Input
-                            id="price"
-                            type="number"
-                            value={newProduct.price}
-                            onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
-                            className="col-span-3"
-                          />
-                        </div>
+                         <div className="grid grid-cols-4 items-center gap-4">
+                           <Label htmlFor="price" className="text-right">Preț</Label>
+                           <Input
+                             id="price"
+                             type="number"
+                             step="0.01"
+                             min="0"
+                             value={newProduct.price}
+                             onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
+                             className="col-span-3"
+                             placeholder="0.00"
+                           />
+                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                           <Label htmlFor="stock" className="text-right">Stoc</Label>
                           <Input
@@ -1286,9 +1289,12 @@ const AdminPage = () => {
                   <Input
                     id="edit-price"
                     type="number"
+                    step="0.01"
+                    min="0"
                     value={editingProduct.price}
-                    onChange={(e) => setEditingProduct({...editingProduct, price: parseFloat(e.target.value)})}
+                    onChange={(e) => setEditingProduct({...editingProduct, price: e.target.value ? parseFloat(e.target.value) : 0})}
                     className="col-span-3"
+                    placeholder="0.00"
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
