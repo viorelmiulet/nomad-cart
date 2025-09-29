@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { BarChart3, Users, Package, ShoppingCart, Settings, Eye, Edit, Trash2, Plus, AlertCircle } from "lucide-react";
+import { BarChart3, Users, Package, ShoppingCart, Settings, Eye, Edit, Trash2, Plus, AlertCircle, Calculator } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
@@ -116,6 +116,7 @@ const AdminPage = () => {
   // Price adjustment state
   const [priceAdjustmentPercentage, setPriceAdjustmentPercentage] = useState("");
   const [individualPriceAdjustments, setIndividualPriceAdjustments] = useState<Record<string, string>>({});
+  const [lastPriceModification, setLastPriceModification] = useState<string>("");
 
   // Initialize data when authenticated
   useEffect(() => {
@@ -428,9 +429,67 @@ const AdminPage = () => {
       });
 
       setPriceAdjustmentPercentage("");
+      
+      const modificationText = `Ajustare bulk ${percentage > 0 ? '+' : ''}${percentage}% pentru ${allProducts.length} produse la ${new Date().toLocaleString('ro-RO')}`;
+      setLastPriceModification(modificationText);
+      
       fetchData();
     } catch (error) {
       console.error('Error adjusting prices:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-au putut actualiza prețurile.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Remove decimals from all prices
+  const handleRemoveDecimals = async () => {
+    if (!confirm("Ești sigur că vrei să elimini zecimalele de la toate prețurile? (ex: 29.99 → 30)")) {
+      return;
+    }
+
+    try {
+      // Get all products
+      const { data: allProducts, error: fetchError } = await supabase
+        .from('products')
+        .select('id, price, name');
+
+      if (fetchError) throw fetchError;
+
+      if (!allProducts || allProducts.length === 0) {
+        toast({
+          title: "Info",
+          description: "Nu există produse de actualizat.",
+        });
+        return;
+      }
+
+      // Round prices and update each product
+      const updatePromises = allProducts.map(async (product) => {
+        const currentPrice = parseFloat(product.price.toString());
+        const newPrice = Math.round(currentPrice);
+        
+        return supabase
+          .from('products')
+          .update({ price: newPrice })
+          .eq('id', product.id);
+      });
+
+      await Promise.all(updatePromises);
+
+      const modificationText = `Eliminat zecimale pentru ${allProducts.length} produse la ${new Date().toLocaleString('ro-RO')}`;
+      setLastPriceModification(modificationText);
+
+      toast({
+        title: "Succes",
+        description: `Zecimalele au fost eliminate pentru ${allProducts.length} produse!`,
+      });
+
+      fetchData();
+    } catch (error) {
+      console.error('Error removing decimals:', error);
       toast({
         title: "Eroare",
         description: "Nu s-au putut actualiza prețurile.",
@@ -474,8 +533,12 @@ const AdminPage = () => {
         description: `Prețul pentru "${product.name}" a fost ${adjustmentPercentage > 0 ? 'mărit' : 'micșorat'} cu ${Math.abs(adjustmentPercentage)}%!`,
       });
 
-      // Clear the individual input
+      // Clear the individual input and record modification
       setIndividualPriceAdjustments(prev => ({ ...prev, [productId]: "" }));
+      
+      const modificationText = `Ajustare individuală ${adjustmentPercentage > 0 ? '+' : ''}${adjustmentPercentage}% pentru "${product.name}" la ${new Date().toLocaleString('ro-RO')}`;
+      setLastPriceModification(modificationText);
+      
       fetchData();
     } catch (error) {
       console.error('Error adjusting individual price:', error);
@@ -789,29 +852,46 @@ const AdminPage = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="mb-4 space-y-4">
-                  {/* Bulk Price Adjustment */}
-                  <div className="flex items-center gap-4 p-4 border rounded-lg bg-muted/50">
-                    <Label htmlFor="pricePercentage" className="text-sm font-medium">
-                      Ajustează toate prețurile cu:
-                    </Label>
-                    <Input
-                      id="pricePercentage"
-                      type="number"
-                      placeholder="±30"
-                      value={priceAdjustmentPercentage}
-                      onChange={(e) => setPriceAdjustmentPercentage(e.target.value)}
-                      className="w-24"
-                    />
-                    <span className="text-sm text-muted-foreground">%</span>
-                    <Button 
-                      onClick={handleBulkPriceAdjustment}
-                      variant="outline"
-                      disabled={!priceAdjustmentPercentage || parseFloat(priceAdjustmentPercentage) === 0}
-                    >
-                      Aplică Modificarea
-                    </Button>
-                  </div>
+                 <div className="mb-4 space-y-4">
+                   {/* Bulk Price Adjustment */}
+                   <div className="space-y-3 p-4 border rounded-lg bg-muted/50">
+                     <div className="flex items-center gap-4">
+                       <Label htmlFor="pricePercentage" className="text-sm font-medium">
+                         Ajustează toate prețurile cu:
+                       </Label>
+                       <Input
+                         id="pricePercentage"
+                         type="number"
+                         placeholder="±30"
+                         value={priceAdjustmentPercentage}
+                         onChange={(e) => setPriceAdjustmentPercentage(e.target.value)}
+                         className="w-24"
+                       />
+                       <span className="text-sm text-muted-foreground">%</span>
+                       <Button 
+                         onClick={handleBulkPriceAdjustment}
+                         variant="outline"
+                         disabled={!priceAdjustmentPercentage || parseFloat(priceAdjustmentPercentage) === 0}
+                       >
+                         Aplică Modificarea
+                       </Button>
+                       <Button 
+                         onClick={handleRemoveDecimals}
+                         variant="outline"
+                         className="bg-accent"
+                       >
+                         <Calculator className="mr-2 h-4 w-4" />
+                         Elimină Zecimale
+                       </Button>
+                     </div>
+                     
+                     {/* Last Modification Display */}
+                     {lastPriceModification && (
+                       <div className="text-xs text-muted-foreground border-t pt-2">
+                         <span className="font-medium">Ultima modificare:</span> {lastPriceModification}
+                       </div>
+                     )}
+                   </div>
 
                   <Dialog open={isAddProductOpen} onOpenChange={setIsAddProductOpen}>
                     <DialogTrigger asChild>
