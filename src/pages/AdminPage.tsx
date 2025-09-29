@@ -116,7 +116,13 @@ const AdminPage = () => {
   // Price adjustment state
   const [priceAdjustmentPercentage, setPriceAdjustmentPercentage] = useState("");
   const [individualPriceAdjustments, setIndividualPriceAdjustments] = useState<Record<string, string>>({});
-  const [lastPriceModification, setLastPriceModification] = useState<string>("");
+  const [lastPriceModification, setLastPriceModification] = useState<{
+    type: string;
+    percentage: string;
+    productCount: number;
+    productName?: string;
+    timestamp: string;
+  } | null>(null);
 
   // Initialize data when authenticated
   useEffect(() => {
@@ -430,8 +436,12 @@ const AdminPage = () => {
 
       setPriceAdjustmentPercentage("");
       
-      const modificationText = `Ajustare bulk ${percentage > 0 ? '+' : ''}${percentage}% pentru ${allProducts.length} produse la ${new Date().toLocaleString('ro-RO')}`;
-      setLastPriceModification(modificationText);
+      setLastPriceModification({
+        type: "Ajustare bulk",
+        percentage: `${percentage > 0 ? '+' : ''}${percentage}%`,
+        productCount: allProducts.length,
+        timestamp: new Date().toLocaleString('ro-RO')
+      });
       
       fetchData();
     } catch (error) {
@@ -467,9 +477,15 @@ const AdminPage = () => {
       }
 
       // Round prices and update each product
+      let totalOriginalPrice = 0;
+      let totalNewPrice = 0;
+      
       const updatePromises = allProducts.map(async (product) => {
         const currentPrice = parseFloat(product.price.toString());
         const newPrice = Math.round(currentPrice);
+        
+        totalOriginalPrice += currentPrice;
+        totalNewPrice += newPrice;
         
         return supabase
           .from('products')
@@ -479,8 +495,18 @@ const AdminPage = () => {
 
       await Promise.all(updatePromises);
 
-      const modificationText = `Eliminat zecimale pentru ${allProducts.length} produse la ${new Date().toLocaleString('ro-RO')}`;
-      setLastPriceModification(modificationText);
+      // Calculate average percentage change
+      const averagePercentageChange = totalOriginalPrice > 0 
+        ? ((totalNewPrice - totalOriginalPrice) / totalOriginalPrice * 100).toFixed(1)
+        : "0.0";
+      const percentageNum = parseFloat(averagePercentageChange);
+
+      setLastPriceModification({
+        type: "Eliminat zecimale",
+        percentage: `${percentageNum > 0 ? '+' : ''}${averagePercentageChange}%`,
+        productCount: allProducts.length,
+        timestamp: new Date().toLocaleString('ro-RO')
+      });
 
       toast({
         title: "Succes",
@@ -536,8 +562,13 @@ const AdminPage = () => {
       // Clear the individual input and record modification
       setIndividualPriceAdjustments(prev => ({ ...prev, [productId]: "" }));
       
-      const modificationText = `Ajustare individuală ${adjustmentPercentage > 0 ? '+' : ''}${adjustmentPercentage}% pentru "${product.name}" la ${new Date().toLocaleString('ro-RO')}`;
-      setLastPriceModification(modificationText);
+      setLastPriceModification({
+        type: "Ajustare individuală",
+        percentage: `${adjustmentPercentage > 0 ? '+' : ''}${adjustmentPercentage}%`,
+        productCount: 1,
+        productName: product.name,
+        timestamp: new Date().toLocaleString('ro-RO')
+      });
       
       fetchData();
     } catch (error) {
@@ -885,12 +916,23 @@ const AdminPage = () => {
                        </Button>
                      </div>
                      
-                     {/* Last Modification Display */}
-                     {lastPriceModification && (
-                       <div className="text-xs text-muted-foreground border-t pt-2">
-                         <span className="font-medium">Ultima modificare:</span> {lastPriceModification}
-                       </div>
-                     )}
+                      {/* Last Modification Display */}
+                      {lastPriceModification && (
+                        <div className="text-xs text-muted-foreground border-t pt-2">
+                          <div className="space-y-1">
+                            <div>
+                              <span className="font-medium">Ultima modificare:</span> {lastPriceModification.type}
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <span><span className="font-medium">Modificare:</span> {lastPriceModification.percentage}</span>
+                              <span><span className="font-medium">Produse:</span> {lastPriceModification.productCount}{lastPriceModification.productName ? ` ("${lastPriceModification.productName}")` : ''}</span>
+                            </div>
+                            <div>
+                              <span className="font-medium">Data:</span> {lastPriceModification.timestamp}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                    </div>
 
                   <Dialog open={isAddProductOpen} onOpenChange={setIsAddProductOpen}>
