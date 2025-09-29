@@ -479,6 +479,7 @@ const AdminPage = () => {
       // Round prices and update each product
       let totalOriginalPrice = 0;
       let totalNewPrice = 0;
+      let modifiedProducts = 0;
       
       const updatePromises = allProducts.map(async (product) => {
         const currentPrice = parseFloat(product.price.toString());
@@ -486,6 +487,11 @@ const AdminPage = () => {
         
         totalOriginalPrice += currentPrice;
         totalNewPrice += newPrice;
+        
+        // Count products that actually changed
+        if (currentPrice !== newPrice) {
+          modifiedProducts++;
+        }
         
         return supabase
           .from('products')
@@ -495,23 +501,31 @@ const AdminPage = () => {
 
       await Promise.all(updatePromises);
 
-      // Calculate average percentage change
-      const averagePercentageChange = totalOriginalPrice > 0 
-        ? ((totalNewPrice - totalOriginalPrice) / totalOriginalPrice * 100).toFixed(1)
-        : "0.0";
-      const percentageNum = parseFloat(averagePercentageChange);
+      // Only record modification if there were actual changes
+      if (modifiedProducts > 0) {
+        // Calculate average percentage change
+        const averagePercentageChange = totalOriginalPrice > 0 
+          ? ((totalNewPrice - totalOriginalPrice) / totalOriginalPrice * 100).toFixed(1)
+          : "0.0";
+        const percentageNum = parseFloat(averagePercentageChange);
 
-      setLastPriceModification({
-        type: "Eliminat zecimale",
-        percentage: `${percentageNum > 0 ? '+' : ''}${averagePercentageChange}%`,
-        productCount: allProducts.length,
-        timestamp: new Date().toLocaleString('ro-RO')
-      });
+        setLastPriceModification({
+          type: "Eliminat zecimale",
+          percentage: `${percentageNum > 0 ? '+' : ''}${averagePercentageChange}%`,
+          productCount: modifiedProducts,
+          timestamp: new Date().toLocaleString('ro-RO')
+        });
 
-      toast({
-        title: "Succes",
-        description: `Zecimalele au fost eliminate pentru ${allProducts.length} produse!`,
-      });
+        toast({
+          title: "Succes",
+          description: `Zecimalele au fost eliminate pentru ${modifiedProducts} produse!`,
+        });
+      } else {
+        toast({
+          title: "Info",
+          description: "Nu au fost găsite produse cu zecimale de eliminat.",
+        });
+      }
 
       fetchData();
     } catch (error) {
