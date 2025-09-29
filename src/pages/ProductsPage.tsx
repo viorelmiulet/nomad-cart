@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ProductGrid from "@/components/ProductGrid";
+import PopularProducts from "@/components/PopularProducts";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Filter, SortAsc } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -48,7 +48,7 @@ const ProductsPage = () => {
               </Button>
               
               <h1 className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
-                Toate Produsele de Calitate
+                Produse Populare - Top 6
               </h1>
             </div>
             
@@ -73,7 +73,7 @@ const ProductsPage = () => {
             </div>
           </div>
           
-          <ProductGrid />
+          <PopularProducts />
         </div>
       </main>
       
