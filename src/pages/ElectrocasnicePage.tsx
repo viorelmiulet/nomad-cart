@@ -134,8 +134,8 @@ const ElectrocasnicePage = () => {
       <Header />
       
       <main className="py-20 bg-hero-gradient relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-luxury-dark/90 via-luxury-navy/70 to-luxury-dark/95"></div>
-        <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95"></div>
+        <div className="absolute inset-0 bg-liquid-gradient opacity-30"></div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex items-center justify-between mb-16">
@@ -143,13 +143,13 @@ const ElectrocasnicePage = () => {
               <Button
                 onClick={handleGoBack}
                 variant="outline"
-                className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
+                className="border-brand-gold/50 text-brand-cream hover:bg-brand-gold/10 hover:border-brand-gold/70"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Înapoi la Home
               </Button>
               
-              <h1 className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
+              <h1 className="text-3xl lg:text-4xl font-bold font-playfair text-brand-cream">
                 Electrocasnice
               </h1>
             </div>
@@ -158,7 +158,7 @@ const ElectrocasnicePage = () => {
               <Button
                 onClick={handleFilter}
                 variant="outline" 
-                className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
+                className="border-brand-gold/50 text-brand-cream hover:bg-brand-gold/10 hover:border-brand-gold/70"
               >
                 <Filter className="h-4 w-4 mr-2" />
                 Filtre
@@ -167,7 +167,7 @@ const ElectrocasnicePage = () => {
               <Button
                 onClick={handleSort}
                 variant="outline"
-                className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
+                className="border-brand-gold/50 text-brand-cream hover:bg-brand-gold/10 hover:border-brand-gold/70"
               >
                 <SortAsc className="h-4 w-4 mr-2" />
                 Sortare
@@ -176,7 +176,7 @@ const ElectrocasnicePage = () => {
           </div>
           
           <div className="text-center mb-16">
-            <p className="text-lg text-luxury-cream/90 max-w-3xl mx-auto font-inter leading-relaxed">
+            <p className="text-lg text-brand-cream/90 max-w-3xl mx-auto font-inter leading-relaxed">
               Electrocasnice moderne și eficiente pentru casa ta. De la frigidere energy-efficient 
               la aparate de gătit de înaltă performanță - totul pentru o casă inteligentă.
             </p>
@@ -184,7 +184,7 @@ const ElectrocasnicePage = () => {
 
           {/* Categories Section */}
           <div className="mb-16">
-            <h2 className="text-2xl font-bold text-luxury-cream mb-8 text-center font-playfair">
+            <h2 className="text-2xl font-bold text-brand-cream mb-8 text-center font-playfair">
               Categorii Electrocasnice
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -197,25 +197,25 @@ const ElectrocasnicePage = () => {
                     onClick={() => handleCategoryClick(category.name)}
                     className={`bg-glass-gradient backdrop-blur-lg border rounded-xl p-6 text-center transition-all duration-300 cursor-pointer group ${
                       isSelected 
-                        ? 'border-luxury-gold bg-luxury-gold/10' 
-                        : 'border-white/20 hover:border-luxury-gold/50'
+                        ? 'border-brand-gold bg-brand-gold/10' 
+                        : 'border-white/20 hover:border-brand-gold/50'
                     }`}
                   >
                     <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors ${
                       isSelected 
-                        ? 'bg-luxury-gold/40' 
-                        : 'bg-luxury-gold/20 group-hover:bg-luxury-gold/30'
+                        ? 'bg-brand-gold/40' 
+                        : 'bg-brand-gold/20 group-hover:bg-brand-gold/30'
                     }`}>
-                      <IconComponent className="h-8 w-8 text-luxury-gold" />
+                      <IconComponent className="h-8 w-8 text-brand-gold" />
                     </div>
-                    <h3 className="text-lg font-semibold text-luxury-cream mb-2">
+                    <h3 className="text-lg font-semibold text-brand-cream mb-2">
                       {category.name}
                     </h3>
-                    <p className="text-luxury-cream/70 text-sm mb-2">
+                    <p className="text-brand-cream/70 text-sm mb-2">
                       {category.description}
                     </p>
                     {category.count > 0 && (
-                      <span className="inline-block bg-luxury-gold/20 text-luxury-gold px-2 py-1 rounded-full text-xs">
+                      <span className="inline-block bg-brand-gold/20 text-brand-gold px-2 py-1 rounded-full text-xs">
                         {category.count} produse
                       </span>
                     )}
@@ -229,13 +229,13 @@ const ElectrocasnicePage = () => {
           {selectedCategory === "Frigidere" ? (
             <div>
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-bold text-luxury-cream font-playfair">
+                <h2 className="text-2xl font-bold text-brand-cream font-playfair">
                   Frigidere și Combine Frigorifice
                 </h2>
                 <Button
                   onClick={() => setSelectedCategory(null)}
                   variant="outline"
-                  className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10"
+                  className="border-brand-gold/50 text-brand-cream hover:bg-brand-gold/10"
                 >
                   Toate categoriile
                 </Button>
@@ -243,22 +243,24 @@ const ElectrocasnicePage = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {frigiderProducts.map((product) => (
-                  <div key={product.id} className="bg-glass-gradient backdrop-blur-lg border border-white/20 rounded-xl overflow-hidden hover:border-luxury-gold/50 transition-all duration-300 group">
+                  <div key={product.id} className="bg-glass-gradient backdrop-blur-lg border border-white/20 rounded-xl overflow-hidden hover:border-brand-gold/50 transition-all duration-300 group shadow-2xl">
                     <div className="relative overflow-hidden">
                       <img 
                         src={product.image} 
                         alt={product.name}
                         className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
                       />
                       {product.originalPrice > product.price && (
-                        <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
                           -{Math.round((1 - product.price / product.originalPrice) * 100)}%
                         </div>
                       )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
                     
                     <div className="p-6">
-                      <h3 className="text-lg font-semibold text-luxury-cream mb-2 line-clamp-2">
+                      <h3 className="text-lg font-semibold text-brand-cream mb-2 leading-tight">
                         {product.name}
                       </h3>
                       
@@ -271,10 +273,10 @@ const ElectrocasnicePage = () => {
                             }`}
                           />
                         ))}
-                        <span className="text-luxury-cream/70 text-sm ml-2">({product.rating}/5)</span>
+                        <span className="text-brand-cream/70 text-sm ml-2">({product.rating}/5)</span>
                       </div>
                       
-                      <p className="text-luxury-cream/70 text-sm mb-4 line-clamp-2">
+                      <p className="text-brand-cream/80 text-sm mb-4 leading-relaxed">
                         {product.description}
                       </p>
                       
@@ -282,27 +284,27 @@ const ElectrocasnicePage = () => {
                         {product.features.map((feature, index) => (
                           <span 
                             key={index}
-                            className="bg-luxury-gold/20 text-luxury-gold px-2 py-1 rounded-full text-xs"
+                            className="bg-brand-gold/20 text-brand-gold px-2 py-1 rounded-full text-xs"
                           >
                             {feature}
                           </span>
                         ))}
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-2xl font-bold text-luxury-gold">
+                      <div className="flex items-center justify-between mt-6">
+                        <div className="flex flex-col">
+                          <span className="text-2xl font-bold text-brand-gold">
                             {product.price.toLocaleString("ro-RO")} Lei
                           </span>
                           {product.originalPrice > product.price && (
-                            <span className="text-luxury-cream/50 line-through text-sm">
+                            <span className="text-brand-cream/50 line-through text-sm">
                               {product.originalPrice.toLocaleString("ro-RO")} Lei
                             </span>
                           )}
                         </div>
                         <Button
                           onClick={() => handleAddToCart(product)}
-                          className="bg-luxury-gold hover:bg-luxury-gold/90 text-luxury-dark"
+                          className="bg-brand-gold hover:bg-brand-gold/90 text-brand-dark font-semibold px-6 py-2 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg"
                         >
                           <ShoppingCart className="h-4 w-4 mr-2" />
                           Cumpără
@@ -316,8 +318,8 @@ const ElectrocasnicePage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
               <div className="col-span-full text-center py-12">
-                <p className="text-luxury-cream/70 text-lg">
-                  {selectedCategory ? 
+                <p className="text-brand-cream/70 text-lg">
+                  {selectedCategory ?
                     `Produsele pentru categoria "${selectedCategory}" vor fi afișate în curând` :
                     "Selectează o categorie pentru a vedea produsele disponibile"
                   }
