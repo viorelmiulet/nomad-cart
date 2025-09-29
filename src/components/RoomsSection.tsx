@@ -5,6 +5,12 @@ import categoryKitchen from "@/assets/category-kitchen.jpg";
 
 const categories = [
   {
+    id: "camera-zi",
+    title: "Camera de zi",
+    image: categoryLiving,
+    subcategories: ["Seturi camera de zi", "Canapele pe colț", "Canapele", "Fotolii", "Mese de cafea"]
+  },
+  {
     id: "dormitor", 
     title: "Dormitor",
     image: categoryBedroom,
@@ -29,7 +35,7 @@ const RoomsSection = () => {
 
   // Map category IDs to their corresponding routes
   const categoryRoutes: { [key: string]: string } = {
-    
+    "camera-zi": "/camera-de-zi",
     "dormitor": "/dormitor", 
     "bucatarie": "/bucatarie",
     "dormitor-complet": "/dormitor-complet"
@@ -56,7 +62,7 @@ const RoomsSection = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 font-playfair text-brand-cream">
-            Camere
+            Camerele
           </h2>
           <p className="text-base md:text-lg text-brand-cream/90 max-w-2xl mx-auto font-inter px-4">
             Descoperă mobilierul perfect pentru fiecare cameră din casa ta

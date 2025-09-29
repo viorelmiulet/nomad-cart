@@ -13,7 +13,7 @@ import ProductsPage from "./pages/ProductsPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import ContactPage from "./pages/ContactPage";
 import MobilierPage from "./pages/MobilierPage";
-
+import CameraDeZiPage from "./pages/CameraDeZiPage";
 import DormitorPage from "./pages/DormitorPage";
 import DormitorCompletPage from "./pages/DormitorCompletPage";
 import BucatariePage from "./pages/BucatariePage";
@@ -52,7 +52,7 @@ const App = () => (
               <Route path="/product/:id" element={<ProductDetailsPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/mobilier" element={<MobilierPage />} />
-              
+              <Route path="/camera-de-zi" element={<CameraDeZiPage />} />
               <Route path="/dormitor" element={<DormitorPage />} />
             <Route path="/dormitor-complet" element={<DormitorCompletPage />} />
             <Route path="/bucatarie" element={<BucatariePage />} />
