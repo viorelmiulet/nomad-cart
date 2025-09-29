@@ -75,7 +75,7 @@ const SearchDialog = () => {
         
         <DialogHeader className="relative z-10 text-center pb-6">
           <DialogTitle className="text-3xl font-bold font-playfair bg-brand-gradient bg-clip-text text-transparent drop-shadow-lg leading-tight">
-            Căutare Mobilier Premium
+            Căutare Mobilier
           </DialogTitle>
           <p id="search-description" className="text-brand-cream/80 font-inter mt-2 text-lg">
             Descoperă mobilierul perfect pentru casa ta
@@ -96,7 +96,7 @@ const SearchDialog = () => {
           </div>
           
           <Button type="submit" className="w-full h-16 bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/10 text-brand-gold font-bold px-10 text-xl transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-brand-gold/20 group relative overflow-hidden rounded-2xl">
-            <span className="relative z-10 font-playfair">Caută Produse Premium</span>
+            <span className="relative z-10 font-playfair">Caută Produse</span>
             <Search className="ml-3 h-6 w-6 relative z-10 group-hover:translate-x-1 transition-transform" />
             <div className="absolute inset-0 bg-brand-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
           </Button>

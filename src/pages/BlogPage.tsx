@@ -45,7 +45,7 @@ const BlogPage = () => {
     {
       id: 3,
       title: "Dormitorul de Lux: Secretele unui Somn Odihnitor",
-      excerpt: "Creează sanctuarul perfect pentru odihnă cu paturile noastre din lemn masiv, saltelele premium din spumă cu memorie și lenjeria din bumbac egyptian. Descoperă importanța culorilor calmante, a iluminatului indirect și a mobilierului ergonomic pentru cel mai bun somn din viața ta.",
+      excerpt: "Creează sanctuarul perfect pentru odihnă cu paturile noastre din lemn masiv, saltelele de înaltă calitate din spumă cu memorie și lenjeria din bumbac egyptian. Descoperă importanța culorilor calmante, a iluminatului indirect și a mobilierului ergonomic pentru cel mai bun somn din viața ta.",
       author: "Mihai Georgescu",
       date: "10 Martie 2025",
       readTime: "6 min", 
@@ -56,8 +56,8 @@ const BlogPage = () => {
     },
     {
       id: 4,
-      title: "Materialele Premium: Calitate și Durabilitate",
-      excerpt: "Explorează lumea materialelor de lux: lemnul de stejar american vârsta de 50+ ani, pielea italiană full-grain, marmura Carrara și țesăturile belgiene hand-woven. Afli cum să identifici calitatea adevărată și de ce investiția în materiale premium se reflectă în durata de viață de peste 20 de ani.",
+      title: "Materialele de Lux: Calitate și Durabilitate",
+      excerpt: "Explorează lumea materialelor de lux: lemnul de stejar american vârsta de 50+ ani, pielea italiană full-grain, marmura Carrara și țesăturile belgiene hand-woven. Afli cum să identifici calitatea adevărată și de ce investiția în materiale de înaltă calitate se reflectă în durata de viață de peste 20 de ani.",
       author: "Design Team Mobila Nomad",
       date: "8 Martie 2025",
       readTime: "7 min",
@@ -129,7 +129,7 @@ const BlogPage = () => {
     {
       id: 10,
       title: "Investiția în Mobilier de Calitate: Ghid Financiar",
-      excerpt: "Analiza cost-beneficiu: cum mobilierul premium se amortizează în timp prin durabilitate, menținerea valorii și satisfacția zilnică. Compară costul pe an de utilizare dintre mobilierul de calitate și alternativele ieftine, plus sfaturi despre perioade promoționale și finanțare.",
+      excerpt: "Analiza cost-beneficiu: cum mobilierul de înaltă calitate se amortizează în timp prin durabilitate, menținerea valorii și satisfacția zilnică. Compară costul pe an de utilizare dintre mobilierul de calitate și alternativele ieftine, plus sfaturi despre perioade promoționale și finanțare.",
       author: "Economic Analyst Maria Pop",
       date: "20 Februarie 2025",
       readTime: "6 min",
@@ -201,7 +201,7 @@ const BlogPage = () => {
     {
       id: 16,
       title: "Confort, Versatilitate și Durabilitate: Tendințele Mobilierului 2025",
-      excerpt: "Revoluglia mobilierului 2025 se concentrează pe trei piloni: confortul maxim prin materiale premium, versatilitatea spațiilor multifuncționale și durabilitatea ca investiție pe termen lung. De la fotoliile ergonomice cu memorie foam la mesele extensibile pentru familiile moderne - mobilierul se adaptează stilului de viață dinamic.",
+      excerpt: "Revoluglia mobilierului 2025 se concentrează pe trei piloni: confortul maxim prin materiale de înaltă calitate, versatilitatea spațiilor multifuncționale și durabilitatea ca investiție pe termen lung. De la fotoliile ergonomice cu memorie foam la mesele extensibile pentru familiile moderne - mobilierul se adaptează stilului de viață dinamic.",
       author: "Furniture Trends Analyst Alex Radu",
       date: "5 Ianuarie 2025",
       readTime: "10 min",
@@ -237,7 +237,7 @@ const BlogPage = () => {
     {
       id: 19,
       title: "Investiția Inteligentă: De Ce Mobilierul de Calitate Se Plătește Singur",
-      excerpt: "Analiza economică demonstrează că mobilierul premium se amortizează în 5-7 ani față de alternativele ieftine care necesită înlocuire la 2-3 ani. Cost per zi de utilizare, menținerea valorii la revânzare, impactul asupra sănătății și satisfacția zilnică fac din mobilierul de calitate cea mai inteligentă investiție pentru casa ta.",
+      excerpt: "Analiza economică demonstrează că mobilierul de înaltă calitate se amortizează în 5-7 ani față de alternativele ieftine care necesită înlocuire la 2-3 ani. Cost per zi de utilizare, menținerea valorii la revânzare, impactul asupra sănătății și satisfacția zilnică fac din mobilierul de calitate cea mai inteligentă investiție pentru casa ta.",
       author: "Financial Advisor Bogdan Stoica",
       date: "25 Decembrie 2024",
       readTime: "8 min",

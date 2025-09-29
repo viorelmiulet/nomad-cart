@@ -84,7 +84,7 @@ const ContactPage = () => {
             </Button>
             
             <h1 className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
-              Contact Premium
+              Contact Direct
             </h1>
           </div>
           
@@ -231,7 +231,7 @@ const ContactPage = () => {
                         <Phone className="h-6 w-6 text-luxury-gold" />
                       </div>
                       <div>
-                        <p className="text-luxury-cream font-semibold">Telefon Premium</p>
+                        <p className="text-luxury-cream font-semibold">Telefon Direct</p>
                         <p className="text-luxury-cream/80 font-mono">0800 LUXURY (589879)</p>
                       </div>
                     </div>
@@ -303,7 +303,7 @@ const ContactPage = () => {
                     <div className="p-4 bg-glass-gradient backdrop-blur-lg border border-white/10 rounded-xl hover:bg-white/5 transition-all duration-300">
                       <p className="font-semibold text-luxury-gold flex items-center space-x-2">
                         <span className="w-2 h-2 bg-luxury-gold rounded-full"></span>
-                        <span>Livrare Premium</span>
+                        <span>Livrare Rapidă</span>
                       </p>
                       <p className="text-sm text-luxury-cream/70 mt-1">Livrare gratuită și instalare profesională</p>
                     </div>

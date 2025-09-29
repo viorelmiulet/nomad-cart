@@ -97,7 +97,7 @@ const DormitorPage = () => {
             return name.includes("comoda");
           case "noptiere":
             return name.includes("noptiere");
-          case "premium":
+          case "luxury":
             return product.price >= 1500;
           default:
             return true;
@@ -112,7 +112,7 @@ const DormitorPage = () => {
     { id: "paturi", name: "Paturi", icon: Bed },
     { id: "comode", name: "Comode", icon: Armchair },
     { id: "noptiere", name: "Noptiere", icon: Package },
-    { id: "premium", name: "Premium", icon: Bed },
+    { id: "luxury", name: "De Lux", icon: Bed },
   ];
 
   return (
@@ -168,7 +168,7 @@ const DormitorPage = () => {
           
           <div className="text-center mb-16">
             <p className="text-lg text-luxury-cream/90 max-w-3xl mx-auto font-inter leading-relaxed">
-              Creează-ți dormitorul perfect cu mobilierul nostru premium. Paturi confortabile, 
+              Creează-ți dormitorul perfect cu mobilierul nostru de înaltă calitate. Paturi confortabile, 
               dulapuri spațioase și saltele de înaltă calitate pentru un somn odihnitor.
             </p>
           </div>

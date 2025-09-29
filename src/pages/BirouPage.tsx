@@ -26,7 +26,7 @@ const BirouPage = () => {
     { id: "set-masa-6-scaune", name: "Set Masă + 6 Scaune", icon: Users2 },
     { id: "set-extensibil", name: "Mese Extensibile", icon: Home },
     { id: "set-gradina", name: "Seturi Grădină", icon: Coffee },
-    { id: "set-premium", name: "Seturi Premium", icon: Star },
+    { id: "set-luxury", name: "Seturi de Lux", icon: Star },
     { id: "set-modern", name: "Design Modern", icon: Sparkles },
   ];
 
@@ -93,7 +93,7 @@ const BirouPage = () => {
           p.name.toLowerCase().includes("terasa") ||
           p.name.toLowerCase().includes("fotolii")
         );
-      case "set-premium":
+      case "set-luxury":
         return products.filter(p => 
           p.name.toLowerCase().includes("diva") ||
           p.name.toLowerCase().includes("regal") ||

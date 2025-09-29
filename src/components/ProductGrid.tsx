@@ -8,7 +8,7 @@ const ProductGrid = () => {
   const handleViewAllProducts = () => {
     toast({
       title: "Toate Produsele",
-      description: "Vei fi redirecționat către pagina cu toate produsele premium.",
+      description: "Vei fi redirecționat către pagina cu toate produsele.",
     });
     setTimeout(() => {
       navigate("/products");

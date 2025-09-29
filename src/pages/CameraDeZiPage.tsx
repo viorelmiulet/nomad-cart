@@ -109,7 +109,7 @@ const CameraDeZiPage = () => {
               Camera de Zi
             </h1>
             <p className="text-lg md:text-xl text-brand-cream/90 mb-6 font-inter">
-              Transformă-ți camera de zi într-un spațiu de lux cu mobilierul nostru premium. 
+              Transformă-ți camera de zi într-un spațiu de lux cu mobilierul nostru de înaltă calitate. 
               Canapele confortabile, fotolii elegante și mese de cafea distinctive.
             </p>
             <div className="flex flex-wrap gap-4">
@@ -185,7 +185,7 @@ const CameraDeZiPage = () => {
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <ShoppingBag className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Calitate Premium</h3>
+              <h3 className="text-xl font-semibold mb-2">Calitate Superioară</h3>
               <p className="text-muted-foreground">
                 Materiale de înaltă calitate și finisaje durabile pentru o investiție pe termen lung.
               </p>

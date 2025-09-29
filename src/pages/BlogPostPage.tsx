@@ -77,7 +77,7 @@ const BlogPostPage = () => {
       <h3>Patul: Inima Dormitorului</h3>
       <p>Investiția în un pat de calitate din lemn masiv nu este doar o alegere estetică. Structura solidă garantează stabilitatea pe termen lung, în timp ce lemnul natural ajută la reglarea umidității din cameră. Modelele cu tăblie înaltă creează o senzație de protecție și intimitate.</p>
       
-      <h3>Saltele Premium: Baza unui Somn Profund</h3>
+      <h3>Saltele de Înaltă Calitate: Baza unui Somn Profund</h3>
       <p>Saltelele din spumă cu memorie se adaptează perfect conturului corpului, reducând punctele de presiune. Tehnologia memory foam de ultimă generație asigură susținere optimă pentru coloana vertebrală, în timp ce stratul de gel termo-reglator menține temperatura ideală toată noaptea.</p>
       
       <h3>Lenjeria din Bumbac Egyptian</h3>
@@ -97,9 +97,9 @@ const BlogPostPage = () => {
     },
     {
       id: 4,
-      title: "Materialele Premium: Calitate și Durabilitate",
+      title: "Materialele de Lux: Calitate și Durabilitate",
       content: `<h2>Investiția în Excelență: Materialele Care Definesc Luxul</h2>
-      <p>În lumea mobilierului premium, materialele fac diferența între o piesă obișnuită și o moștenire care se transmite din generație în generație. Să explorăm materialele care definesc adevărata calitate.</p>
+      <p>În lumea mobilierului de înaltă calitate, materialele fac diferența între o piesă obișnuită și o moștenire care se transmite din generație în generație. Să explorăm materialele care definesc adevărata calitate.</p>
       
       <h3>Lemnul de Stejar American - 50+ Ani de Maturitate</h3>
       <p>Stejarul american vârstă de peste 50 de ani dezvoltă o densitate și stabilitate excepționale. Veinele complexe și culorile bogate de miere și caramel fac din fiecare piesă o operă de artă unică. Duritatea sa naturală rezistă la zgârieturi și impacturi, făcându-l ideal pentru mobilierul de familie.</p>
@@ -113,7 +113,7 @@ const BlogPostPage = () => {
       <h3>Țesăturile Belgiene Hand-Woven</h3>
       <p>Artizanii belgieni perpetuează tradițiile textile seculare, creând țesături dense și durabile pe războaie de țesut manuale. Fibrele naturale - lână virginală, mătase și in - sunt țesute în modele complexe care pot rezista decenii întregi păstrându-și textura și culorile.</p>
       
-      <h3>De Ce Materialele Premium Valorează Investiția</h3>
+      <h3>De Ce Materialele de Înaltă Calitate Valorează Investiția</h3>
       <p>Un fotoliu din piele italiană full-grain pe structură de stejar masiv poate dura peste 20 de ani cu îngrijire minimă. Calculul economic: 200€/an pentru un fotoliu de 4000€ versus 150€/an pentru înlocuirea unui fotoliu de 600€ la fiecare 4 ani. Calitatea nu costă - ea se amortizează.</p>`,
       author: "Design Team Mobila Nomad",
       date: "8 Martie 2025",

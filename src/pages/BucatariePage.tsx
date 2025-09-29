@@ -176,7 +176,7 @@ const BucatariePage = () => {
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CookingPot className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Calitate Premium</h3>
+              <h3 className="text-xl font-semibold mb-2">Calitate Superioară</h3>
               <p className="text-muted-foreground">
                 Materiale rezistente și finisaje de calitate pentru o durabilitate maximă.
               </p>

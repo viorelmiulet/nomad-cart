@@ -48,7 +48,7 @@ const ProductsPage = () => {
               </Button>
               
               <h1 className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
-                Toate Produsele Premium
+                Toate Produsele de Calitate
               </h1>
             </div>
             

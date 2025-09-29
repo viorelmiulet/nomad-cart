@@ -69,7 +69,7 @@ const DormitorCompletPage = () => {
             return name.includes("diana");
           case "robert":
             return name.includes("robert");
-          case "premium":
+          case "luxury":
             return product.price >= 3000;
           case "buget":
             return product.price < 2000;
@@ -83,7 +83,7 @@ const DormitorCompletPage = () => {
 
   const subcategories = [
     { id: "toate", name: "Toate Produsele", icon: ShoppingBag },
-    { id: "premium", name: "Seturi Premium", icon: Bed },
+    { id: "luxury", name: "Seturi de Lux", icon: Bed },
     { id: "diana", name: "Colecția Diana", icon: Bed },
     { id: "robert", name: "Colecția Robert", icon: Armchair },
     { id: "buget", name: "Prețuri Mici", icon: ShoppingBag },

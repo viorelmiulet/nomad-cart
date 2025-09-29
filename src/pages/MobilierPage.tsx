@@ -37,7 +37,7 @@ const MobilierPage = () => {
   const mobilierProducts = [
     {
       id: "m1",
-      name: "Bibliotecă Modulară Premium",
+      name: "Bibliotecă Modulară de Lux",
       price: 2499,
       originalPrice: 2899,
       image: bookshelfImage,
@@ -67,7 +67,7 @@ const MobilierPage = () => {
     },
     {
       id: "m4",
-      name: "Set Fotolii Living Premium",
+      name: "Set Fotolii Living de Lux",
       price: 2399,
       image: armchairsImage,
       rating: 4,
@@ -97,7 +97,7 @@ const MobilierPage = () => {
               </Button>
               
               <h1 className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
-                Mobilier Premium
+                Mobilier de Lux
               </h1>
             </div>
             
@@ -124,7 +124,7 @@ const MobilierPage = () => {
           
           <div className="text-center mb-16">
             <p className="text-lg text-luxury-cream/90 max-w-3xl mx-auto font-inter leading-relaxed">
-              Descoperă colecția noastră de mobilier premium. Fiecare piesă este selectată cu grijă pentru a oferi 
+              Descoperă colecția noastră de mobilier de înaltă calitate. Fiecare piesă este selectată cu grijă pentru a oferi 
               calitatea și eleganța pe care le meriti în casa ta.
             </p>
           </div>
