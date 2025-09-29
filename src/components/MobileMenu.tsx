@@ -18,7 +18,7 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
   const handleNavClick = (section: string) => {
     const routes: { [key: string]: string } = {
       "Acasă": "/",
-      "Camera de zi": "/camera-de-zi",
+      
       "Dormitor": "/dormitor",
       "Bucătării": "/bucatarie",
       "Dormitoare Complete": "/dormitor-complet",
@@ -47,7 +47,7 @@ const MobileMenu = ({ onNavClick }: MobileMenuProps) => {
   const menuItems = [
     "Acasă",
     "Bucătării",
-    "Camera de zi",
+    
     "Dormitor",
     "Dormitoare Complete",
     
