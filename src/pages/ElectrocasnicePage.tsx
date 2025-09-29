@@ -118,7 +118,7 @@ const ElectrocasnicePage = () => {
       name: "Combina frigorifica Heinner HC-HS269E++",
       price: 1339,
       originalPrice: null,
-      image: "/images/electrocasnice/frigider-5.webp",
+      image: "/images/electrocasnice/heinner-hc-hs269e.webp",
       rating: 4,
       features: ["Clasa E", "269L", "Control mecanic", "LED", "Alb"],
       description: "Combină frigorifică cu control mecanic și iluminare LED, înălțime 180cm"
@@ -128,7 +128,7 @@ const ElectrocasnicePage = () => {
       name: "Combina frigorifica Heinner HC-HM262BKE++",
       price: 1099,
       originalPrice: null,
-      image: "/images/electrocasnice/frigider-6.webp",
+      image: "/images/electrocasnice/heinner-hc-hm262bke.webp",
       rating: 4,
       features: ["Clasa E", "262L", "LED", "Usi reversibile", "Negru"],
       description: "Combină frigorifică neagră cu iluminare LED și uși reversibile"
