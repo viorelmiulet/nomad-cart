@@ -38,7 +38,7 @@ const ElectrocasnicePage = () => {
       name: "Combina frigorifica Heinner HC-HM260BKWDE++",
       price: 1149,
       originalPrice: null,
-      image: "/images/electrocasnice/heinner-hc-hm260bkwde.webp",
+      image: "/images/electrocasnice/frigider-negru-modern.webp",
       rating: 4,
       features: ["Clasa E", "260L", "Dozator apa", "LED", "Usi reversibile"],
       description: "Combină frigorifică cu dozator de apă și iluminare LED, înălțime 180cm, culoare negru"
@@ -48,7 +48,7 @@ const ElectrocasnicePage = () => {
       name: "Combina frigorifica Heinner HC-HS269SE++",
       price: 1099,
       originalPrice: null,
-      image: "/images/electrocasnice/heinner-hc-hs269se.webp",
+      image: "/images/electrocasnice/frigider-argintiu-modern.webp",
       rating: 4,
       features: ["Clasa E", "269L", "LED", "Usi reversibile", "Argintiu"],
       description: "Combină frigorifică cu design elegant argintiu și iluminare LED, înălțime 180cm"
@@ -58,7 +58,7 @@ const ElectrocasnicePage = () => {
       name: "Combina frigorifica Heinner HC-HS268WDE++",
       price: 1145,
       originalPrice: null,
-      image: "/images/electrocasnice/heinner-hc-hs268wde.webp",
+      image: "/images/electrocasnice/frigider-alb-modern.webp",
       rating: 4,
       features: ["Clasa E", "268L", "Dozator apa", "LED", "Alb"],
       description: "Combină frigorifică albă cu dozator de apă și iluminare LED, înălțime 180cm"
@@ -68,7 +68,7 @@ const ElectrocasnicePage = () => {
       name: "Combina frigorifica Beko RCSA406K40DWN",
       price: 1899,
       originalPrice: null,
-      image: "/images/electrocasnice/frigider-alb.webp",
+      image: "/images/electrocasnice/frigider-beko-alb.webp",
       rating: 4,
       features: ["Clasa E", "386L", "Dozator apa", "Alb"],
       description: "Combină frigorifică Beko cu capacitate mare de 386L și dozator de apă"
@@ -78,7 +78,7 @@ const ElectrocasnicePage = () => {
       name: "Combina frigorifica Electrolux LNT7ME36G2",
       price: 3896,
       originalPrice: null,
-      image: "/images/electrocasnice/frigider-modern-1.webp",
+      image: "/images/electrocasnice/frigider-electrolux-inox.webp",
       rating: 5,
       features: ["No Frost", "Clasa E", "366L", "Multi Flow", "LED"],
       description: "Combină frigorifică Electrolux cu sistem No Frost și control electronic"
