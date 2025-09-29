@@ -501,21 +501,8 @@ const AdminPage = () => {
 
       await Promise.all(updatePromises);
 
-      // Only record modification if there were actual changes
+      // Show success message without recording as modification
       if (modifiedProducts > 0) {
-        // Calculate average percentage change
-        const averagePercentageChange = totalOriginalPrice > 0 
-          ? ((totalNewPrice - totalOriginalPrice) / totalOriginalPrice * 100).toFixed(1)
-          : "0.0";
-        const percentageNum = parseFloat(averagePercentageChange);
-
-        setLastPriceModification({
-          type: "Eliminat zecimale",
-          percentage: `${percentageNum > 0 ? '+' : ''}${averagePercentageChange}%`,
-          productCount: modifiedProducts,
-          timestamp: new Date().toLocaleString('ro-RO')
-        });
-
         toast({
           title: "Succes",
           description: `Zecimalele au fost eliminate pentru ${modifiedProducts} produse!`,
