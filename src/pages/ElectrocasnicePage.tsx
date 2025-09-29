@@ -112,6 +112,116 @@ const ElectrocasnicePage = () => {
       rating: 5,
       features: ["Clasa E", "210L", "VarioSpace", "SmartFrost", "Inox"],
       description: "Combină frigorifică Liebherr cu tehnologie SmartFrost și design compact"
+    },
+    {
+      id: 9,
+      name: "Combina frigorifica Heinner HC-HS269E++",
+      price: 1339,
+      originalPrice: null,
+      image: "/images/electrocasnice/frigider-5.webp",
+      rating: 4,
+      features: ["Clasa E", "269L", "Control mecanic", "LED", "Alb"],
+      description: "Combină frigorifică cu control mecanic și iluminare LED, înălțime 180cm"
+    },
+    {
+      id: 10,
+      name: "Combina frigorifica Heinner HC-HM262BKE++",
+      price: 1099,
+      originalPrice: null,
+      image: "/images/electrocasnice/frigider-6.webp",
+      rating: 4,
+      features: ["Clasa E", "262L", "LED", "Usi reversibile", "Negru"],
+      description: "Combină frigorifică neagră cu iluminare LED și uși reversibile"
+    },
+    {
+      id: 11,
+      name: "Combina frigorifica Candy CCT3L517EB",
+      price: 1522,
+      originalPrice: null,
+      image: "/images/electrocasnice/frigider-modern-1.webp",
+      rating: 4,
+      features: ["Low Frost", "Clasa E", "260L", "Negru"],
+      description: "Combină frigorifică Candy cu sistem Low Frost și design negru elegant"
+    },
+    {
+      id: 12,
+      name: "Samus Combina frigorifica Albatros CF333E",
+      price: 1369,
+      originalPrice: null,
+      image: "/images/electrocasnice/frigider-alb.webp",
+      rating: 4,
+      features: ["Clasa E", "248L", "LED", "Usi reversibile", "Alb"],
+      description: "Combină frigorifică cu termostat reglabil și picioare reglabile"
+    },
+    {
+      id: 13,
+      name: "Combina frigorifica Arctic AK54305M40S",
+      price: 1397,
+      originalPrice: null,
+      image: "/images/electrocasnice/frigider-inox.webp",
+      rating: 4,
+      features: ["Clasa E", "291L", "Garden Fresh", "Mix Zone", "Argintiu"],
+      description: "Combină frigorifică Arctic cu tehnologie Garden Fresh și Mix Zone"
+    },
+    {
+      id: 14,
+      name: "Combina Frigorifica Samus SCX357NFDE",
+      price: 1493,
+      originalPrice: null,
+      image: "/images/electrocasnice/frigider-inox.webp",
+      rating: 4,
+      features: ["Full No-Frost", "Clasa E", "251L", "Dozator apa", "Inox"],
+      description: "Combină frigorifică cu sistem Full No-Frost și dozator de apă"
+    },
+    {
+      id: 15,
+      name: "Combina frigorifica Arctic AK54305M40W",
+      price: 1364,
+      originalPrice: null,
+      image: "/images/electrocasnice/frigider-alb.webp",
+      rating: 4,
+      features: ["Clasa E", "291L", "Garden Fresh", "Mix Zone", "Alb"],
+      description: "Combină frigorifică Arctic albă cu tehnologie Garden Fresh"
+    },
+    {
+      id: 16,
+      name: "Combina frigorifica Beko RCSA406K40DXBN",
+      price: 2032,
+      originalPrice: null,
+      image: "/images/electrocasnice/frigider-inox.webp",
+      rating: 4,
+      features: ["Clasa A++", "386L", "Dozator apa", "Argintiu"],
+      description: "Combină frigorifică Beko premium cu clasa energetică A++"
+    },
+    {
+      id: 17,
+      name: "Combina Frigorifica Samus SCX338E",
+      price: 1299,
+      originalPrice: null,
+      image: "/images/electrocasnice/frigider-alb.webp",
+      rating: 4,
+      features: ["Clasa E", "248L", "Termostat reglabil", "4 sertare", "Alb"],
+      description: "Combină frigorifică cu dezghețare automată frigider și 4 sertare congelator"
+    },
+    {
+      id: 18,
+      name: "Combina frigorifica Albalux AXCFS350E",
+      price: 1162,
+      originalPrice: null,
+      image: "/images/electrocasnice/frigider-inox.webp",
+      rating: 4,
+      features: ["Clasa E", "262L", "LED", "Usi reversibile", "Inox"],
+      description: "Combină frigorifică cu iluminare LED și uși reversibile"
+    },
+    {
+      id: 19,
+      name: "Heinner Combina frigorifica Fram FC-VRL2681RDE++",
+      price: 1632,
+      originalPrice: null,
+      image: "/images/electrocasnice/frigider-modern-2.webp",
+      rating: 4,
+      features: ["Less Frost", "Clasa E", "268L", "LED", "Rosu"],
+      description: "Combină frigorifică cu design unic roșu și sistem Less Frost"
     }
   ];
 
