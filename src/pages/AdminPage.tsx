@@ -113,6 +113,9 @@ const AdminPage = () => {
     status: "active"
   });
 
+  // Price adjustment state
+  const [priceAdjustmentPercentage, setPriceAdjustmentPercentage] = useState("");
+
   // Initialize data when authenticated
   useEffect(() => {
     if (isAuthenticated) {
@@ -368,6 +371,68 @@ const AdminPage = () => {
       toast({
         title: "Eroare",
         description: "Nu s-a putut șterge produsul.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Bulk price adjustment
+  const handleBulkPriceAdjustment = async () => {
+    const percentage = parseFloat(priceAdjustmentPercentage);
+    if (isNaN(percentage) || percentage === 0) {
+      toast({
+        title: "Eroare",
+        description: "Te rog să introduci un procent valid.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!confirm(`Ești sigur că vrei să ${percentage > 0 ? 'mărești' : 'micșorezi'} toate prețurile cu ${Math.abs(percentage)}%?`)) {
+      return;
+    }
+
+    try {
+      // Get all products
+      const { data: allProducts, error: fetchError } = await supabase
+        .from('products')
+        .select('id, price');
+
+      if (fetchError) throw fetchError;
+
+      if (!allProducts || allProducts.length === 0) {
+        toast({
+          title: "Info",
+          description: "Nu există produse de actualizat.",
+        });
+        return;
+      }
+
+      // Calculate new prices and update each product
+      const updatePromises = allProducts.map(async (product) => {
+        const currentPrice = parseFloat(product.price.toString());
+        const newPrice = Math.max(0, currentPrice * (1 + percentage / 100));
+        
+        return supabase
+          .from('products')
+          .update({ price: parseFloat(newPrice.toFixed(2)) })
+          .eq('id', product.id);
+      });
+
+      await Promise.all(updatePromises);
+
+      toast({
+        title: "Succes",
+        description: `Toate prețurile au fost ${percentage > 0 ? 'mărite' : 'micșorate'} cu ${Math.abs(percentage)}% (${allProducts.length} produse actualizate)!`,
+      });
+
+      setPriceAdjustmentPercentage("");
+      fetchData();
+    } catch (error) {
+      console.error('Error adjusting prices:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-au putut actualiza prețurile.",
         variant: "destructive",
       });
     }
@@ -675,7 +740,30 @@ const AdminPage = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="mb-4">
+                <div className="mb-4 space-y-4">
+                  {/* Bulk Price Adjustment */}
+                  <div className="flex items-center gap-4 p-4 border rounded-lg bg-muted/50">
+                    <Label htmlFor="pricePercentage" className="text-sm font-medium">
+                      Ajustează toate prețurile cu:
+                    </Label>
+                    <Input
+                      id="pricePercentage"
+                      type="number"
+                      placeholder="±30"
+                      value={priceAdjustmentPercentage}
+                      onChange={(e) => setPriceAdjustmentPercentage(e.target.value)}
+                      className="w-24"
+                    />
+                    <span className="text-sm text-muted-foreground">%</span>
+                    <Button 
+                      onClick={handleBulkPriceAdjustment}
+                      variant="outline"
+                      disabled={!priceAdjustmentPercentage || parseFloat(priceAdjustmentPercentage) === 0}
+                    >
+                      Aplică Modificarea
+                    </Button>
+                  </div>
+
                   <Dialog open={isAddProductOpen} onOpenChange={setIsAddProductOpen}>
                     <DialogTrigger asChild>
                       <Button className="bg-primary text-primary-foreground">
