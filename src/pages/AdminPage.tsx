@@ -115,6 +115,7 @@ const AdminPage = () => {
 
   // Price adjustment state
   const [priceAdjustmentPercentage, setPriceAdjustmentPercentage] = useState("");
+  const [individualPriceAdjustments, setIndividualPriceAdjustments] = useState<Record<string, string>>({});
 
   // Initialize data when authenticated
   useEffect(() => {
@@ -433,6 +434,54 @@ const AdminPage = () => {
       toast({
         title: "Eroare",
         description: "Nu s-au putut actualiza prețurile.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Individual price adjustment
+  const handleIndividualPriceAdjustment = async (productId: string, percentage: string) => {
+    const adjustmentPercentage = parseFloat(percentage);
+    if (isNaN(adjustmentPercentage) || adjustmentPercentage === 0) {
+      toast({
+        title: "Eroare",
+        description: "Te rog să introduci un procent valid.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    if (!confirm(`Ești sigur că vrei să ${adjustmentPercentage > 0 ? 'mărești' : 'micșorezi'} prețul pentru "${product.name}" cu ${Math.abs(adjustmentPercentage)}%?`)) {
+      return;
+    }
+
+    try {
+      const currentPrice = parseFloat(product.price.toString());
+      const newPrice = Math.max(0, currentPrice * (1 + adjustmentPercentage / 100));
+      
+      const { error } = await supabase
+        .from('products')
+        .update({ price: parseFloat(newPrice.toFixed(2)) })
+        .eq('id', productId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Succes",
+        description: `Prețul pentru "${product.name}" a fost ${adjustmentPercentage > 0 ? 'mărit' : 'micșorat'} cu ${Math.abs(adjustmentPercentage)}%!`,
+      });
+
+      // Clear the individual input
+      setIndividualPriceAdjustments(prev => ({ ...prev, [productId]: "" }));
+      fetchData();
+    } catch (error) {
+      console.error('Error adjusting individual price:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-a putut actualiza prețul.",
         variant: "destructive",
       });
     }
@@ -855,6 +904,7 @@ const AdminPage = () => {
                       <TableHead>Nume Produs</TableHead>
                       <TableHead>Categorie</TableHead>
                       <TableHead>Preț</TableHead>
+                      <TableHead>Ajustare Preț</TableHead>
                       <TableHead>Stoc</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Acțiuni</TableHead>
@@ -866,6 +916,29 @@ const AdminPage = () => {
                         <TableCell className="font-medium">{product.name}</TableCell>
                         <TableCell>{product.categories?.name || 'N/A'}</TableCell>
                         <TableCell>{product.price} RON</TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Input
+                              type="number"
+                              placeholder="±%"
+                              value={individualPriceAdjustments[product.id] || ""}
+                              onChange={(e) => setIndividualPriceAdjustments(prev => ({ 
+                                ...prev, 
+                                [product.id]: e.target.value 
+                              }))}
+                              className="w-16 h-8"
+                            />
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleIndividualPriceAdjustment(product.id, individualPriceAdjustments[product.id] || "")}
+                              disabled={!individualPriceAdjustments[product.id] || parseFloat(individualPriceAdjustments[product.id]) === 0}
+                              className="h-8 px-2"
+                            >
+                              ±
+                            </Button>
+                          </div>
+                        </TableCell>
                         <TableCell>{product.stock}</TableCell>
                         <TableCell>
                           <Badge className={getStatusBadge(product.status)}>
