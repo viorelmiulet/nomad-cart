@@ -24,7 +24,7 @@ const Header = () => {
       "Dormitor": "/dormitor",
       "Bucătării": "/bucatarie",
       "Dormitoare Complete": "/dormitor-complet",
-      "Electrocasnice": "/electrocasnice",
+      
       "Blog": "/blog"
     };
     
@@ -105,10 +105,6 @@ const Header = () => {
             </button>
             <button onClick={() => handleNavClick("Dormitoare Complete")} className="text-white/90 hover:text-brand-gold transition-all duration-300 relative group whitespace-nowrap">
               Dormitoare Complete
-              <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-            </button>
-            <button onClick={() => handleNavClick("Electrocasnice")} className="text-white/90 hover:text-brand-gold transition-all duration-300 relative group whitespace-nowrap">
-              Electrocasnice
               <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-glass-gradient backdrop-blur-sm scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
             </button>
             <button onClick={() => handleNavClick("Blog")} className="text-white/90 hover:text-brand-gold transition-all duration-300 relative group whitespace-nowrap">
