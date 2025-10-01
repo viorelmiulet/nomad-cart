@@ -55,19 +55,19 @@ const RoomsSection = () => {
   };
 
   return (
-    <section className="py-12 md:py-16 bg-hero-gradient relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95"></div>
-      <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
+    <section className="py-12 md:py-16 bg-hero-gradient relative overflow-hidden" aria-labelledby="rooms-section-heading">
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95" aria-hidden="true"></div>
+      <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow" aria-hidden="true"></div>
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 font-playfair text-brand-cream">
+        <header className="text-center mb-8 md:mb-12">
+          <h2 id="rooms-section-heading" className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 font-playfair text-brand-cream">
             Camerele
           </h2>
           <p className="text-base md:text-lg text-brand-cream/90 max-w-2xl mx-auto font-inter px-4">
             Descoperă mobilierul perfect pentru fiecare cameră din casa ta
           </p>
-        </div>
+        </header>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {categories.map((category) => (
@@ -82,10 +82,11 @@ const RoomsSection = () => {
                 <div className="relative h-36 md:h-48 overflow-hidden">
                   <img 
                     src={category.image} 
-                    alt={category.title}
+                    alt={`Mobilier pentru ${category.title} - canapele, paturi, mese și scaune de calitate`}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/60 via-transparent to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/60 via-transparent to-transparent" aria-hidden="true"></div>
                 </div>
                 
                 <div className="relative p-4 md:p-6 bg-glass-gradient backdrop-blur-sm">

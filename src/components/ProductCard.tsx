@@ -51,8 +51,9 @@ const ProductCard = ({
         <div className="relative overflow-hidden rounded-t-2xl z-10">
           <img 
             src={image} 
-            alt={name}
+            alt={`${name} - mobilier de calitate Mobila Nomad`}
             className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+            loading="lazy"
           />
           
           <div className="absolute top-4 left-4 flex gap-2 z-20">

@@ -13,8 +13,8 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative overflow-hidden bg-hero-gradient min-h-[80vh] md:min-h-[90vh] flex items-center">
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95"></div>
+    <section className="relative overflow-hidden bg-hero-gradient min-h-[80vh] md:min-h-[90vh] flex items-center" aria-label="Prezentare principală">
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95" aria-hidden="true"></div>
       
       {/* Liquid Glass Elements - optimized for mobile */}
       <div className="absolute top-10 left-5 w-64 h-64 md:top-20 md:left-10 md:w-96 md:h-96 bg-glass-gradient backdrop-blur-3xl rounded-full opacity-30 animate-liquid-flow"></div>
@@ -55,8 +55,9 @@ const Hero = () => {
               <div className="flex items-center justify-center h-48 md:h-64 lg:h-80 relative z-10">
                 <img 
                   src={heroCozyCpollection} 
-                  alt="Colecții de mobilier de calitate" 
+                  alt="Colecții speciale de mobilier Mobila Nomad - canapele confortabile, paturi elegante și mese moderne pentru casa ta" 
                   className="w-full h-full object-cover rounded-xl md:rounded-2xl shadow-2xl"
+                  loading="eager"
                 />
               </div>
               <div className="text-center mt-4 md:mt-6 relative z-10">
