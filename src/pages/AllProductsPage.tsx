@@ -31,23 +31,24 @@ const AllProductsPage = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="py-20 bg-hero-gradient relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-luxury-dark/90 via-luxury-navy/70 to-luxury-dark/95"></div>
-        <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
+      <main className="py-20 bg-hero-gradient relative overflow-hidden" aria-labelledby="all-products-heading">
+        <div className="absolute inset-0 bg-gradient-to-br from-luxury-dark/90 via-luxury-navy/70 to-luxury-dark/95" aria-hidden="true"></div>
+        <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow" aria-hidden="true"></div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="flex items-center justify-between mb-16">
+          <header className="flex items-center justify-between mb-16">
             <div className="flex items-center space-x-4">
               <Button
                 onClick={handleGoBack}
                 variant="outline"
                 className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
+                aria-label="Înapoi la pagina principală"
               >
-                <ArrowLeft className="h-4 w-4 mr-2" />
+                <ArrowLeft className="h-4 w-4 mr-2" aria-hidden="true" />
                 Înapoi la Home
               </Button>
               
-              <h1 className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
+              <h1 id="all-products-heading" className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
                 Toate Produsele
               </h1>
             </div>
@@ -57,8 +58,9 @@ const AllProductsPage = () => {
                 onClick={handleFilter}
                 variant="outline" 
                 className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
+                aria-label="Deschide opțiuni de filtrare"
               >
-                <Filter className="h-4 w-4 mr-2" />
+                <Filter className="h-4 w-4 mr-2" aria-hidden="true" />
                 Filtre
               </Button>
               
@@ -66,12 +68,13 @@ const AllProductsPage = () => {
                 onClick={handleSort}
                 variant="outline"
                 className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
+                aria-label="Deschide opțiuni de sortare"
               >
-                <SortAsc className="h-4 w-4 mr-2" />
+                <SortAsc className="h-4 w-4 mr-2" aria-hidden="true" />
                 Sortare
               </Button>
             </div>
-          </div>
+          </header>
           
           <AllProducts />
         </div>

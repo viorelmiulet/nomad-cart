@@ -68,35 +68,36 @@ const ContactPage = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="py-20 bg-hero-gradient relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-luxury-dark/90 via-luxury-navy/70 to-luxury-dark/95"></div>
-        <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
+      <main className="py-20 bg-hero-gradient relative overflow-hidden" aria-labelledby="contact-heading">
+        <div className="absolute inset-0 bg-gradient-to-br from-luxury-dark/90 via-luxury-navy/70 to-luxury-dark/95" aria-hidden="true"></div>
+        <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow" aria-hidden="true"></div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="flex items-center space-x-4 mb-16">
+          <header className="flex items-center space-x-4 mb-16">
             <Button
               onClick={handleGoBack}
               variant="outline"
               className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
+              aria-label="Înapoi la pagina principală"
             >
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="h-4 w-4 mr-2" aria-hidden="true" />
               Înapoi la Home
             </Button>
             
-            <h1 className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
+            <h1 id="contact-heading" className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
               Contact Direct
             </h1>
-          </div>
+          </header>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Contact Form - Takes 2 columns */}
             <div className="lg:col-span-2">
               <div className="bg-glass-gradient backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl p-8 relative overflow-hidden">
-                <div className="absolute inset-0 bg-liquid-gradient opacity-10 animate-liquid-flow"></div>
+                <div className="absolute inset-0 bg-liquid-gradient opacity-10 animate-liquid-flow" aria-hidden="true"></div>
                 
                 <div className="relative z-10">
-                  <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-luxury-gradient rounded-full mb-4 shadow-xl">
+                  <header className="text-center mb-8">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-luxury-gradient rounded-full mb-4 shadow-xl" aria-hidden="true">
                       <MessageSquare className="h-8 w-8 text-luxury-dark" />
                     </div>
                     <h2 className="text-3xl font-bold font-playfair text-luxury-cream mb-2">
@@ -105,7 +106,7 @@ const ContactPage = () => {
                     <p className="text-luxury-cream/80 font-inter">
                       Completează formularul și te vom contacta în 24 de ore
                     </p>
-                  </div>
+                  </header>
 
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -180,17 +181,18 @@ const ContactPage = () => {
                       type="submit"
                       disabled={isSubmitting}
                       className="w-full h-16 bg-luxury-gradient text-luxury-dark px-8 text-lg font-bold hover:opacity-90 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] rounded-xl relative overflow-hidden group"
+                      aria-label="Trimite formularul de contact"
                     >
-                      <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true"></div>
                       <div className="relative z-10 flex items-center justify-center space-x-3">
                         {isSubmitting ? (
                           <>
-                            <div className="w-6 h-6 border-2 border-luxury-dark/30 border-t-luxury-dark rounded-full animate-spin"></div>
+                            <div className="w-6 h-6 border-2 border-luxury-dark/30 border-t-luxury-dark rounded-full animate-spin" aria-hidden="true"></div>
                             <span>Se trimite...</span>
                           </>
                         ) : (
                           <>
-                            <Send className="h-6 w-6" />
+                            <Send className="h-6 w-6" aria-hidden="true" />
                             <span>Trimite Mesajul</span>
                           </>
                         )}

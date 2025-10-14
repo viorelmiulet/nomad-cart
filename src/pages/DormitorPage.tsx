@@ -119,28 +119,31 @@ const DormitorPage = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="py-20 bg-hero-gradient relative overflow-hidden">
+      <main className="py-20 bg-hero-gradient relative overflow-hidden" aria-labelledby="dormitor-heading">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroImage})` }}
+          role="img"
+          aria-label="Mobilier dormitor de calitate - paturi, dulapuri și comode"
         />
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="absolute inset-0 bg-gradient-to-br from-luxury-dark/40 via-luxury-navy/30 to-luxury-dark/40"></div>
-        <div className="absolute inset-0 bg-liquid-gradient opacity-20 animate-liquid-flow"></div>
+        <div className="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-luxury-dark/40 via-luxury-navy/30 to-luxury-dark/40" aria-hidden="true"></div>
+        <div className="absolute inset-0 bg-liquid-gradient opacity-20 animate-liquid-flow" aria-hidden="true"></div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="flex items-center justify-between mb-16">
+          <header className="flex items-center justify-between mb-16">
             <div className="flex items-center space-x-4">
               <Button
                 onClick={handleGoBack}
                 variant="outline"
                 className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
+                aria-label="Înapoi la pagina principală"
               >
-                <ArrowLeft className="h-4 w-4 mr-2" />
+                <ArrowLeft className="h-4 w-4 mr-2" aria-hidden="true" />
                 Înapoi la Home
               </Button>
               
-              <h1 className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
+              <h1 id="dormitor-heading" className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
                 Dormitor
               </h1>
             </div>
@@ -150,8 +153,9 @@ const DormitorPage = () => {
                 onClick={handleFilter}
                 variant="outline" 
                 className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
+                aria-label="Deschide opțiuni de filtrare"
               >
-                <Filter className="h-4 w-4 mr-2" />
+                <Filter className="h-4 w-4 mr-2" aria-hidden="true" />
                 Filtre
               </Button>
               
@@ -159,12 +163,13 @@ const DormitorPage = () => {
                 onClick={handleSort}
                 variant="outline"
                 className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
+                aria-label="Deschide opțiuni de sortare"
               >
-                <SortAsc className="h-4 w-4 mr-2" />
+                <SortAsc className="h-4 w-4 mr-2" aria-hidden="true" />
                 Sortare
               </Button>
             </div>
-          </div>
+          </header>
           
           <div className="text-center mb-16">
             <p className="text-lg text-luxury-cream/90 max-w-3xl mx-auto font-inter leading-relaxed">
