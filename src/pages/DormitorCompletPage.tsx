@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Bed, Armchair, ShoppingBag, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -91,6 +92,19 @@ const DormitorCompletPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Dormitoare Complete - Seturi de Mobilier pentru Dormitor"
+        description="Transformă-ți dormitorul într-un sanctuar de relaxare cu seturile noastre complete de mobilier. Design coerent, funcționalitate perfectă și prețuri avantajoase. Livrare gratuită."
+        canonical="https://mobilanomad.lovable.app/dormitor-complet"
+        keywords="dormitor complet, set dormitor, mobilier dormitor complet, dormitor matrimonial complet, dormitor tineret, mobilier dormitor seturi, dormitor complet ieftin, set pat dulap noptiere"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Dormitoare Complete - Mobila Nomad",
+          "description": "Seturi complete de mobilier pentru dormitor: paturi, dulapuri, comode și noptiere",
+          "url": "https://mobilanomad.lovable.app/dormitor-complet"
+        }}
+      />
       <Header />
       
       {/* Hero Section */}

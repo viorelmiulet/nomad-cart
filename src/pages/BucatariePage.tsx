@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, Filter, SortAsc, ChefHat, Utensils, CookingPot, Refrigerator } from "lucide-react";
@@ -94,6 +95,19 @@ const BucatariePage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Bucătării Complete și Mobilier pentru Bucătărie"
+        description="Descoperă colecția noastră de bucătării moderne și funcționale. Corpuri individuale, accesorii și electrocasnice pentru bucătăria ta de vis. Livrare gratuită în România."
+        canonical="https://mobilanomad.lovable.app/bucatarie"
+        keywords="bucătării complete, mobilier bucătărie, corpuri bucătărie, blat bucătărie, bucătărie modernă, bucătărie la comandă, bucătărie ieftină"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Bucătării - Mobila Nomad",
+          "description": "Mobilier și electrocasnice pentru bucătăria ta de vis. Design funcțional și calitate superioară.",
+          "url": "https://mobilanomad.lovable.app/bucatarie"
+        }}
+      />
       <Header />
       
       {/* Hero Section */}

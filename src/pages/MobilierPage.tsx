@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Filter, SortAsc } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -78,6 +79,19 @@ const MobilierPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Mobilier de Lux - Colecție Premium pentru Casă"
+        description="Descoperă colecția noastră de mobilier de înaltă calitate. Biblioteci modulare, mese extensibile, dulapuri elegante și fotolii de lux. Design premium pentru casa ta."
+        canonical="https://mobilanomad.lovable.app/mobilier"
+        keywords="mobilier lux, mobilier premium, mobilier design, biblioteci modulare, mese extensibile, dulapuri elegante, mobilier living premium, mobilier de calitate"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Mobilier de Lux - Mobila Nomad",
+          "description": "Colecție premium de mobilier pentru toate camerele",
+          "url": "https://mobilanomad.lovable.app/mobilier"
+        }}
+      />
       <Header />
       
       <main className="py-20 bg-hero-gradient relative overflow-hidden">

@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AllProducts from "@/components/AllProducts";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Filter, SortAsc } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -29,6 +30,19 @@ const AllProductsPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Toate Produsele - Catalog Complet de Mobilier"
+        description="Descoperă catalogul nostru complet de mobilier pentru toate camerele: dormitoare, camere de zi, bucătării și mobilier divers. Peste 500 de produse cu livrare gratuită în România."
+        canonical="https://mobilanomad.lovable.app/toate-produsele"
+        keywords="catalog mobilier, toate produsele mobilier, magazine mobilier online, mobilier dormitor, mobilier living, mobilier bucătărie, mobilier complet casă"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Toate Produsele - Mobila Nomad",
+          "description": "Catalog complet de mobilier pentru casa ta",
+          "url": "https://mobilanomad.lovable.app/toate-produsele"
+        }}
+      />
       <Header />
       
       <main className="py-20 bg-hero-gradient relative overflow-hidden" aria-labelledby="all-products-heading">

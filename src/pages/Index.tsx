@@ -3,6 +3,7 @@ import PromoBanner from "@/components/PromoBanner";
 import Hero from "@/components/Hero";
 import PopularProducts from "@/components/PopularProducts";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -15,6 +16,25 @@ const Index = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <SEO 
+        title="Mobilier de Calitate cu Livrare Gratuită"
+        description="⭐ Magazin online de mobilier: canapele, paturi, mese, scaune pentru toate camerele. ✓ Livrare gratuită ✓ Prețuri accesibile ✓ Garanție extinsă. Comenzi WhatsApp: 0758433114"
+        canonical="https://mobilanomad.lovable.app/"
+        keywords="mobilier online, canapele colt, paturi, mese bucătărie, scaune, dormitor complet, camera de zi, mobilier living, bucătării moderne, magazine mobilier România, mobilier ieftin, livrare gratuită mobilier"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "FurnitureStore",
+          "name": "Mobila Nomad",
+          "description": "Magazin online de mobilier de calitate cu livrare gratuită în România",
+          "url": "https://mobilanomad.lovable.app/",
+          "telephone": "+40758433114",
+          "priceRange": "$$",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "RO"
+          }
+        }}
+      />
       <Header />
       <PromoBanner />
       <Hero />
