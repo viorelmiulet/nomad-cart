@@ -69,6 +69,12 @@ const Header = () => {
     }`}>
       <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95"></div>
       <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
+      
+      {/* Scroll indicator - subtle glow line */}
+      <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-brand-gradient transition-all duration-500 ${
+        isScrolled ? 'opacity-100 shadow-[0_0_20px_rgba(255,215,0,0.6)]' : 'opacity-0'
+      }`}></div>
+      
       <div className={`container flex items-center justify-between relative z-10 px-4 transition-all duration-300 ${
         isScrolled ? 'h-10 md:h-12 lg:h-14' : 'h-12 md:h-14 lg:h-16'
       }`}>
