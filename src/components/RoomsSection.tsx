@@ -55,64 +55,53 @@ const RoomsSection = () => {
   };
 
   return (
-    <section className="py-12 md:py-16 bg-hero-gradient relative overflow-hidden" aria-labelledby="rooms-section-heading">
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95" aria-hidden="true"></div>
-      <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow" aria-hidden="true"></div>
-      
-      <div className="container mx-auto px-4 relative z-10">
-        <header className="text-center mb-8 md:mb-12">
-          <h2 id="rooms-section-heading" className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 font-playfair text-brand-cream">
+    <section className="py-16 md:py-20 bg-background" aria-labelledby="rooms-section-heading">
+      <div className="container mx-auto px-4">
+        <header className="text-center mb-12">
+          <h2 id="rooms-section-heading" className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
             Camerele
           </h2>
-          <p className="text-base md:text-lg text-brand-cream/90 max-w-2xl mx-auto font-inter px-4">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Descoperă mobilierul perfect pentru fiecare cameră din casa ta
           </p>
         </header>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((category) => (
             <div 
               key={category.id}
               className="group cursor-pointer"
               onClick={() => handleCategoryClick(category.id)}
             >
-              <div className="relative overflow-hidden rounded-xl md:rounded-2xl bg-glass-gradient backdrop-blur-xl border border-white/10 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 md:hover:-translate-y-2 touch-manipulation">
-                <div className="absolute inset-0 bg-liquid-gradient opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
+              <div className="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 aspect-[4/3]">
+                <img 
+                  src={category.image} 
+                  alt={`Mobilier pentru ${category.title} - canapele, paturi, mese și scaune de calitate`}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                  role="img"
+                />
                 
-                <div className="relative h-36 md:h-48 overflow-hidden">
-                  <img 
-                    src={category.image} 
-                    alt={`Mobilier pentru ${category.title} - canapele, paturi, mese și scaune de calitate`}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/60 via-transparent to-transparent" aria-hidden="true"></div>
-                </div>
+                <div className="absolute inset-0 bg-overlay-gradient"></div>
                 
-                <div className="relative p-4 md:p-6 bg-glass-gradient backdrop-blur-sm">
-                  <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 font-playfair text-brand-cream group-hover:text-brand-gold transition-colors">
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-6 text-center">
+                  <h3 className="text-2xl md:text-3xl font-bold mb-2 uppercase tracking-wide">
                     {category.title}
                   </h3>
-                  
-                  <ul className="space-y-1.5 md:space-y-2">
-                    {category.subcategories.map((sub, index) => (
-                      <li key={index}>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSubcategoryClick(sub);
-                          }}
-                          className="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors duration-300 font-inter text-left touch-manipulation py-1"
-                        >
-                          {sub}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
+                  <p className="text-sm mb-6 opacity-90">
+                    de la 999 lei
+                  </p>
+                  <button 
+                    className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md font-medium hover:opacity-90 transition-opacity duration-200"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCategoryClick(category.id);
+                    }}
+                    aria-label={`Vezi produsele din categoria ${category.title}`}
+                  >
+                    Vezi produsele
+                  </button>
                 </div>
-                
-                {/* Glass reflection effect */}
-                <div className="absolute top-2 left-2 md:top-4 md:left-4 w-8 h-8 md:w-16 md:h-16 bg-white/10 rounded-full blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-300"></div>
               </div>
             </div>
           ))}
