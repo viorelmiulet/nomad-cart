@@ -6,6 +6,7 @@ import { AdminSupportChat } from "@/components/AdminSupportChat";
 import { CompanyInfoEditor } from "@/components/CompanyInfoEditor";
 import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
 import { DiscountSettings } from "@/components/DiscountSettings";
+import { SupportStatsDashboard } from "@/components/SupportStatsDashboard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1203,7 +1204,9 @@ const AdminPage = () => {
           </TabsContent>
 
           {/* Support Tab */}
-          <TabsContent value="support">
+          <TabsContent value="support" className="space-y-6">
+            <SupportStatsDashboard />
+            
             <Card>
               <CardHeader>
                 <CardTitle>Suport Clienți</CardTitle>
