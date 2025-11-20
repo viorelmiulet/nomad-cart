@@ -8,7 +8,7 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import logoMobilaNomad from "@/assets/logo-mobila-nomad.png";
+import logoMobilaNomad from "@/assets/logo-mobila-nomad-modern.png";
 
 const Header = () => {
   const navigate = useNavigate();
