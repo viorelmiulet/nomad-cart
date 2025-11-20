@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import PromoBanner from "@/components/PromoBanner";
 import Hero from "@/components/Hero";
 import PopularProducts from "@/components/PopularProducts";
 import Footer from "@/components/Footer";
@@ -15,6 +16,7 @@ const Index = () => {
   return (
     <main className="min-h-screen bg-background">
       <Header />
+      <PromoBanner />
       <Hero />
       <section className="py-20 bg-hero-gradient relative overflow-hidden" aria-labelledby="popular-products-heading">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95" aria-hidden="true"></div>
