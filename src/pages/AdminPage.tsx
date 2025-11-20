@@ -544,7 +544,10 @@ const AdminPage = () => {
     try {
       const { data, error } = await supabase
         .from('price_history')
-        .select('*, profiles(display_name)')
+        .select(`
+          *,
+          profiles!price_history_changed_by_fkey(display_name)
+        `)
         .eq('product_id', productId)
         .order('created_at', { ascending: false });
 
