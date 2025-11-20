@@ -14,14 +14,14 @@ const CartDrawer = () => {
   const getDiscountedPrice = () => {
     const total = getTotalPrice();
     if (paymentMethod === 'card') {
-      return total * 0.95; // 5% discount for card payments
+      return total * 0.9; // 10% discount for card payments
     }
     return total;
   };
 
   const getDiscount = () => {
     if (paymentMethod === 'card') {
-      return getTotalPrice() * 0.05;
+      return getTotalPrice() * 0.1; // 10% discount
     }
     return 0;
   };
@@ -157,7 +157,7 @@ const CartDrawer = () => {
                   
                   {paymentMethod === 'card' && (
                     <div className="flex justify-between items-center">
-                      <span className="text-green-400">Discount card (5%):</span>
+                      <span className="text-green-400">Discount card (10%):</span>
                       <span className="text-green-400">
                         -{getDiscount().toLocaleString('ro-RO')} Lei
                       </span>

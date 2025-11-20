@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Search, Star } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -143,10 +144,18 @@ const SearchDialog = () => {
                                 </div>
                               </div>
                             </div>
-                            <div className="text-right flex-shrink-0">
-                              <span className="text-lg md:text-2xl font-bold text-brand-gold font-inter">
+                            <div className="text-right flex-shrink-0 space-y-1">
+                              <div className="text-sm text-muted-foreground">
                                 {product.price.toLocaleString("ro-RO")} Lei
-                              </span>
+                              </div>
+                              <div className="flex items-center gap-1 justify-end">
+                                <span className="text-lg md:text-xl font-bold text-brand-gold font-inter">
+                                  {(product.price * 0.9).toLocaleString("ro-RO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })} Lei
+                                </span>
+                                <Badge variant="secondary" className="bg-brand-gold/20 text-brand-gold border-brand-gold/30 text-xs">
+                                  -10%
+                                </Badge>
+                              </div>
                             </div>
                           </div>
                         </div>
