@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Filter, SortAsc, Bed, Armchair, Home, Package } from "lucide-react";
 import heroImage from "@/assets/hero-dormitor-new.jpg";
@@ -117,6 +118,19 @@ const DormitorPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Mobilier Dormitor - Paturi, Dulapuri și Comode"
+        description="Creează-ți dormitorul perfect cu mobilierul nostru de înaltă calitate. Paturi confortabile, dulapuri spațioase și saltele premium pentru un somn odihnitor. Livrare gratuită."
+        canonical="https://mobilanomad.lovable.app/dormitor"
+        keywords="mobilier dormitor, paturi, dulapuri dormitor, comode, noptiere, dormitor complet, pat dublu, pat tapițat, mobilier dormitor modern"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Dormitor - Mobila Nomad",
+          "description": "Mobilier de calitate pentru dormitorul tău: paturi, dulapuri, comode și noptiere",
+          "url": "https://mobilanomad.lovable.app/dormitor"
+        }}
+      />
       <Header />
       
       <main className="py-20 bg-hero-gradient relative overflow-hidden" aria-labelledby="dormitor-heading">

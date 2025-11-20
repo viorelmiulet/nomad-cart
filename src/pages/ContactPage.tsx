@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -66,6 +67,19 @@ const ContactPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Contact - Consultanță Gratuită pentru Mobilier"
+        description="Contactează-ne pentru consultanță gratuită în design interior și mobilier. Echipa noastră de specialiști te va ajuta să alegi mobilierul perfect pentru casa ta. Răspuns în 24h."
+        canonical="https://mobilanomad.lovable.app/contact"
+        keywords="contact mobilier, consultanță design interior, măsurători la domiciliu, livrare mobilier, servicii mobilier, asistență clienți mobilier"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "ContactPage",
+          "name": "Contact - Mobila Nomad",
+          "description": "Contactează-ne pentru consultanță gratuită",
+          "url": "https://mobilanomad.lovable.app/contact"
+        }}
+      />
       <Header />
       
       <main className="py-20 bg-hero-gradient relative overflow-hidden" aria-labelledby="contact-heading">
