@@ -128,7 +128,7 @@ const CartDrawer = () => {
                       <CreditCard className="h-4 w-4" />
                       Card
                       {paymentMethod === 'card' && (
-                        <span className="text-xs bg-green-500 text-white px-1.5 py-0.5 rounded-full">-5%</span>
+                        <span className="text-xs bg-green-500 text-white px-1.5 py-0.5 rounded-full">-10%</span>
                       )}
                     </Button>
                     <Button
