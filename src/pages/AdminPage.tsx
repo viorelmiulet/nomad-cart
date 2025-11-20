@@ -102,6 +102,7 @@ const AdminPage = () => {
   const [editProductImages, setEditProductImages] = useState<ImageFile[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [userRoles, setUserRoles] = useState<any[]>([]);
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const { toast } = useToast();
   const { user } = useAuth();
   const { isAuthenticated, isLoading: authLoading, login, logout } = useAdminAuth();
@@ -1056,7 +1057,10 @@ const AdminPage = () => {
                     {products.map((product) => (
                       <TableRow key={product.id}>
                         <TableCell>
-                          <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+                          <div 
+                            className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
+                            onClick={() => product.image_url && setSelectedImageUrl(product.image_url)}
+                          >
                             {product.image_url ? (
                               <img 
                                 src={product.image_url} 
@@ -1648,6 +1652,22 @@ const AdminPage = () => {
                 Închide
               </Button>
             </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Image Preview Dialog */}
+        <Dialog open={!!selectedImageUrl} onOpenChange={() => setSelectedImageUrl(null)}>
+          <DialogContent className="max-w-3xl">
+            <DialogHeader>
+              <DialogTitle>Imagine Produs</DialogTitle>
+            </DialogHeader>
+            <div className="flex items-center justify-center p-4">
+              <img 
+                src={selectedImageUrl || ''} 
+                alt="Produs" 
+                className="max-w-full max-h-[70vh] object-contain rounded-lg"
+              />
+            </div>
           </DialogContent>
         </Dialog>
       </main>
