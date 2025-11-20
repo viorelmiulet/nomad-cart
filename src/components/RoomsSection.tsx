@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useParallax } from "@/hooks/useParallax";
 import categoryLiving from "@/assets/category-living.jpg";
 import categoryBedroom from "@/assets/category-bedroom.jpg";
 import categoryKitchen from "@/assets/category-kitchen.jpg";
@@ -32,6 +33,7 @@ const categories = [
 
 const RoomsSection = () => {
   const navigate = useNavigate();
+  const parallaxOffset = useParallax(0.3);
 
   // Map category IDs to their corresponding routes
   const categoryRoutes: { [key: string]: string } = {
@@ -57,7 +59,11 @@ const RoomsSection = () => {
   return (
     <section className="py-12 md:py-16 bg-hero-gradient relative overflow-hidden" aria-labelledby="rooms-section-heading">
       <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95" aria-hidden="true"></div>
-      <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow" aria-hidden="true"></div>
+      <div 
+        className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow" 
+        aria-hidden="true"
+        style={{ transform: `translateY(${parallaxOffset}px)` }}
+      ></div>
       
       <div className="container mx-auto px-4 relative z-10">
         <header className="text-center mb-8 md:mb-12">
@@ -70,11 +76,15 @@ const RoomsSection = () => {
         </header>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {categories.map((category) => (
+          {categories.map((category, index) => (
             <div 
               key={category.id}
               className="group cursor-pointer"
               onClick={() => handleCategoryClick(category.id)}
+              style={{ 
+                transform: `translateY(${parallaxOffset * (0.1 + index * 0.05)}px)`,
+                transition: 'transform 0.1s ease-out'
+              }}
             >
               <div className="relative overflow-hidden rounded-xl md:rounded-2xl bg-glass-gradient backdrop-blur-xl border border-white/10 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 md:hover:-translate-y-2 touch-manipulation">
                 <div className="absolute inset-0 bg-liquid-gradient opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
