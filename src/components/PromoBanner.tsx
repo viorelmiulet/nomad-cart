@@ -1,7 +1,11 @@
 import { CreditCard, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useDiscount } from "@/hooks/useDiscount";
 
 const PromoBanner = () => {
+  const { discountPercentage, isActive } = useDiscount();
+
+  if (!isActive) return null;
   return (
     <div className="relative overflow-hidden bg-gradient-to-r from-brand-gold via-amber-500 to-brand-gold py-2 sm:py-3 px-3 sm:px-4 animate-slideDown">
       {/* Animated background elements */}
@@ -26,7 +30,7 @@ const PromoBanner = () => {
                 Reducere Specială!
               </span>
               <Badge className="bg-brand-dark text-brand-gold border-0 font-bold text-sm sm:text-base px-2 sm:px-3 py-0.5 sm:py-1 animate-bounce">
-                -10%
+                -{discountPercentage}%
               </Badge>
             </div>
             <span className="text-brand-dark font-semibold text-xs sm:text-sm md:text-base font-inter leading-tight">

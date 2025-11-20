@@ -5,23 +5,25 @@ import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDiscount } from "@/hooks/useDiscount";
 
 const CartDrawer = () => {
   const { items, updateQuantity, removeItem, getTotalItems, getTotalPrice, clearCart, isOpen, setIsOpen } = useCart();
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash'>('card');
+  const { discountPercentage } = useDiscount();
   const navigate = useNavigate();
 
   const getDiscountedPrice = () => {
     const total = getTotalPrice();
     if (paymentMethod === 'card') {
-      return total * 0.9; // 10% discount for card payments
+      return total * (1 - discountPercentage / 100);
     }
     return total;
   };
 
   const getDiscount = () => {
     if (paymentMethod === 'card') {
-      return getTotalPrice() * 0.1; // 10% discount
+      return getTotalPrice() * (discountPercentage / 100);
     }
     return 0;
   };
@@ -128,7 +130,7 @@ const CartDrawer = () => {
                       <CreditCard className="h-4 w-4" />
                       Card
                       {paymentMethod === 'card' && (
-                        <span className="text-xs bg-green-500 text-white px-1.5 py-0.5 rounded-full">-10%</span>
+                        <span className="text-xs bg-green-500 text-white px-1.5 py-0.5 rounded-full">-{discountPercentage}%</span>
                       )}
                     </Button>
                     <Button
@@ -157,7 +159,7 @@ const CartDrawer = () => {
                   
                   {paymentMethod === 'card' && (
                     <div className="flex justify-between items-center">
-                      <span className="text-green-400">Discount card (10%):</span>
+                      <span className="text-green-400">Discount card ({discountPercentage}%):</span>
                       <span className="text-green-400">
                         -{getDiscount().toLocaleString('ro-RO')} Lei
                       </span>
