@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
+import { useParallaxMulti } from "@/hooks/useParallax";
 
 import heroCozyCpollection from "@/assets/hero-cozy-collection.jpg";
 
 const Hero = () => {
+  const [offset1, offset2, offset3] = useParallaxMulti([0.2, 0.4, 0.6]);
 
   const handleWhatsAppContact = () => {
     const phoneNumber = "0758433114";
@@ -16,14 +18,26 @@ const Hero = () => {
     <section className="relative overflow-hidden bg-hero-gradient min-h-[80vh] md:min-h-[90vh] flex items-center" aria-label="Prezentare principală">
       <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95" aria-hidden="true"></div>
       
-      {/* Liquid Glass Elements - optimized for mobile */}
-      <div className="absolute top-10 left-5 w-64 h-64 md:top-20 md:left-10 md:w-96 md:h-96 bg-glass-gradient backdrop-blur-3xl rounded-full opacity-30 animate-liquid-flow"></div>
-      <div className="absolute bottom-16 right-10 w-48 h-48 md:bottom-32 md:right-20 md:w-80 md:h-80 bg-liquid-gradient backdrop-blur-2xl rounded-full opacity-40 animate-glass-float"></div>
-      <div className="absolute top-1/2 left-1/4 w-32 h-32 md:w-64 md:h-64 bg-glass-gradient backdrop-blur-xl rounded-full opacity-20 animate-liquid-flow delay-1000"></div>
+      {/* Liquid Glass Elements - optimized for mobile with parallax */}
+      <div 
+        className="absolute top-10 left-5 w-64 h-64 md:top-20 md:left-10 md:w-96 md:h-96 bg-glass-gradient backdrop-blur-3xl rounded-full opacity-30 animate-liquid-flow"
+        style={{ transform: `translateY(${offset1}px)` }}
+      ></div>
+      <div 
+        className="absolute bottom-16 right-10 w-48 h-48 md:bottom-32 md:right-20 md:w-80 md:h-80 bg-liquid-gradient backdrop-blur-2xl rounded-full opacity-40 animate-glass-float"
+        style={{ transform: `translateY(${-offset2}px)` }}
+      ></div>
+      <div 
+        className="absolute top-1/2 left-1/4 w-32 h-32 md:w-64 md:h-64 bg-glass-gradient backdrop-blur-xl rounded-full opacity-20 animate-liquid-flow delay-1000"
+        style={{ transform: `translateY(${offset3}px)` }}
+      ></div>
       
       <div className="container mx-auto px-4 py-12 md:py-20 lg:py-32 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-center">
-          <div className="text-luxury-dark text-center lg:text-left">
+          <div 
+            className="text-luxury-dark text-center lg:text-left"
+            style={{ transform: `translateY(${offset1 * 0.3}px)` }}
+          >
             <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-6 md:mb-8 font-playfair text-luxury-dark">
               Mii de piese de mobilier
               <span className="block bg-brand-gradient bg-clip-text text-transparent">
@@ -48,7 +62,10 @@ const Hero = () => {
           </div>
           
           
-          <div className="relative mt-8 lg:mt-0">
+          <div 
+            className="relative mt-8 lg:mt-0"
+            style={{ transform: `translateY(${-offset2 * 0.3}px)` }}
+          >
             <div className="absolute inset-0 bg-glass-gradient backdrop-blur-3xl rounded-2xl md:rounded-3xl opacity-40 animate-liquid-flow"></div>
             <div className="relative bg-glass-gradient backdrop-blur-xl rounded-2xl md:rounded-3xl p-4 md:p-8 border border-white/20 shadow-2xl group hover:shadow-brand-gold/20 transition-all duration-500">
               <div className="absolute inset-0 bg-liquid-gradient opacity-20 rounded-2xl md:rounded-3xl group-hover:opacity-30 transition-opacity duration-300"></div>
