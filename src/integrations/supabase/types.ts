@@ -290,7 +290,7 @@ export type Database = {
           created_at: string
           device_type: string | null
           id: string
-          ip_address: unknown
+          ip_address: unknown | null
           page_path: string
           referrer: string | null
           session_id: string | null
@@ -304,7 +304,7 @@ export type Database = {
           created_at?: string
           device_type?: string | null
           id?: string
-          ip_address?: unknown
+          ip_address?: unknown | null
           page_path: string
           referrer?: string | null
           session_id?: string | null
@@ -318,7 +318,7 @@ export type Database = {
           created_at?: string
           device_type?: string | null
           id?: string
-          ip_address?: unknown
+          ip_address?: unknown | null
           page_path?: string
           referrer?: string | null
           session_id?: string | null
