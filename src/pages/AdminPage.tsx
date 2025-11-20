@@ -17,7 +17,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { BarChart3, Users, Package, ShoppingCart, Settings, Eye, Edit, Trash2, Plus, AlertCircle, Calculator } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { BarChart3, Users, Package, ShoppingCart, Settings, Eye, Edit, Trash2, Plus, AlertCircle, Calculator, History } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
@@ -107,6 +108,8 @@ const AdminPage = () => {
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const [editingPriceId, setEditingPriceId] = useState<string | null>(null);
   const [tempPrice, setTempPrice] = useState<string>("");
+  const [priceHistoryProductId, setPriceHistoryProductId] = useState<string | null>(null);
+  const [priceHistory, setPriceHistory] = useState<any[]>([]);
   
   // Filter states
   const [searchQuery, setSearchQuery] = useState("");
@@ -519,6 +522,44 @@ const AdminPage = () => {
     setFilterMaxPrice("");
   };
 
+  // Save price change to history
+  const savePriceHistory = async (productId: string, oldPrice: number, newPrice: number, reason: string = 'manual_edit') => {
+    try {
+      await supabase
+        .from('price_history')
+        .insert({
+          product_id: productId,
+          old_price: oldPrice,
+          new_price: newPrice,
+          changed_by: user?.id || null,
+          change_reason: reason
+        });
+    } catch (error) {
+      console.error('Error saving price history:', error);
+    }
+  };
+
+  // Fetch price history for a product
+  const fetchPriceHistory = async (productId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('price_history')
+        .select('*, profiles(display_name)')
+        .eq('product_id', productId)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setPriceHistory(data || []);
+    } catch (error) {
+      console.error('Error fetching price history:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-a putut încărca istoricul prețurilor.",
+        variant: "destructive",
+      });
+    }
+  };
+
   // Handle inline price edit
   const handleStartPriceEdit = (productId: string, currentPrice: number) => {
     setEditingPriceId(productId);
@@ -527,6 +568,9 @@ const AdminPage = () => {
 
   const handleSavePriceEdit = async (productId: string) => {
     const newPrice = parseFloat(tempPrice);
+    const product = products.find(p => p.id === productId);
+    
+    if (!product) return;
     
     if (isNaN(newPrice) || newPrice < 0) {
       toast({
@@ -539,12 +583,17 @@ const AdminPage = () => {
     }
 
     try {
+      const oldPrice = parseFloat(product.price.toString());
+      
       const { error } = await supabase
         .from('products')
         .update({ price: newPrice })
         .eq('id', productId);
 
       if (error) throw error;
+
+      // Save to price history
+      await savePriceHistory(productId, oldPrice, newPrice, 'manual_edit');
 
       toast({
         title: "Succes",
@@ -615,11 +664,16 @@ const AdminPage = () => {
       const updatePromises = allProducts.map(async (product) => {
         const currentPrice = parseFloat(product.price.toString());
         const newPrice = Math.max(0, currentPrice * (1 + percentage / 100));
+        const roundedNewPrice = parseFloat(newPrice.toFixed(2));
         
-        return supabase
+        // Update product price
+        await supabase
           .from('products')
-          .update({ price: parseFloat(newPrice.toFixed(2)) })
+          .update({ price: roundedNewPrice })
           .eq('id', product.id);
+        
+        // Save to price history
+        await savePriceHistory(product.id, currentPrice, roundedNewPrice, `bulk_adjustment_${percentage > 0 ? 'increase' : 'decrease'}_${Math.abs(percentage)}%`);
       });
 
       await Promise.all(updatePromises);
@@ -686,12 +740,16 @@ const AdminPage = () => {
         // Count products that actually changed
         if (currentPrice !== newPrice) {
           modifiedProducts++;
+          
+          // Update product price
+          await supabase
+            .from('products')
+            .update({ price: newPrice })
+            .eq('id', product.id);
+          
+          // Save to price history
+          await savePriceHistory(product.id, currentPrice, newPrice, 'remove_decimals');
         }
-        
-        return supabase
-          .from('products')
-          .update({ price: newPrice })
-          .eq('id', product.id);
       });
 
       await Promise.all(updatePromises);
@@ -742,13 +800,17 @@ const AdminPage = () => {
     try {
       const currentPrice = parseFloat(product.price.toString());
       const newPrice = Math.max(0, currentPrice * (1 + adjustmentPercentage / 100));
+      const roundedNewPrice = parseFloat(newPrice.toFixed(2));
       
       const { error } = await supabase
         .from('products')
-        .update({ price: parseFloat(newPrice.toFixed(2)) })
+        .update({ price: roundedNewPrice })
         .eq('id', productId);
 
       if (error) throw error;
+
+      // Save to price history
+      await savePriceHistory(productId, currentPrice, roundedNewPrice, `individual_adjustment_${adjustmentPercentage > 0 ? 'increase' : 'decrease'}_${Math.abs(adjustmentPercentage)}%`);
 
       toast({
         title: "Succes",
@@ -1463,6 +1525,17 @@ const AdminPage = () => {
                               variant="outline"
                               size="sm"
                               onClick={() => {
+                                setPriceHistoryProductId(product.id);
+                                fetchPriceHistory(product.id);
+                              }}
+                              title="Istoric preț"
+                            >
+                              <History className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
                                 setEditingProduct(product);
                                 setIsEditProductOpen(true);
                               }}
@@ -2021,6 +2094,86 @@ const AdminPage = () => {
                 className="max-w-full max-h-[70vh] object-contain rounded-lg"
               />
             </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Price History Dialog */}
+        <Dialog open={!!priceHistoryProductId} onOpenChange={() => setPriceHistoryProductId(null)}>
+          <DialogContent className="max-w-4xl">
+            <DialogHeader>
+              <DialogTitle>Istoric Modificări Preț</DialogTitle>
+              <DialogDescription>
+                {priceHistoryProductId && products.find(p => p.id === priceHistoryProductId)?.name}
+              </DialogDescription>
+            </DialogHeader>
+            <ScrollArea className="h-[500px] pr-4">
+              {priceHistory.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <History className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                  <p>Nu există modificări de preț pentru acest produs.</p>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Data</TableHead>
+                      <TableHead>Preț Vechi</TableHead>
+                      <TableHead>Preț Nou</TableHead>
+                      <TableHead>Diferență</TableHead>
+                      <TableHead>Modificat de</TableHead>
+                      <TableHead>Motiv</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {priceHistory.map((entry) => {
+                      const difference = parseFloat(entry.new_price) - parseFloat(entry.old_price);
+                      const percentChange = ((difference / parseFloat(entry.old_price)) * 100).toFixed(2);
+                      
+                      return (
+                        <TableRow key={entry.id}>
+                          <TableCell className="whitespace-nowrap">
+                            {new Date(entry.created_at).toLocaleString('ro-RO', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </TableCell>
+                          <TableCell>{parseFloat(entry.old_price).toFixed(2)} RON</TableCell>
+                          <TableCell className="font-medium">
+                            {parseFloat(entry.new_price).toFixed(2)} RON
+                          </TableCell>
+                          <TableCell>
+                            <div className={`flex items-center gap-1 ${difference > 0 ? 'text-green-600' : difference < 0 ? 'text-red-600' : 'text-muted-foreground'}`}>
+                              <span>
+                                {difference > 0 ? '+' : ''}{difference.toFixed(2)} RON
+                              </span>
+                              <span className="text-xs">
+                                ({difference > 0 ? '+' : ''}{percentChange}%)
+                              </span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            {entry.profiles?.display_name || 'Sistem'}
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className="text-xs">
+                              {entry.change_reason?.replace(/_/g, ' ') || 'N/A'}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              )}
+            </ScrollArea>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setPriceHistoryProductId(null)}>
+                Închide
+              </Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       </main>
