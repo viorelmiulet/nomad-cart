@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 import { BarChart3, Users, Package, ShoppingCart, Settings, Eye, Edit, Trash2, Plus, AlertCircle, Calculator } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -103,6 +104,7 @@ const AdminPage = () => {
   const [users, setUsers] = useState<any[]>([]);
   const [userRoles, setUserRoles] = useState<any[]>([]);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+  const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const { toast } = useToast();
   const { user } = useAuth();
   const { isAuthenticated, isLoading: authLoading, login, logout } = useAdminAuth();
@@ -397,6 +399,87 @@ const AdminPage = () => {
         variant: "destructive",
       });
     }
+  };
+
+  // Bulk delete products
+  const handleBulkDeleteProducts = async () => {
+    if (selectedProductIds.length === 0) {
+      toast({
+        title: "Info",
+        description: "Nu ai selectat niciun produs pentru ștergere.",
+      });
+      return;
+    }
+
+    if (!confirm(`Ești sigur că vrei să ștergi ${selectedProductIds.length} produse selectate? Această acțiune nu poate fi anulată.`)) {
+      return;
+    }
+
+    try {
+      // Delete images and products for each selected product
+      const deletePromises = selectedProductIds.map(async (productId) => {
+        // First delete associated images from storage
+        const { data: imageData } = await supabase
+          .from('product_images')
+          .select('image_url')
+          .eq('product_id', productId);
+
+        if (imageData) {
+          const deleteImagePromises = imageData.map(async (img) => {
+            const fileName = img.image_url.split('/').pop();
+            if (fileName) {
+              await supabase.storage
+                .from('product-images')
+                .remove([`${productId}/${fileName}`]);
+            }
+          });
+          await Promise.all(deleteImagePromises);
+        }
+
+        // Delete the product
+        return supabase
+          .from('products')
+          .delete()
+          .eq('id', productId);
+      });
+
+      await Promise.all(deletePromises);
+
+      toast({
+        title: "Succes",
+        description: `${selectedProductIds.length} produse au fost șterse cu succes!`,
+      });
+
+      setSelectedProductIds([]);
+      fetchData();
+    } catch (error) {
+      console.error('Error deleting products:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-au putut șterge produsele.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Toggle select all products
+  const handleToggleSelectAll = () => {
+    if (selectedProductIds.length === products.length) {
+      setSelectedProductIds([]);
+    } else {
+      setSelectedProductIds(products.map(p => p.id));
+    }
+  };
+
+  // Toggle select individual product
+  const handleToggleSelectProduct = (productId: string) => {
+    setSelectedProductIds(prev => {
+      if (prev.includes(productId)) {
+        return prev.filter(id => id !== productId);
+      } else {
+        return [...prev, productId];
+      }
+    });
   };
 
   // Bulk price adjustment
@@ -1040,9 +1123,40 @@ const AdminPage = () => {
                     </DialogContent>
                   </Dialog>
                 </div>
+
+                {/* Bulk delete button */}
+                {selectedProductIds.length > 0 && (
+                  <div className="mb-4 flex items-center gap-2">
+                    <Badge variant="secondary">
+                      {selectedProductIds.length} produs{selectedProductIds.length > 1 ? 'e' : ''} selectat{selectedProductIds.length > 1 ? 'e' : ''}
+                    </Badge>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={handleBulkDeleteProducts}
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Șterge Selectate
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSelectedProductIds([])}
+                    >
+                      Deselectează Tot
+                    </Button>
+                  </div>
+                )}
+
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead className="w-12">
+                        <Checkbox
+                          checked={selectedProductIds.length === products.length && products.length > 0}
+                          onCheckedChange={handleToggleSelectAll}
+                        />
+                      </TableHead>
                       <TableHead>Imagine</TableHead>
                       <TableHead>Nume Produs</TableHead>
                       <TableHead>Categorie</TableHead>
@@ -1056,6 +1170,12 @@ const AdminPage = () => {
                   <TableBody>
                     {products.map((product) => (
                       <TableRow key={product.id}>
+                        <TableCell>
+                          <Checkbox
+                            checked={selectedProductIds.includes(product.id)}
+                            onCheckedChange={() => handleToggleSelectProduct(product.id)}
+                          />
+                        </TableCell>
                         <TableCell>
                           <div 
                             className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
