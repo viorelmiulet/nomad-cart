@@ -17,22 +17,22 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 20%;
 
-    --primary: 16 100% 63%;
+    --primary: 142 71% 45%;
     --primary-foreground: 0 0% 100%;
 
-    --brand-coral: 16 100% 63%;
-    --brand-coral-dark: 16 100% 55%;
+    --brand-coral: 142 71% 45%;
+    --brand-coral-dark: 142 71% 38%;
     --brand-gray: 210 11% 71%;
     --brand-dark: 210 17% 38%;
     --brand-light: 0 0% 98%;
     
-    --brand-gradient: linear-gradient(135deg, hsl(16 100% 63%) 0%, hsl(16 100% 55%) 100%);
+    --brand-gradient: linear-gradient(135deg, hsl(142 71% 45%) 0%, hsl(142 71% 38%) 100%);
     --hero-gradient: linear-gradient(135deg, hsl(0 0% 98%) 0%, hsl(0 0% 96%) 100%);
     --card-gradient: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(0 0% 98%) 100%);
     --overlay-gradient: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%);
     
     --glass-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-    --liquid-gradient: linear-gradient(45deg, rgba(255, 127, 80, 0.3) 0%, rgba(255, 255, 255, 0.2) 25%, rgba(255, 127, 80, 0.3) 50%, rgba(255, 255, 255, 0.1) 75%, rgba(255, 127, 80, 0.2) 100%);
+    --liquid-gradient: linear-gradient(45deg, rgba(34, 197, 94, 0.3) 0%, rgba(255, 255, 255, 0.2) 25%, rgba(34, 197, 94, 0.3) 50%, rgba(255, 255, 255, 0.1) 75%, rgba(34, 197, 94, 0.2) 100%);
     --glass-border: rgba(255, 255, 255, 0.18);
     --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
 
@@ -42,7 +42,7 @@ All colors MUST be HSL.
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
 
-    --accent: 16 100% 63%;
+    --accent: 142 71% 45%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
@@ -81,24 +81,24 @@ All colors MUST be HSL.
     --popover: 210 17% 25%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 16 100% 63%;
+    --primary: 142 71% 45%;
     --primary-foreground: 0 0% 100%;
 
-    --brand-coral: 16 100% 63%;
-    --brand-coral-dark: 16 100% 55%;
+    --brand-coral: 142 71% 45%;
+    --brand-coral-dark: 142 71% 38%;
     --brand-gray: 210 11% 71%;
     --brand-dark: 210 17% 38%;
     --brand-light: 0 0% 98%;
     
-    --brand-gradient: linear-gradient(135deg, hsl(16 100% 63%) 0%, hsl(16 100% 55%) 100%);
+    --brand-gradient: linear-gradient(135deg, hsl(142 71% 45%) 0%, hsl(142 71% 38%) 100%);
     --hero-gradient: linear-gradient(135deg, hsl(210 17% 25%) 0%, hsl(210 17% 20%) 100%);
     --card-gradient: linear-gradient(145deg, hsl(210 17% 25%) 0%, hsl(210 17% 28%) 100%);
     --overlay-gradient: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0) 100%);
     
-    --glass-gradient: linear-gradient(135deg, rgba(255, 127, 80, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
-    --liquid-gradient: linear-gradient(45deg, rgba(255, 127, 80, 0.4) 0%, rgba(255, 255, 255, 0.3) 25%, rgba(255, 127, 80, 0.4) 50%, rgba(255, 255, 255, 0.2) 75%, rgba(255, 127, 80, 0.3) 100%);
-    --glass-border: rgba(255, 127, 80, 0.3);
-    --glass-shadow: 0 8px 32px 0 rgba(255, 127, 80, 0.2);
+    --glass-gradient: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
+    --liquid-gradient: linear-gradient(45deg, rgba(34, 197, 94, 0.4) 0%, rgba(255, 255, 255, 0.3) 25%, rgba(34, 197, 94, 0.4) 50%, rgba(255, 255, 255, 0.2) 75%, rgba(34, 197, 94, 0.3) 100%);
+    --glass-border: rgba(34, 197, 94, 0.3);
+    --glass-shadow: 0 8px 32px 0 rgba(34, 197, 94, 0.2);
 
     --secondary: 210 17% 28%;
     --secondary-foreground: 0 0% 95%;
@@ -106,7 +106,7 @@ All colors MUST be HSL.
     --muted: 210 17% 28%;
     --muted-foreground: 0 0% 70%;
 
-    --accent: 16 100% 63%;
+    --accent: 142 71% 45%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62.8% 30.6%;
