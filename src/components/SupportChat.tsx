@@ -183,14 +183,16 @@ export function SupportChat() {
 
     setIsLoading(true);
     try {
+      const messageData = {
+        user_name: userName.trim() || 'Anonim',
+        user_email: userEmail.trim() || getSessionEmail(),
+        user_phone: userPhone.trim() || '',
+        message: newMessage.trim()
+      };
+
       const { error } = await supabase
         .from('support_messages')
-        .insert({
-          user_name: userName.trim() || 'Anonim',
-          user_email: userEmail.trim() || getSessionEmail(),
-          user_phone: userPhone.trim() || '',
-          message: newMessage.trim()
-        });
+        .insert(messageData);
 
       if (error) throw error;
 
@@ -200,6 +202,16 @@ export function SupportChat() {
           .from('profiles')
           .update({ phone: userPhone.trim() })
           .eq('user_id', user.id);
+      }
+
+      // Send email notification to admin
+      try {
+        await supabase.functions.invoke('send-support-notification', {
+          body: messageData
+        });
+      } catch (emailError) {
+        console.error('Error sending email notification:', emailError);
+        // Don't show error to user, just log it
       }
 
       setNewMessage('');
