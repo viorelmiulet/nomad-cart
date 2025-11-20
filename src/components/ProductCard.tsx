@@ -96,17 +96,34 @@ const ProductCard = ({
             <span className="text-sm text-muted-foreground font-inter">({reviews} recenzii)</span>
           </div>
           
-          <div className="flex items-center justify-between mb-6">
+          <div className="mb-6 space-y-2">
+            {/* Preț cash */}
             <div className="flex items-center gap-3">
-              <span className="text-2xl font-bold text-brand-gold font-playfair">
+              <span className="text-xl font-bold text-foreground font-playfair">
                 {price.toLocaleString('ro-RO')} Lei
               </span>
+              <span className="text-sm text-muted-foreground font-inter">
+                (cash)
+              </span>
               {originalPrice && (
-                <span className="text-lg text-muted-foreground line-through font-inter">
+                <span className="text-base text-muted-foreground line-through font-inter">
                   {originalPrice.toLocaleString('ro-RO')} Lei
                 </span>
               )}
             </div>
+            
+            {/* Preț card - 10% discount */}
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold text-brand-gold font-playfair">
+                {(price * 0.9).toLocaleString('ro-RO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} Lei
+              </span>
+              <Badge variant="secondary" className="bg-brand-gold/20 text-brand-gold border-brand-gold/30 font-semibold">
+                -10% card
+              </Badge>
+            </div>
+            <p className="text-xs text-muted-foreground font-inter italic">
+              *Preț special pentru plata cu cardul bancar
+            </p>
           </div>
           
           <Button 
