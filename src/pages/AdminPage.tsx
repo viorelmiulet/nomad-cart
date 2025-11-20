@@ -5,6 +5,7 @@ import Footer from "@/components/Footer"; // Footer component
 import { AdminSupportChat } from "@/components/AdminSupportChat";
 import { CompanyInfoEditor } from "@/components/CompanyInfoEditor";
 import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
+import { DiscountSettings } from "@/components/DiscountSettings";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -859,13 +860,14 @@ const AdminPage = () => {
 
         {/* Admin Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-7">
+          <TabsList className="grid w-full grid-cols-8">
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="products">Produse</TabsTrigger>
             <TabsTrigger value="orders">Comenzi</TabsTrigger>
             <TabsTrigger value="support">Suport Clienți</TabsTrigger>
             <TabsTrigger value="users">Utilizatori</TabsTrigger>
             <TabsTrigger value="company">Companie</TabsTrigger>
+            <TabsTrigger value="discount">Reduceri</TabsTrigger>
             <TabsTrigger value="settings">Setări</TabsTrigger>
           </TabsList>
 
@@ -1310,6 +1312,11 @@ const AdminPage = () => {
           {/* Company Info Tab */}
           <TabsContent value="company">
             <CompanyInfoEditor />
+          </TabsContent>
+
+          {/* Discount Settings Tab */}
+          <TabsContent value="discount">
+            <DiscountSettings />
           </TabsContent>
 
           {/* Settings Tab */}

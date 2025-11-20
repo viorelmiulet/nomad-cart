@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, Star } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useDiscount } from "@/hooks/useDiscount";
 
 // Import product images
 import sofaImage from "@/assets/product-sofa-modern.jpg";
@@ -17,6 +18,7 @@ import mattressImage from "@/assets/product-mattress.jpg";
 const SearchDialog = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const { discountPercentage } = useDiscount();
 
   const mockResults = [
     { id: "1", name: "Canapea Modernă 3 Locuri", price: 2999, rating: 5, image: sofaImage },
@@ -150,10 +152,10 @@ const SearchDialog = () => {
                               </div>
                               <div className="flex items-center gap-1 justify-end">
                                 <span className="text-lg md:text-xl font-bold text-brand-gold font-inter">
-                                  {(product.price * 0.9).toLocaleString("ro-RO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })} Lei
+                                  {(product.price * (1 - discountPercentage / 100)).toLocaleString("ro-RO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })} Lei
                                 </span>
                                 <Badge variant="secondary" className="bg-brand-gold/20 text-brand-gold border-brand-gold/30 text-xs">
-                                  -10%
+                                  -{discountPercentage}%
                                 </Badge>
                               </div>
                             </div>

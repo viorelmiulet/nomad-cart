@@ -22,6 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/hooks/useWishlist";
 import { useToast } from "@/components/ui/use-toast";
+import { useDiscount } from "@/hooks/useDiscount";
 
 interface Product {
   id: string;
@@ -47,6 +48,7 @@ const ProductDetailsPage = () => {
   const { addItem } = useCart();
   const { toggleItem, isInWishlist } = useWishlist();
   const { toast } = useToast();
+  const { discountPercentage } = useDiscount();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [images, setImages] = useState<ProductImage[]>([]);
@@ -364,13 +366,13 @@ const ProductDetailsPage = () => {
                 </span>
               </div>
               
-              {/* Preț card - 10% discount */}
+              {/* Preț card - discount dinamic */}
               <div className="flex items-center gap-2">
                 <span className="text-3xl font-bold text-brand-gold font-playfair">
-                  {(product.price * 0.9).toLocaleString('ro-RO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} Lei
+                  {(product.price * (1 - discountPercentage / 100)).toLocaleString('ro-RO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} Lei
                 </span>
                 <Badge variant="secondary" className="bg-brand-gold/20 text-brand-gold border-brand-gold/30 font-semibold">
-                  -10% card
+                  -{discountPercentage}% card
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground font-inter italic">
