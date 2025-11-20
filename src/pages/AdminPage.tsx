@@ -39,6 +39,7 @@ interface Product {
   stock: number;
   status: string;
   category_id: string;
+  image_url?: string;
   categories?: {
     id: string;
     name: string;
@@ -148,7 +149,7 @@ const AdminPage = () => {
       if (categoriesError) throw categoriesError;
       setCategories(categoriesData || []);
 
-      // Fetch products with categories
+      // Fetch products with categories and primary image
       const { data: productsData, error: productsError } = await supabase
         .from('products')
         .select(`
@@ -157,12 +158,23 @@ const AdminPage = () => {
             id,
             name,
             slug
+          ),
+          product_images (
+            image_url,
+            is_primary
           )
         `)
         .order('created_at', { ascending: false });
 
       if (productsError) throw productsError;
-      setProducts(productsData || []);
+      
+      // Transform data to include primary image URL
+      const transformedProducts = productsData?.map(product => ({
+        ...product,
+        image_url: product.image_url || product.product_images?.find((img: any) => img.is_primary)?.image_url || product.product_images?.[0]?.image_url
+      })) || [];
+      
+      setProducts(transformedProducts);
 
       // Fetch orders with order items and product details
       const { data: ordersData, error: ordersError } = await supabase
@@ -1030,6 +1042,7 @@ const AdminPage = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead>Imagine</TableHead>
                       <TableHead>Nume Produs</TableHead>
                       <TableHead>Categorie</TableHead>
                       <TableHead>Preț</TableHead>
@@ -1042,6 +1055,19 @@ const AdminPage = () => {
                   <TableBody>
                     {products.map((product) => (
                       <TableRow key={product.id}>
+                        <TableCell>
+                          <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+                            {product.image_url ? (
+                              <img 
+                                src={product.image_url} 
+                                alt={product.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <Package className="h-6 w-6 text-muted-foreground" />
+                            )}
+                          </div>
+                        </TableCell>
                         <TableCell className="font-medium">{product.name}</TableCell>
                         <TableCell>{product.categories?.name || 'N/A'}</TableCell>
                         <TableCell>{product.price} RON</TableCell>
