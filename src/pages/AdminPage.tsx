@@ -105,6 +105,14 @@ const AdminPage = () => {
   const [userRoles, setUserRoles] = useState<any[]>([]);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
+  
+  // Filter states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterCategory, setFilterCategory] = useState<string>("all");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [filterMinPrice, setFilterMinPrice] = useState("");
+  const [filterMaxPrice, setFilterMaxPrice] = useState("");
+  
   const { toast } = useToast();
   const { user } = useAuth();
   const { isAuthenticated, isLoading: authLoading, login, logout } = useAdminAuth();
@@ -462,13 +470,51 @@ const AdminPage = () => {
     }
   };
 
-  // Toggle select all products
+  // Toggle select all products (only filtered products)
   const handleToggleSelectAll = () => {
-    if (selectedProductIds.length === products.length) {
+    if (selectedProductIds.length === filteredProducts.length && filteredProducts.length > 0) {
       setSelectedProductIds([]);
     } else {
-      setSelectedProductIds(products.map(p => p.id));
+      setSelectedProductIds(filteredProducts.map(p => p.id));
     }
+  };
+
+  // Filter products based on search and filter criteria
+  const filteredProducts = products.filter(product => {
+    // Search by name
+    if (searchQuery && !product.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
+    
+    // Filter by category
+    if (filterCategory !== "all" && product.category_id !== filterCategory) {
+      return false;
+    }
+    
+    // Filter by status
+    if (filterStatus !== "all" && product.status !== filterStatus) {
+      return false;
+    }
+    
+    // Filter by price range
+    const price = parseFloat(product.price.toString());
+    if (filterMinPrice && price < parseFloat(filterMinPrice)) {
+      return false;
+    }
+    if (filterMaxPrice && price > parseFloat(filterMaxPrice)) {
+      return false;
+    }
+    
+    return true;
+  });
+
+  // Clear all filters
+  const handleClearFilters = () => {
+    setSearchQuery("");
+    setFilterCategory("all");
+    setFilterStatus("all");
+    setFilterMinPrice("");
+    setFilterMaxPrice("");
   };
 
   // Toggle select individual product
@@ -1124,6 +1170,99 @@ const AdminPage = () => {
                   </Dialog>
                 </div>
 
+
+                {/* Search and Filter Section */}
+                <Card className="mb-4">
+                  <CardContent className="pt-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                      {/* Search */}
+                      <div className="lg:col-span-2">
+                        <Label htmlFor="search">Caută după nume</Label>
+                        <Input
+                          id="search"
+                          type="text"
+                          placeholder="Caută produs..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+
+                      {/* Category Filter */}
+                      <div>
+                        <Label htmlFor="filter-category">Categorie</Label>
+                        <Select value={filterCategory} onValueChange={setFilterCategory}>
+                          <SelectTrigger id="filter-category" className="mt-1">
+                            <SelectValue placeholder="Toate" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">Toate categoriile</SelectItem>
+                            {categories.map((category) => (
+                              <SelectItem key={category.id} value={category.id}>
+                                {category.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Status Filter */}
+                      <div>
+                        <Label htmlFor="filter-status">Status</Label>
+                        <Select value={filterStatus} onValueChange={setFilterStatus}>
+                          <SelectTrigger id="filter-status" className="mt-1">
+                            <SelectValue placeholder="Toate" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">Toate statusurile</SelectItem>
+                            <SelectItem value="active">Activ</SelectItem>
+                            <SelectItem value="inactive">Inactiv</SelectItem>
+                            <SelectItem value="draft">Draft</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Price Range */}
+                      <div className="lg:col-span-1">
+                        <Label>Interval preț (RON)</Label>
+                        <div className="flex gap-2 mt-1">
+                          <Input
+                            type="number"
+                            placeholder="Min"
+                            value={filterMinPrice}
+                            onChange={(e) => setFilterMinPrice(e.target.value)}
+                            className="w-full"
+                          />
+                          <Input
+                            type="number"
+                            placeholder="Max"
+                            value={filterMaxPrice}
+                            onChange={(e) => setFilterMaxPrice(e.target.value)}
+                            className="w-full"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Filter Actions */}
+                    <div className="flex items-center justify-between mt-4">
+                      <div className="text-sm text-muted-foreground">
+                        {filteredProducts.length} {filteredProducts.length === 1 ? 'produs găsit' : 'produse găsite'}
+                        {filteredProducts.length !== products.length && ` din ${products.length}`}
+                      </div>
+                      {(searchQuery || filterCategory !== "all" || filterStatus !== "all" || filterMinPrice || filterMaxPrice) && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleClearFilters}
+                        >
+                          Resetează filtrele
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+
                 {/* Bulk delete button */}
                 {selectedProductIds.length > 0 && (
                   <div className="mb-4 flex items-center gap-2">
@@ -1153,7 +1292,7 @@ const AdminPage = () => {
                     <TableRow>
                       <TableHead className="w-12">
                         <Checkbox
-                          checked={selectedProductIds.length === products.length && products.length > 0}
+                          checked={selectedProductIds.length === filteredProducts.length && filteredProducts.length > 0}
                           onCheckedChange={handleToggleSelectAll}
                         />
                       </TableHead>
@@ -1168,7 +1307,7 @@ const AdminPage = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {products.map((product) => (
+                    {filteredProducts.map((product) => (
                       <TableRow key={product.id}>
                         <TableCell>
                           <Checkbox
