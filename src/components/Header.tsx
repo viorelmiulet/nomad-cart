@@ -9,13 +9,24 @@ import { useAuth } from "@/contexts/AuthContext";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import logoMobilaNomad from "@/assets/logo-mobila-nomad-modern.png";
+import { useState, useEffect } from "react";
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, signOut } = useAuth();
+  const [isScrolled, setIsScrolled] = useState(false);
   
   const isAdminPage = location.pathname === '/admin';
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleNavClick = (section: string) => {
     const routes: { [key: string]: string } = {
@@ -53,16 +64,24 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-hero-gradient backdrop-blur-xl border-b border-brand-gold/20 shadow-2xl relative overflow-hidden">
+    <header className={`sticky top-0 z-50 w-full bg-hero-gradient backdrop-blur-xl border-b border-brand-gold/20 shadow-2xl relative overflow-hidden transition-all duration-300 ${
+      isScrolled ? 'py-1' : 'py-0'
+    }`}>
       <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95"></div>
       <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
-      <div className="container flex h-12 md:h-14 lg:h-16 items-center justify-between relative z-10 px-4">
+      <div className={`container flex items-center justify-between relative z-10 px-4 transition-all duration-300 ${
+        isScrolled ? 'h-10 md:h-12 lg:h-14' : 'h-12 md:h-14 lg:h-16'
+      }`}>
         <Link
           to="/"
           className="flex items-center space-x-2 md:space-x-3 relative z-10 hover:scale-105 transition-transform duration-200 touch-manipulation group min-w-[44px] min-h-[44px]"
           aria-label="Acasă"
         >
-          <div className="relative bg-glass-gradient backdrop-blur-2xl border border-white/20 rounded-lg md:rounded-xl lg:rounded-2xl p-1.5 sm:p-2 md:p-2.5 lg:p-3 xl:p-4 shadow-lg md:shadow-xl lg:shadow-2xl transition-all duration-300 overflow-hidden">
+          <div className={`relative bg-glass-gradient backdrop-blur-2xl border border-white/20 rounded-lg md:rounded-xl lg:rounded-2xl shadow-lg md:shadow-xl lg:shadow-2xl transition-all duration-300 overflow-hidden ${
+            isScrolled 
+              ? 'p-1 sm:p-1.5 md:p-2 lg:p-2.5 xl:p-3' 
+              : 'p-1.5 sm:p-2 md:p-2.5 lg:p-3 xl:p-4'
+          }`}>
             {/* Simplified liquid glass background for mobile */}
             <div className="absolute inset-0 bg-liquid-gradient opacity-30 md:opacity-40 group-hover:opacity-50 md:group-hover:opacity-60 transition-opacity duration-300 rounded-lg md:rounded-xl lg:rounded-2xl"></div>
             <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/15 md:from-white/20 to-transparent rounded-t-lg md:rounded-t-xl lg:rounded-t-2xl"></div>
@@ -76,7 +95,11 @@ const Header = () => {
             <img 
               src={logoMobilaNomad} 
               alt="Mobila Nomad Logo"
-              className="h-6 w-auto sm:h-7 md:h-9 lg:h-11 xl:h-14 drop-shadow-lg md:drop-shadow-xl lg:drop-shadow-2xl transition-transform duration-200 group-hover:scale-105 md:group-hover:scale-110 relative z-10"
+              className={`w-auto drop-shadow-lg md:drop-shadow-xl lg:drop-shadow-2xl transition-all duration-300 group-hover:scale-105 md:group-hover:scale-110 relative z-10 ${
+                isScrolled 
+                  ? 'h-5 sm:h-6 md:h-7 lg:h-9 xl:h-11' 
+                  : 'h-6 sm:h-7 md:h-9 lg:h-11 xl:h-14'
+              }`}
               loading="eager"
             />
             
