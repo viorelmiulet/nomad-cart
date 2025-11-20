@@ -62,7 +62,15 @@ export function AdminSupportChat() {
         },
         (payload) => {
           if (payload.eventType === 'INSERT') {
-            setMessages(prev => [payload.new as SupportMessage, ...prev]);
+            const newMessage = payload.new as SupportMessage;
+            setMessages(prev => [newMessage, ...prev]);
+            
+            // Show toast notification for new message
+            toast({
+              title: "Mesaj nou de support!",
+              description: `${newMessage.user_name} - ${newMessage.message.substring(0, 50)}${newMessage.message.length > 50 ? '...' : ''}`,
+              duration: 5000,
+            });
           } else if (payload.eventType === 'UPDATE') {
             setMessages(prev => 
               prev.map(msg => 
