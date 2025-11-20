@@ -105,6 +105,8 @@ const AdminPage = () => {
   const [userRoles, setUserRoles] = useState<any[]>([]);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
+  const [editingPriceId, setEditingPriceId] = useState<string | null>(null);
+  const [tempPrice, setTempPrice] = useState<string>("");
   
   // Filter states
   const [searchQuery, setSearchQuery] = useState("");
@@ -515,6 +517,55 @@ const AdminPage = () => {
     setFilterStatus("all");
     setFilterMinPrice("");
     setFilterMaxPrice("");
+  };
+
+  // Handle inline price edit
+  const handleStartPriceEdit = (productId: string, currentPrice: number) => {
+    setEditingPriceId(productId);
+    setTempPrice(currentPrice.toString());
+  };
+
+  const handleSavePriceEdit = async (productId: string) => {
+    const newPrice = parseFloat(tempPrice);
+    
+    if (isNaN(newPrice) || newPrice < 0) {
+      toast({
+        title: "Eroare",
+        description: "Te rog să introduci un preț valid.",
+        variant: "destructive",
+      });
+      setEditingPriceId(null);
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('products')
+        .update({ price: newPrice })
+        .eq('id', productId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Succes",
+        description: "Prețul a fost actualizat!",
+      });
+
+      setEditingPriceId(null);
+      fetchData();
+    } catch (error) {
+      console.error('Error updating price:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-a putut actualiza prețul.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleCancelPriceEdit = () => {
+    setEditingPriceId(null);
+    setTempPrice("");
   };
 
   // Toggle select individual product
@@ -1333,7 +1384,50 @@ const AdminPage = () => {
                         </TableCell>
                         <TableCell className="font-medium">{product.name}</TableCell>
                         <TableCell>{product.categories?.name || 'N/A'}</TableCell>
-                        <TableCell>{product.price} RON</TableCell>
+                        <TableCell>
+                          {editingPriceId === product.id ? (
+                            <div className="flex items-center gap-2">
+                              <Input
+                                type="number"
+                                step="0.01"
+                                value={tempPrice}
+                                onChange={(e) => setTempPrice(e.target.value)}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    handleSavePriceEdit(product.id);
+                                  } else if (e.key === 'Escape') {
+                                    handleCancelPriceEdit();
+                                  }
+                                }}
+                                className="w-24 h-8"
+                                autoFocus
+                              />
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleSavePriceEdit(product.id)}
+                                className="h-8 px-2"
+                              >
+                                ✓
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={handleCancelPriceEdit}
+                                className="h-8 px-2"
+                              >
+                                ✕
+                              </Button>
+                            </div>
+                          ) : (
+                            <div
+                              className="cursor-pointer hover:bg-muted/50 rounded px-2 py-1 inline-block"
+                              onClick={() => handleStartPriceEdit(product.id, product.price)}
+                            >
+                              {product.price} RON
+                            </div>
+                          )}
+                        </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <Input
