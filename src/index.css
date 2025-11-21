@@ -164,4 +164,41 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: hsl(var(--brand-gold) / 0.8);
 }
+
+/* React Quill Editor Styles */
+.ql-toolbar {
+  @apply bg-background border-border rounded-t-lg;
 }
+
+.ql-container {
+  @apply bg-background border-border rounded-b-lg;
+  min-height: 300px;
+}
+
+.ql-editor {
+  @apply text-foreground;
+  min-height: 300px;
+}
+
+.ql-editor.ql-blank::before {
+  @apply text-muted-foreground;
+}
+
+.ql-snow .ql-stroke {
+  @apply stroke-foreground;
+}
+
+.ql-snow .ql-fill {
+  @apply fill-foreground;
+}
+
+.ql-snow .ql-picker-label {
+  @apply text-foreground;
+}
+
+.ql-toolbar.ql-snow .ql-picker-label:hover,
+.ql-toolbar.ql-snow .ql-picker-item:hover {
+  @apply text-primary;
+}
+}
+
