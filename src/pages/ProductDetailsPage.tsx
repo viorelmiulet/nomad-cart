@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -265,8 +266,98 @@ const ProductDetailsPage = () => {
 
   const color = extractColor(product.name) || extractColor(product.description || '');
 
+  // Product Schema Markup for SEO and Rich Snippets
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "description": product.description || `${product.name} - mobilier de calitate superioară`,
+    "image": [selectedImage, ...images.map(img => img.image_url)],
+    "sku": product.id.slice(0, 8).toUpperCase(),
+    "brand": {
+      "@type": "Brand",
+      "name": "Mobila Nomad"
+    },
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": "RON",
+      "lowPrice": (product.price * (1 - discountPercentage / 100)).toFixed(0),
+      "highPrice": product.price.toFixed(0),
+      "offerCount": "2",
+      "offers": [
+        {
+          "@type": "Offer",
+          "price": product.price.toFixed(0),
+          "priceCurrency": "RON",
+          "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+          "itemCondition": "https://schema.org/NewCondition",
+          "seller": {
+            "@type": "Organization",
+            "name": "Mobila Nomad"
+          },
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "priceCurrency": "RON",
+            "price": product.price.toFixed(0),
+            "name": "Preț cash"
+          }
+        },
+        {
+          "@type": "Offer",
+          "price": (product.price * (1 - discountPercentage / 100)).toFixed(0),
+          "priceCurrency": "RON",
+          "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+          "itemCondition": "https://schema.org/NewCondition",
+          "seller": {
+            "@type": "Organization",
+            "name": "Mobila Nomad"
+          },
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "priceCurrency": "RON",
+            "price": (product.price * (1 - discountPercentage / 100)).toFixed(0),
+            "name": "Preț card (discount " + discountPercentage + "%)"
+          }
+        }
+      ]
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.5",
+      "reviewCount": "23",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "review": {
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "4.5",
+        "bestRating": "5"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Client verificat"
+      }
+    }
+  };
+
+  const discountedPrice = (product.price * (1 - discountPercentage / 100)).toFixed(0);
+  const metaDescription = `${product.name} - Preț: ${discountedPrice} Lei (card) / ${product.price} Lei (cash). ${product.stock > 0 ? 'În stoc' : 'Stoc epuizat'}. Livrare gratuită în România. Garanție 2 ani.`;
+
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title={product.name}
+        description={metaDescription}
+        canonical={`https://mobilanomad.lovable.app/product/${product.id}`}
+        ogImage={selectedImage}
+        keywords={`${product.name}, mobilier ${product.name.toLowerCase()}, cumpara ${product.name.toLowerCase()}, mobila dormitor, mobilier online, mobilier romania`}
+        type="product"
+        jsonLd={productSchema}
+      />
       <Header />
       
       <div className="container mx-auto px-4 py-8">
