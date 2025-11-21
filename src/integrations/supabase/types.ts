@@ -271,6 +271,59 @@ export type Database = {
           },
         ]
       }
+      product_reviews: {
+        Row: {
+          comment: string
+          created_at: string | null
+          id: string
+          images: string[] | null
+          is_verified_purchase: boolean | null
+          product_id: string
+          rating: number
+          status: string
+          updated_at: string | null
+          user_email: string
+          user_id: string | null
+          user_name: string
+        }
+        Insert: {
+          comment: string
+          created_at?: string | null
+          id?: string
+          images?: string[] | null
+          is_verified_purchase?: boolean | null
+          product_id: string
+          rating: number
+          status?: string
+          updated_at?: string | null
+          user_email: string
+          user_id?: string | null
+          user_name: string
+        }
+        Update: {
+          comment?: string
+          created_at?: string | null
+          id?: string
+          images?: string[] | null
+          is_verified_purchase?: boolean | null
+          product_id?: string
+          rating?: number
+          status?: string
+          updated_at?: string | null
+          user_email?: string
+          user_id?: string | null
+          user_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           category_id: string | null

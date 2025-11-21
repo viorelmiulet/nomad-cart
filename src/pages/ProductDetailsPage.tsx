@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import { ProductReviews } from "@/components/ProductReviews";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -56,6 +57,8 @@ const ProductDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
+  const [averageRating, setAverageRating] = useState(4.5);
+  const [reviewCount, setReviewCount] = useState(23);
 
   useEffect(() => {
     if (!id) return;
@@ -266,6 +269,13 @@ const ProductDetailsPage = () => {
 
   const color = extractColor(product.name) || extractColor(product.description || '');
 
+  const handleReviewsLoaded = (reviews: any[], avgRating: number) => {
+    setReviewCount(reviews.length);
+    if (reviews.length > 0) {
+      setAverageRating(avgRating);
+    }
+  };
+
   // Product Schema Markup for SEO and Rich Snippets
   const productSchema = {
     "@context": "https://schema.org",
@@ -323,25 +333,13 @@ const ProductDetailsPage = () => {
         }
       ]
     },
-    "aggregateRating": {
+    "aggregateRating": reviewCount > 0 ? {
       "@type": "AggregateRating",
-      "ratingValue": "4.5",
-      "reviewCount": "23",
+      "ratingValue": averageRating.toFixed(1),
+      "reviewCount": reviewCount.toString(),
       "bestRating": "5",
       "worstRating": "1"
-    },
-    "review": {
-      "@type": "Review",
-      "reviewRating": {
-        "@type": "Rating",
-        "ratingValue": "4.5",
-        "bestRating": "5"
-      },
-      "author": {
-        "@type": "Person",
-        "name": "Client verificat"
-      }
-    }
+    } : undefined
   };
 
   const discountedPrice = (product.price * (1 - discountPercentage / 100)).toFixed(0);
@@ -431,19 +429,23 @@ const ProductDetailsPage = () => {
             </h1>
 
             {/* Rating */}
-            <div className="flex items-center gap-2">
-              <div className="flex items-center">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`h-5 w-5 ${
-                      i < 4.5 ? "text-brand-gold fill-current" : "text-gray-300"
-                    }`}
-                  />
-                ))}
+            {reviewCount > 0 && (
+              <div className="flex items-center gap-2">
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-5 w-5 ${
+                        i < Math.round(averageRating) ? "text-brand-gold fill-current" : "text-gray-300"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-sm text-muted-foreground">
+                  ({averageRating.toFixed(1)}/5 • {reviewCount} {reviewCount === 1 ? 'recenzie' : 'recenzii'})
+                </span>
               </div>
-              <span className="text-sm text-muted-foreground">(4.5/5 • 23 recenzii)</span>
-            </div>
+            )}
 
             {/* Price */}
             <div className="space-y-2">
@@ -606,6 +608,14 @@ const ProductDetailsPage = () => {
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Product Reviews Section */}
+        <div className="mt-16">
+          <ProductReviews 
+            productId={product.id} 
+            onReviewsLoaded={handleReviewsLoaded}
+          />
         </div>
       </div>
 
