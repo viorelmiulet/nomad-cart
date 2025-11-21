@@ -6,6 +6,7 @@ import { AdminSupportChat } from "@/components/AdminSupportChat";
 import { CompanyInfoEditor } from "@/components/CompanyInfoEditor";
 import { GoogleAnalyticsDashboard } from "@/components/GoogleAnalyticsDashboard";
 import { DiscountSettings } from "@/components/DiscountSettings";
+import { DiscountCodes } from "@/components/DiscountCodes";
 import { SupportStatsDashboard } from "@/components/SupportStatsDashboard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -1777,8 +1778,9 @@ const AdminPage = () => {
           </TabsContent>
 
           {/* Discount Settings Tab */}
-          <TabsContent value="discount">
+          <TabsContent value="discount" className="space-y-6">
             <DiscountSettings />
+            <DiscountCodes />
           </TabsContent>
 
           {/* Settings Tab */}
