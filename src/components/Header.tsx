@@ -68,7 +68,7 @@ const Header = ({ onSearchOpenChange }: HeaderProps) => {
   };
 
   return (
-    <header className={`sticky top-0 z-50 w-full bg-hero-gradient backdrop-blur-xl border-b border-brand-gold/20 shadow-2xl relative overflow-hidden transition-all duration-300 ${
+    <header className={`sticky top-0 z-50 w-full bg-hero-gradient backdrop-blur-xl border-b border-brand-gold/20 shadow-2xl relative transition-all duration-300 ${
       isScrolled ? 'py-1' : 'py-0'
     }`}>
       <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95"></div>
