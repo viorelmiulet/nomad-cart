@@ -24,7 +24,8 @@ const CheckoutPage = () => {
   const [appliedDiscount, setAppliedDiscount] = useState<{
     id: string;
     code: string;
-    percentage: number;
+    type: 'percentage' | 'fixed';
+    value: number;
   } | null>(null);
   const [checkingCode, setCheckingCode] = useState(false);
   const [customerData, setCustomerData] = useState({
@@ -103,12 +104,17 @@ const CheckoutPage = () => {
       setAppliedDiscount({
         id: data.id,
         code: data.code,
-        percentage: data.discount_percentage
+        type: data.discount_type as 'percentage' | 'fixed',
+        value: data.discount_value
       });
 
+      const discountText = data.discount_type === 'percentage' 
+        ? `${data.discount_value}%` 
+        : `${data.discount_value} RON`;
+      
       toast({
         title: "Cod aplicat!",
-        description: `Reducere de ${data.discount_percentage}% aplicată.`,
+        description: `Reducere de ${discountText} aplicată.`,
       });
     } catch (error) {
       console.error("Error applying discount code:", error);
@@ -136,7 +142,11 @@ const CheckoutPage = () => {
     
     // Apply discount code first
     if (appliedDiscount) {
-      total = total * (1 - appliedDiscount.percentage / 100);
+      if (appliedDiscount.type === 'percentage') {
+        total = total * (1 - appliedDiscount.value / 100);
+      } else {
+        total = Math.max(0, total - appliedDiscount.value);
+      }
     }
     
     // Then apply card payment discount
@@ -151,7 +161,11 @@ const CheckoutPage = () => {
     if (paymentMethod === 'card') {
       let baseTotal = getTotalPrice();
       if (appliedDiscount) {
-        baseTotal = baseTotal * (1 - appliedDiscount.percentage / 100);
+        if (appliedDiscount.type === 'percentage') {
+          baseTotal = baseTotal * (1 - appliedDiscount.value / 100);
+        } else {
+          baseTotal = Math.max(0, baseTotal - appliedDiscount.value);
+        }
       }
       return baseTotal * 0.05;
     }
@@ -160,7 +174,11 @@ const CheckoutPage = () => {
 
   const getCodeDiscount = () => {
     if (appliedDiscount) {
-      return getTotalPrice() * (appliedDiscount.percentage / 100);
+      if (appliedDiscount.type === 'percentage') {
+        return getTotalPrice() * (appliedDiscount.value / 100);
+      } else {
+        return Math.min(appliedDiscount.value, getTotalPrice());
+      }
     }
     return 0;
   };
@@ -208,7 +226,7 @@ const CheckoutPage = () => {
           customer_address: fullAddress,
           total: getDiscountedPrice(),
           discount_code_id: appliedDiscount?.id || null,
-          discount_percentage: appliedDiscount?.percentage || 0,
+          discount_percentage: appliedDiscount?.type === 'percentage' ? appliedDiscount.value : 0,
           discount_amount: getCodeDiscount() + getCardDiscount(),
           status: 'pending'
         };
@@ -280,7 +298,7 @@ const CheckoutPage = () => {
           customer_address: fullAddress,
           total: getDiscountedPrice(),
           discount_code_id: appliedDiscount?.id || null,
-          discount_percentage: appliedDiscount?.percentage || 0,
+          discount_percentage: appliedDiscount?.type === 'percentage' ? appliedDiscount.value : 0,
           discount_amount: getCodeDiscount() + getCardDiscount(),
           items: items
         };
@@ -522,7 +540,9 @@ const CheckoutPage = () => {
                         {appliedDiscount.code}
                       </span>
                       <span className="text-sm text-green-600 dark:text-green-400">
-                        (-{appliedDiscount.percentage}%)
+                        ({appliedDiscount.type === 'percentage' 
+                          ? `-${appliedDiscount.value}%` 
+                          : `-${appliedDiscount.value} RON`})
                       </span>
                     </div>
                     <Button
@@ -563,7 +583,11 @@ const CheckoutPage = () => {
                 
                 {appliedDiscount && (
                   <div className="flex justify-between text-green-600">
-                    <span>Cod reducere ({appliedDiscount.percentage}%):</span>
+                    <span>
+                      Cod reducere ({appliedDiscount.type === 'percentage' 
+                        ? `${appliedDiscount.value}%` 
+                        : `${appliedDiscount.value} RON`}):
+                    </span>
                     <span>-{getCodeDiscount().toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} RON</span>
                   </div>
                 )}

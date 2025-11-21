@@ -9,12 +9,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Ticket, Plus, Trash2, Copy, CheckCircle } from "lucide-react";
 
 interface DiscountCode {
   id: string;
   code: string;
+  discount_type: 'percentage' | 'fixed';
   discount_percentage: number;
+  discount_value: number;
   is_active: boolean;
   max_uses: number | null;
   current_uses: number;
@@ -31,7 +34,8 @@ export const DiscountCodes = () => {
 
   const [newCode, setNewCode] = useState({
     code: "",
-    discount_percentage: "",
+    discount_type: "percentage" as 'percentage' | 'fixed',
+    discount_value: "",
     max_uses: "",
     expires_at: "",
   });
@@ -49,7 +53,10 @@ export const DiscountCodes = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setCodes(data || []);
+      setCodes((data || []).map(code => ({
+        ...code,
+        discount_type: code.discount_type as 'percentage' | 'fixed'
+      })));
     } catch (error) {
       console.error("Error fetching discount codes:", error);
       toast({
@@ -72,29 +79,43 @@ export const DiscountCodes = () => {
   };
 
   const handleAddCode = async () => {
-    if (!newCode.code || !newCode.discount_percentage) {
+    if (!newCode.code || !newCode.discount_value) {
       toast({
         title: "Eroare",
-        description: "Codul și procentajul sunt obligatorii.",
+        description: "Codul și valoarea reducerii sunt obligatorii.",
         variant: "destructive",
       });
       return;
     }
 
-    const discountPercentage = parseInt(newCode.discount_percentage);
-    if (discountPercentage < 0 || discountPercentage > 100) {
-      toast({
-        title: "Eroare",
-        description: "Procentajul trebuie să fie între 0 și 100.",
-        variant: "destructive",
-      });
-      return;
+    const discountValue = parseFloat(newCode.discount_value);
+    
+    if (newCode.discount_type === 'percentage') {
+      if (discountValue < 0 || discountValue > 100) {
+        toast({
+          title: "Eroare",
+          description: "Procentajul trebuie să fie între 0 și 100.",
+          variant: "destructive",
+        });
+        return;
+      }
+    } else {
+      if (discountValue < 0) {
+        toast({
+          title: "Eroare",
+          description: "Suma fixă trebuie să fie pozitivă.",
+          variant: "destructive",
+        });
+        return;
+      }
     }
 
     try {
       const { error } = await supabase.from("discount_codes").insert({
         code: newCode.code.toUpperCase(),
-        discount_percentage: discountPercentage,
+        discount_type: newCode.discount_type,
+        discount_value: discountValue,
+        discount_percentage: newCode.discount_type === 'percentage' ? discountValue : 0,
         max_uses: newCode.max_uses ? parseInt(newCode.max_uses) : null,
         expires_at: newCode.expires_at || null,
       });
@@ -120,7 +141,8 @@ export const DiscountCodes = () => {
       setIsAddDialogOpen(false);
       setNewCode({
         code: "",
-        discount_percentage: "",
+        discount_type: "percentage",
+        discount_value: "",
         max_uses: "",
         expires_at: "",
       });
@@ -261,15 +283,33 @@ export const DiscountCodes = () => {
                   </div>
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="discount">Reducere (%)</Label>
+                  <Label htmlFor="discountType">Tip reducere</Label>
+                  <Select 
+                    value={newCode.discount_type} 
+                    onValueChange={(value: 'percentage' | 'fixed') => setNewCode({ ...newCode, discount_type: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="percentage">Procent (%)</SelectItem>
+                      <SelectItem value="fixed">Sumă fixă (RON)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="discount">
+                    {newCode.discount_type === 'percentage' ? 'Reducere (%)' : 'Reducere (RON)'}
+                  </Label>
                   <Input
                     id="discount"
                     type="number"
                     min="0"
-                    max="100"
-                    value={newCode.discount_percentage}
-                    onChange={(e) => setNewCode({ ...newCode, discount_percentage: e.target.value })}
-                    placeholder="20"
+                    max={newCode.discount_type === 'percentage' ? "100" : undefined}
+                    step={newCode.discount_type === 'percentage' ? "1" : "0.01"}
+                    value={newCode.discount_value}
+                    onChange={(e) => setNewCode({ ...newCode, discount_value: e.target.value })}
+                    placeholder={newCode.discount_type === 'percentage' ? "20" : "50.00"}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -341,7 +381,11 @@ export const DiscountCodes = () => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="secondary">{code.discount_percentage}%</Badge>
+                    <Badge variant="secondary">
+                      {code.discount_type === 'percentage' 
+                        ? `${code.discount_value}%` 
+                        : `${code.discount_value} RON`}
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     {code.current_uses} / {code.max_uses || "∞"}
