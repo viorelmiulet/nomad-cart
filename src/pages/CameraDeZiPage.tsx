@@ -96,14 +96,14 @@ const CameraDeZiPage = () => {
       <SEO 
         title="Camera de Zi - Canapele Colțare, Fotolii și Mobilier Living"
         description="Transformă-ți camera de zi într-un spațiu de lux cu mobilierul nostru de înaltă calitate. Canapele colțare confortabile, fotolii elegante și mese de cafea distinctive. Livrare gratuită."
-        canonical="https://mobilanomad.lovable.app/camera-de-zi"
+        canonical="https://mobilanomad.ro/camera-de-zi"
         keywords="mobilier living, canapele colțare, fotolii, mese de cafea, mobilier camera de zi, canapea extensibilă, living modern, canapea colț, mobilier living room"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           "name": "Camera de Zi - Mobila Nomad",
           "description": "Mobilier elegant pentru camera de zi: canapele colțare, fotolii și accesorii",
-          "url": "https://mobilanomad.lovable.app/camera-de-zi"
+          "url": "https://mobilanomad.ro/camera-de-zi"
         }}
       />
       <Header />

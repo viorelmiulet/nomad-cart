@@ -14,17 +14,29 @@ const SEO = ({
   title,
   description,
   canonical,
-  ogImage = 'https://mobilanomad.lovable.app/images/og-image.jpg',
+  ogImage = 'https://mobilanomad.ro/images/og-image.jpg',
   keywords,
   type = 'website',
   jsonLd,
 }: SEOProps) => {
   const fullTitle = `${title} | Mobila Nomad`;
-  const siteUrl = 'https://mobilanomad.lovable.app';
+  const siteUrl = 'https://mobilanomad.ro';
   const fullCanonical = canonical || siteUrl;
+  
+  // Detectează dacă suntem pe subdomeniului lovable și blochează indexarea
+  const isLovableSubdomain = typeof window !== 'undefined' && 
+    window.location.hostname.includes('lovable.app');
 
   return (
     <Helmet>
+      {/* Blochează indexarea pentru subdomeniile lovable.app */}
+      {isLovableSubdomain && (
+        <>
+          <meta name="robots" content="noindex, nofollow" />
+          <meta name="googlebot" content="noindex, nofollow" />
+        </>
+      )}
+      
       {/* Basic Meta Tags */}
       <title>{fullTitle}</title>
       <meta name="description" content={description} />

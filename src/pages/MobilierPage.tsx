@@ -82,14 +82,14 @@ const MobilierPage = () => {
       <SEO 
         title="Mobilier de Lux - Colecție Premium pentru Casă"
         description="Descoperă colecția noastră de mobilier de înaltă calitate. Biblioteci modulare, mese extensibile, dulapuri elegante și fotolii de lux. Design premium pentru casa ta."
-        canonical="https://mobilanomad.lovable.app/mobilier"
+        canonical="https://mobilanomad.ro/mobilier"
         keywords="mobilier lux, mobilier premium, mobilier design, biblioteci modulare, mese extensibile, dulapuri elegante, mobilier living premium, mobilier de calitate"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           "name": "Mobilier de Lux - Mobila Nomad",
           "description": "Colecție premium de mobilier pentru toate camerele",
-          "url": "https://mobilanomad.lovable.app/mobilier"
+          "url": "https://mobilanomad.ro/mobilier"
         }}
       />
       <Header />

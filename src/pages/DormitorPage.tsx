@@ -121,14 +121,14 @@ const DormitorPage = () => {
       <SEO 
         title="Mobilier Dormitor - Paturi, Dulapuri și Comode"
         description="Creează-ți dormitorul perfect cu mobilierul nostru de înaltă calitate. Paturi confortabile, dulapuri spațioase și saltele premium pentru un somn odihnitor. Livrare gratuită."
-        canonical="https://mobilanomad.lovable.app/dormitor"
+        canonical="https://mobilanomad.ro/dormitor"
         keywords="mobilier dormitor, paturi, dulapuri dormitor, comode, noptiere, dormitor complet, pat dublu, pat tapițat, mobilier dormitor modern"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           "name": "Dormitor - Mobila Nomad",
           "description": "Mobilier de calitate pentru dormitorul tău: paturi, dulapuri, comode și noptiere",
-          "url": "https://mobilanomad.lovable.app/dormitor"
+          "url": "https://mobilanomad.ro/dormitor"
         }}
       />
       <Header />

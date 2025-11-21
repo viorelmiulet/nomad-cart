@@ -95,14 +95,14 @@ const DormitorCompletPage = () => {
       <SEO 
         title="Dormitoare Complete - Seturi de Mobilier pentru Dormitor"
         description="Transformă-ți dormitorul într-un sanctuar de relaxare cu seturile noastre complete de mobilier. Design coerent, funcționalitate perfectă și prețuri avantajoase. Livrare gratuită."
-        canonical="https://mobilanomad.lovable.app/dormitor-complet"
+        canonical="https://mobilanomad.ro/dormitor-complet"
         keywords="dormitor complet, set dormitor, mobilier dormitor complet, dormitor matrimonial complet, dormitor tineret, mobilier dormitor seturi, dormitor complet ieftin, set pat dulap noptiere"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           "name": "Dormitoare Complete - Mobila Nomad",
           "description": "Seturi complete de mobilier pentru dormitor: paturi, dulapuri, comode și noptiere",
-          "url": "https://mobilanomad.lovable.app/dormitor-complet"
+          "url": "https://mobilanomad.ro/dormitor-complet"
         }}
       />
       <Header />

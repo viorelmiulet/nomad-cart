@@ -98,14 +98,14 @@ const BucatariePage = () => {
       <SEO 
         title="Bucătării Complete și Mobilier pentru Bucătărie"
         description="Descoperă colecția noastră de bucătării moderne și funcționale. Corpuri individuale, accesorii și electrocasnice pentru bucătăria ta de vis. Livrare gratuită în România."
-        canonical="https://mobilanomad.lovable.app/bucatarie"
+        canonical="https://mobilanomad.ro/bucatarie"
         keywords="bucătării complete, mobilier bucătărie, corpuri bucătărie, blat bucătărie, bucătărie modernă, bucătărie la comandă, bucătărie ieftină"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           "name": "Bucătării - Mobila Nomad",
           "description": "Mobilier și electrocasnice pentru bucătăria ta de vis. Design funcțional și calitate superioară.",
-          "url": "https://mobilanomad.lovable.app/bucatarie"
+          "url": "https://mobilanomad.ro/bucatarie"
         }}
       />
       <Header />

@@ -70,14 +70,14 @@ const ContactPage = () => {
       <SEO 
         title="Contact - Consultanță Gratuită pentru Mobilier"
         description="Contactează-ne pentru consultanță gratuită în design interior și mobilier. Echipa noastră de specialiști te va ajuta să alegi mobilierul perfect pentru casa ta. Răspuns în 24h."
-        canonical="https://mobilanomad.lovable.app/contact"
+        canonical="https://mobilanomad.ro/contact"
         keywords="contact mobilier, consultanță design interior, măsurători la domiciliu, livrare mobilier, servicii mobilier, asistență clienți mobilier"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "ContactPage",
           "name": "Contact - Mobila Nomad",
           "description": "Contactează-ne pentru consultanță gratuită",
-          "url": "https://mobilanomad.lovable.app/contact"
+          "url": "https://mobilanomad.ro/contact"
         }}
       />
       <Header />
