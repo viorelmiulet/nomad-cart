@@ -117,27 +117,25 @@ const SearchDialog = ({ onOpenChange }: SearchDialogProps) => {
           <span className="sr-only">Deschide căutarea</span>
         </Button>
       ) : (
-        <div className="relative flex items-center gap-1.5 flex-1 max-w-md">
-          <div className="flex items-center gap-1.5 flex-1">
-            <div className="flex-1 relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-brand-gold/80 pointer-events-none z-10" />
-              <Input
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Caută produse..."
-                className="relative z-20 pl-8 pr-3 h-8 bg-glass-gradient backdrop-blur-lg border border-white/20 text-brand-cream placeholder:text-brand-cream/60 focus:border-brand-gold/50 focus:ring-2 focus:ring-brand-gold/30 rounded-lg text-xs shadow-xl font-inter"
-                autoFocus
-              />
-            </div>
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={handleClose}
-              className="min-w-[32px] min-h-[32px] h-8 w-8 bg-glass-gradient backdrop-blur-lg border border-white/20 rounded-lg text-white/80 hover:text-brand-gold hover:bg-white/10 transition-all duration-300 flex-shrink-0"
-            >
-              <X className="h-3.5 w-3.5" />
-            </Button>
+        <div className="relative flex items-center gap-1.5 max-w-md">
+          <div className="flex-1 relative">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-brand-gold/80 pointer-events-none z-10" />
+            <Input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Caută produse..."
+              className="relative z-20 pl-8 pr-3 h-8 bg-glass-gradient backdrop-blur-lg border border-white/20 text-brand-cream placeholder:text-brand-cream/60 focus:border-brand-gold/50 focus:ring-2 focus:ring-brand-gold/30 rounded-lg text-xs shadow-xl font-inter"
+              autoFocus
+            />
           </div>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={handleClose}
+            className="min-w-[32px] min-h-[32px] h-8 w-8 bg-glass-gradient backdrop-blur-lg border border-white/20 rounded-lg text-white/80 hover:text-brand-gold hover:bg-white/10 transition-all duration-300 flex-shrink-0"
+          >
+            <X className="h-3.5 w-3.5" />
+          </Button>
 
           {/* Search Results Dropdown */}
           {debouncedSearch && (
