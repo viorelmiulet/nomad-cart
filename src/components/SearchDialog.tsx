@@ -86,8 +86,17 @@ const SearchDialog = () => {
   };
 
   return (
-    <div ref={searchRef} className="relative">
-      {!isOpen ? (
+    <>
+      {/* Backdrop */}
+      {isOpen && debouncedSearch && (
+        <div 
+          className="fixed inset-0 bg-brand-dark/80 backdrop-blur-sm z-[150]"
+          onClick={handleClose}
+        />
+      )}
+      
+      <div ref={searchRef} className="relative z-[160]">
+        {!isOpen ? (
         <Button 
           size="icon" 
           variant="ghost"
@@ -193,7 +202,8 @@ const SearchDialog = () => {
           )}
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 };
 
