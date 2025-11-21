@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { CreditCard, Banknote } from "lucide-react";
+import { CreditCard, Banknote, X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const CheckoutPage = () => {
@@ -20,6 +20,13 @@ const CheckoutPage = () => {
   
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash'>('card');
   const [loading, setLoading] = useState(false);
+  const [discountCode, setDiscountCode] = useState('');
+  const [appliedDiscount, setAppliedDiscount] = useState<{
+    id: string;
+    code: string;
+    percentage: number;
+  } | null>(null);
+  const [checkingCode, setCheckingCode] = useState(false);
   const [customerData, setCustomerData] = useState({
     firstName: '',
     lastName: '',
@@ -42,17 +49,118 @@ const CheckoutPage = () => {
     }
   }, [items, navigate]);
 
-  const getDiscountedPrice = () => {
-    const total = getTotalPrice();
-    if (paymentMethod === 'card') {
-      return total * 0.95; // 5% discount for card payments
+  const applyDiscountCode = async () => {
+    if (!discountCode.trim()) {
+      toast({
+        title: "Eroare",
+        description: "Introduceți un cod de reducere.",
+        variant: "destructive"
+      });
+      return;
     }
+
+    setCheckingCode(true);
+
+    try {
+      const { data, error } = await supabase
+        .from('discount_codes')
+        .select('*')
+        .eq('code', discountCode.toUpperCase())
+        .eq('is_active', true)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (!data) {
+        toast({
+          title: "Cod invalid",
+          description: "Codul introdus nu este valid sau nu este activ.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Check if expired
+      if (data.expires_at && new Date(data.expires_at) < new Date()) {
+        toast({
+          title: "Cod expirat",
+          description: "Acest cod de reducere a expirat.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Check if max uses reached
+      if (data.max_uses !== null && data.current_uses >= data.max_uses) {
+        toast({
+          title: "Cod indisponibil",
+          description: "Acest cod de reducere a fost folosit de numărul maxim de ori.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      setAppliedDiscount({
+        id: data.id,
+        code: data.code,
+        percentage: data.discount_percentage
+      });
+
+      toast({
+        title: "Cod aplicat!",
+        description: `Reducere de ${data.discount_percentage}% aplicată.`,
+      });
+    } catch (error) {
+      console.error("Error applying discount code:", error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-a putut aplica codul de reducere.",
+        variant: "destructive"
+      });
+    } finally {
+      setCheckingCode(false);
+    }
+  };
+
+  const removeDiscountCode = () => {
+    setAppliedDiscount(null);
+    setDiscountCode('');
+    toast({
+      title: "Cod eliminat",
+      description: "Codul de reducere a fost eliminat.",
+    });
+  };
+
+  const getDiscountedPrice = () => {
+    let total = getTotalPrice();
+    
+    // Apply discount code first
+    if (appliedDiscount) {
+      total = total * (1 - appliedDiscount.percentage / 100);
+    }
+    
+    // Then apply card payment discount
+    if (paymentMethod === 'card') {
+      total = total * 0.95; // 5% discount for card payments
+    }
+    
     return total;
   };
 
-  const getDiscount = () => {
+  const getCardDiscount = () => {
     if (paymentMethod === 'card') {
-      return getTotalPrice() * 0.05;
+      let baseTotal = getTotalPrice();
+      if (appliedDiscount) {
+        baseTotal = baseTotal * (1 - appliedDiscount.percentage / 100);
+      }
+      return baseTotal * 0.05;
+    }
+    return 0;
+  };
+
+  const getCodeDiscount = () => {
+    if (appliedDiscount) {
+      return getTotalPrice() * (appliedDiscount.percentage / 100);
     }
     return 0;
   };
@@ -98,7 +206,10 @@ const CheckoutPage = () => {
           customer_email: customerData.email,
           customer_phone: customerData.phone,
           customer_address: fullAddress,
-          total: getTotalPrice(),
+          total: getDiscountedPrice(),
+          discount_code_id: appliedDiscount?.id || null,
+          discount_percentage: appliedDiscount?.percentage || 0,
+          discount_amount: getCodeDiscount() + getCardDiscount(),
           status: 'pending'
         };
         
@@ -138,6 +249,22 @@ const CheckoutPage = () => {
         
         console.log("Order items created successfully");
 
+        // Increment discount code usage if applied
+        if (appliedDiscount) {
+          const { data: discountData } = await supabase
+            .from('discount_codes')
+            .select('current_uses')
+            .eq('id', appliedDiscount.id)
+            .single();
+          
+          if (discountData) {
+            await supabase
+              .from('discount_codes')
+              .update({ current_uses: discountData.current_uses + 1 })
+              .eq('id', appliedDiscount.id);
+          }
+        }
+
         clearCart();
         toast({
           title: "Comandă plasată",
@@ -151,7 +278,10 @@ const CheckoutPage = () => {
           customer_email: customerData.email,
           customer_phone: customerData.phone,
           customer_address: fullAddress,
-          total: getTotalPrice(),
+          total: getDiscountedPrice(),
+          discount_code_id: appliedDiscount?.id || null,
+          discount_percentage: appliedDiscount?.percentage || 0,
+          discount_amount: getCodeDiscount() + getCardDiscount(),
           items: items
         };
 
@@ -382,6 +512,48 @@ const CheckoutPage = () => {
                 </div>
               </div>
 
+              {/* Discount Code Section */}
+              <div className="space-y-3 border-t pt-4">
+                <Label>Cod de reducere:</Label>
+                {appliedDiscount ? (
+                  <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono font-bold text-green-700 dark:text-green-300">
+                        {appliedDiscount.code}
+                      </span>
+                      <span className="text-sm text-green-600 dark:text-green-400">
+                        (-{appliedDiscount.percentage}%)
+                      </span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={removeDiscountCode}
+                      className="text-red-500 hover:text-red-700 h-8"
+                    >
+                      Elimină
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Introdu codul"
+                      value={discountCode}
+                      onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
+                      onKeyPress={(e) => e.key === 'Enter' && applyDiscountCode()}
+                      className="uppercase"
+                    />
+                    <Button
+                      variant="outline"
+                      onClick={applyDiscountCode}
+                      disabled={checkingCode || !discountCode.trim()}
+                    >
+                      {checkingCode ? "Verificare..." : "Aplică"}
+                    </Button>
+                  </div>
+                )}
+              </div>
+
               {/* Price Summary */}
               <div className="space-y-2 border-t pt-4">
                 <div className="flex justify-between">
@@ -389,16 +561,23 @@ const CheckoutPage = () => {
                   <span>{getTotalPrice().toLocaleString('ro-RO')} RON</span>
                 </div>
                 
+                {appliedDiscount && (
+                  <div className="flex justify-between text-green-600">
+                    <span>Cod reducere ({appliedDiscount.percentage}%):</span>
+                    <span>-{getCodeDiscount().toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} RON</span>
+                  </div>
+                )}
+                
                 {paymentMethod === 'card' && (
                   <div className="flex justify-between text-green-600">
                     <span>Discount card (5%):</span>
-                    <span>-{getDiscount().toLocaleString('ro-RO')} RON</span>
+                    <span>-{getCardDiscount().toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} RON</span>
                   </div>
                 )}
                 
                 <div className="flex justify-between text-lg font-bold border-t pt-2">
                   <span>Total:</span>
-                  <span>{getDiscountedPrice().toLocaleString('ro-RO')} RON</span>
+                  <span>{getDiscountedPrice().toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} RON</span>
                 </div>
               </div>
 

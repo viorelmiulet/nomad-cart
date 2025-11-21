@@ -31,11 +31,8 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_ANON_KEY") ?? ""
     );
 
-    // Calculate total amount (apply 5% discount for card payments)
-    let totalAmount = orderData.total;
-    if (paymentMethod === 'card') {
-      totalAmount = Math.round(totalAmount * 0.95); // 5% discount
-    }
+    // Total amount already includes all discounts from frontend
+    const totalAmount = orderData.total;
 
     // Convert RON to bani (smallest currency unit)
     const amountInBani = Math.round(totalAmount * 100);
@@ -64,7 +61,9 @@ serve(async (req) => {
       metadata: {
         order_data: JSON.stringify(orderData),
         payment_method: paymentMethod,
-        discount_applied: paymentMethod === 'card' ? '5%' : '0%'
+        discount_applied: paymentMethod === 'card' ? '5%' : '0%',
+        discount_code_id: orderData.discount_code_id || null,
+        discount_percentage: orderData.discount_percentage || 0
       }
     });
 
