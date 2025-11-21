@@ -141,7 +141,7 @@ const SearchDialog = ({ onOpenChange }: SearchDialogProps) => {
 
           {/* Search Results Dropdown */}
           {debouncedSearch && (
-            <div className="absolute top-full left-0 right-0 mt-1.5 bg-glass-gradient backdrop-blur-lg border border-white/10 rounded-lg p-2 shadow-2xl max-h-[60vh] overflow-y-auto custom-scrollbar z-[9999]">
+            <div className="absolute top-full left-0 right-0 mt-1.5 bg-glass-gradient backdrop-blur-lg border-2 border-brand-gold/30 rounded-lg p-2 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)] max-h-[60vh] overflow-y-auto custom-scrollbar z-[9999] animate-fade-in ring-1 ring-brand-gold/10">
               {isLoading ? (
                 <div className="text-center py-4">
                   <Loader2 className="h-8 w-8 text-brand-gold mx-auto mb-2 animate-spin" />
@@ -153,7 +153,7 @@ const SearchDialog = ({ onOpenChange }: SearchDialogProps) => {
                     <button
                       key={product.id}
                       onClick={() => handleProductClick(product.id)}
-                      className="w-full text-left p-2 bg-glass-gradient backdrop-blur-lg border border-white/20 hover:bg-white/10 rounded-lg transition-all duration-300 group shadow-lg hover:shadow-xl relative overflow-hidden active:scale-[0.98]"
+                      className="w-full text-left p-2 bg-glass-gradient backdrop-blur-lg border border-white/20 hover:border-brand-gold/40 hover:bg-white/10 rounded-lg transition-all duration-300 group shadow-lg hover:shadow-2xl hover:shadow-brand-gold/20 relative overflow-hidden active:scale-[0.98]"
                     >
                       <div className="flex items-center space-x-2 relative z-10">
                         <div className="relative flex-shrink-0">
