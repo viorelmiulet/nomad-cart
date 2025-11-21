@@ -65,84 +65,112 @@ export function GoogleAnalyticsDashboard() {
     try {
       const daysMap = { '1day': 1, '7days': 7, '30days': 30, '90days': 90 };
       const days = daysMap[range];
+      const endDate = new Date().toISOString().split('T')[0];
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - days);
+      const startDateStr = startDate.toISOString().split('T')[0];
 
-      // Fetch organic traffic (sessions with referrer from search engines)
-      const { data: analyticsData, error: analyticsError } = await supabase
-        .from('site_analytics')
-        .select('*')
-        .gte('created_at', startDate.toISOString())
-        .not('referrer', 'is', null);
-
-      if (analyticsError) throw analyticsError;
-
-      // Filter organic traffic
-      const organicData = analyticsData?.filter(item => 
-        item.referrer && /google|bing|yahoo|duckduckgo|yandex|baidu/i.test(item.referrer)
-      ) || [];
-
-      // Process daily organic traffic
-      const dailyTraffic = new Map<string, { sessions: Set<string>, users: Set<string> }>();
-      
-      organicData.forEach(item => {
-        const date = new Date(item.created_at).toLocaleDateString('ro-RO');
-        if (!dailyTraffic.has(date)) {
-          dailyTraffic.set(date, { sessions: new Set(), users: new Set() });
+      // Fetch data from GA4 for organic traffic over time
+      const { data: trafficData, error: trafficError } = await supabase.functions.invoke('fetch-ga4-data', {
+        body: {
+          startDate: startDateStr,
+          endDate: endDate,
+          metrics: ['sessions', 'activeUsers'],
+          dimensions: ['date', 'sessionDefaultChannelGroup']
         }
-        const dayData = dailyTraffic.get(date)!;
-        if (item.session_id) dayData.sessions.add(item.session_id);
-        if (item.user_id) dayData.users.add(item.user_id);
       });
 
-      const trafficArray: OrganicTrafficData[] = Array.from(dailyTraffic.entries())
-        .map(([date, data]) => ({
-          date,
-          sessions: data.sessions.size,
-          users: data.users.size,
-        }))
-        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      if (trafficError) throw trafficError;
+
+      // Process organic traffic data
+      const organicRows = trafficData?.rows?.filter((row: any) => 
+        row.dimensionValues[1]?.value === 'Organic Search'
+      ) || [];
+
+      const dailyTrafficMap = new Map<string, { sessions: number, users: number }>();
+      organicRows.forEach((row: any) => {
+        const dateStr = row.dimensionValues[0]?.value;
+        if (dateStr) {
+          const date = `${dateStr.substring(0, 4)}-${dateStr.substring(4, 6)}-${dateStr.substring(6, 8)}`;
+          const formattedDate = new Date(date).toLocaleDateString('ro-RO');
+          const sessions = parseInt(row.metricValues[0]?.value || '0');
+          const users = parseInt(row.metricValues[1]?.value || '0');
+          
+          if (!dailyTrafficMap.has(formattedDate)) {
+            dailyTrafficMap.set(formattedDate, { sessions: 0, users: 0 });
+          }
+          const existing = dailyTrafficMap.get(formattedDate)!;
+          existing.sessions += sessions;
+          existing.users += users;
+        }
+      });
+
+      const trafficArray: OrganicTrafficData[] = Array.from(dailyTrafficMap.entries())
+        .map(([date, data]) => ({ date, ...data }))
+        .sort((a, b) => {
+          const [dayA, monthA, yearA] = a.date.split('.').map(Number);
+          const [dayB, monthB, yearB] = b.date.split('.').map(Number);
+          return new Date(yearA, monthA - 1, dayA).getTime() - new Date(yearB, monthB - 1, dayB).getTime();
+        });
 
       setOrganicTraffic(trafficArray);
 
-      // Calculate landing pages
-      const pagesMap = new Map<string, { visits: number, sessions: Set<string> }>();
-      organicData.forEach(item => {
-        if (!pagesMap.has(item.page_path)) {
-          pagesMap.set(item.page_path, { visits: 0, sessions: new Set() });
+      // Fetch landing pages from GA4
+      const { data: pagesData, error: pagesError } = await supabase.functions.invoke('fetch-ga4-data', {
+        body: {
+          startDate: startDateStr,
+          endDate: endDate,
+          metrics: ['screenPageViews', 'sessions'],
+          dimensions: ['landingPage', 'sessionDefaultChannelGroup']
         }
-        const pageData = pagesMap.get(item.page_path)!;
-        pageData.visits++;
-        if (item.session_id) pageData.sessions.add(item.session_id);
       });
 
-      const topPages: LandingPage[] = Array.from(pagesMap.entries())
-        .map(([page, data]) => ({
-          page,
-          visits: data.visits,
-          sessions: data.sessions.size,
+      if (pagesError) throw pagesError;
+
+      const organicPages = pagesData?.rows?.filter((row: any) => 
+        row.dimensionValues[1]?.value === 'Organic Search'
+      ) || [];
+
+      const topPages: LandingPage[] = organicPages
+        .map((row: any) => ({
+          page: row.dimensionValues[0]?.value || '/',
+          visits: parseInt(row.metricValues[0]?.value || '0'),
+          sessions: parseInt(row.metricValues[1]?.value || '0'),
         }))
         .sort((a, b) => b.visits - a.visits)
         .slice(0, 10);
 
       setLandingPages(topPages);
 
-      // Calculate search engines
-      const enginesMap = new Map<string, number>();
-      organicData.forEach(item => {
-        if (item.referrer) {
-          const url = new URL(item.referrer);
-          const hostname = url.hostname.toLowerCase();
-          let engine = 'Other';
-          
-          if (hostname.includes('google')) engine = 'Google';
-          else if (hostname.includes('bing')) engine = 'Bing';
-          else if (hostname.includes('yahoo')) engine = 'Yahoo';
-          else if (hostname.includes('duckduckgo')) engine = 'DuckDuckGo';
-          else if (hostname.includes('yandex')) engine = 'Yandex';
-          
-          enginesMap.set(engine, (enginesMap.get(engine) || 0) + 1);
+      // Fetch search engines from GA4
+      const { data: sourcesData, error: sourcesError } = await supabase.functions.invoke('fetch-ga4-data', {
+        body: {
+          startDate: startDateStr,
+          endDate: endDate,
+          metrics: ['sessions'],
+          dimensions: ['sessionSource', 'sessionDefaultChannelGroup']
         }
+      });
+
+      if (sourcesError) throw sourcesError;
+
+      const organicSources = sourcesData?.rows?.filter((row: any) => 
+        row.dimensionValues[1]?.value === 'Organic Search'
+      ) || [];
+
+      const enginesMap = new Map<string, number>();
+      organicSources.forEach((row: any) => {
+        const source = (row.dimensionValues[0]?.value || '').toLowerCase();
+        const sessions = parseInt(row.metricValues[0]?.value || '0');
+        
+        let engine = 'Other';
+        if (source.includes('google')) engine = 'Google';
+        else if (source.includes('bing')) engine = 'Bing';
+        else if (source.includes('yahoo')) engine = 'Yahoo';
+        else if (source.includes('duckduckgo')) engine = 'DuckDuckGo';
+        else if (source.includes('yandex')) engine = 'Yandex';
+        
+        enginesMap.set(engine, (enginesMap.get(engine) || 0) + sessions);
       });
 
       const totalEngineVisits = Array.from(enginesMap.values()).reduce((sum, val) => sum + val, 0);
@@ -150,17 +178,33 @@ export function GoogleAnalyticsDashboard() {
         .map(([engine, visits]) => ({
           engine,
           visits,
-          percentage: (visits / totalEngineVisits) * 100,
+          percentage: totalEngineVisits > 0 ? (visits / totalEngineVisits) * 100 : 0,
         }))
         .sort((a, b) => b.visits - a.visits);
 
       setSearchEngines(enginesArray);
 
-      // Calculate device stats
+      // Fetch device stats from GA4
+      const { data: devicesData, error: devicesError } = await supabase.functions.invoke('fetch-ga4-data', {
+        body: {
+          startDate: startDateStr,
+          endDate: endDate,
+          metrics: ['sessions'],
+          dimensions: ['deviceCategory', 'sessionDefaultChannelGroup']
+        }
+      });
+
+      if (devicesError) throw devicesError;
+
+      const organicDevices = devicesData?.rows?.filter((row: any) => 
+        row.dimensionValues[1]?.value === 'Organic Search'
+      ) || [];
+
       const devicesMap = new Map<string, number>();
-      organicData.forEach(item => {
-        const device = item.device_type || 'desktop';
-        devicesMap.set(device, (devicesMap.get(device) || 0) + 1);
+      organicDevices.forEach((row: any) => {
+        const device = row.dimensionValues[0]?.value || 'desktop';
+        const sessions = parseInt(row.metricValues[0]?.value || '0');
+        devicesMap.set(device, (devicesMap.get(device) || 0) + sessions);
       });
 
       const totalDeviceVisits = Array.from(devicesMap.values()).reduce((sum, val) => sum + val, 0);
@@ -168,17 +212,19 @@ export function GoogleAnalyticsDashboard() {
         .map(([device, visits]) => ({
           device: device.charAt(0).toUpperCase() + device.slice(1),
           visits,
-          percentage: (visits / totalDeviceVisits) * 100,
+          percentage: totalDeviceVisits > 0 ? (visits / totalDeviceVisits) * 100 : 0,
         }))
         .sort((a, b) => b.visits - a.visits);
 
       setDeviceStats(devicesArray);
 
-      // Fetch conversions (orders)
+      // Fetch conversions from local database
+      const orderStartDate = new Date();
+      orderStartDate.setDate(orderStartDate.getDate() - days);
       const { data: ordersData, error: ordersError } = await supabase
         .from('orders')
         .select('*')
-        .gte('created_at', startDate.toISOString());
+        .gte('created_at', orderStartDate.toISOString());
 
       if (ordersError) throw ordersError;
 
@@ -196,25 +242,25 @@ export function GoogleAnalyticsDashboard() {
       });
 
       const conversionsArray: ConversionData[] = Array.from(dailyConversions.entries())
-        .map(([date, data]) => ({
-          date,
-          orders: data.orders,
-          revenue: data.revenue,
-        }))
-        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        .map(([date, data]) => ({ date, ...data }))
+        .sort((a, b) => {
+          const [dayA, monthA, yearA] = a.date.split('.').map(Number);
+          const [dayB, monthB, yearB] = b.date.split('.').map(Number);
+          return new Date(yearA, monthA - 1, dayA).getTime() - new Date(yearB, monthB - 1, dayB).getTime();
+        });
 
       setConversions(conversionsArray);
 
-      // Calculate total stats
-      const uniqueSessions = new Set(organicData.map(item => item.session_id).filter(Boolean));
-      const uniqueUsers = new Set(organicData.map(item => item.user_id).filter(Boolean));
+      // Calculate total stats from GA4 data
+      const totalSessions = trafficArray.reduce((sum, item) => sum + item.sessions, 0);
+      const totalUsers = trafficArray.reduce((sum, item) => sum + item.users, 0);
       const totalOrders = ordersData?.length || 0;
       const totalRevenue = ordersData?.reduce((sum, order) => sum + order.total, 0) || 0;
-      const conversionRate = uniqueSessions.size > 0 ? (totalOrders / uniqueSessions.size) * 100 : 0;
+      const conversionRate = totalSessions > 0 ? (totalOrders / totalSessions) * 100 : 0;
 
       setTotalStats({
-        organicSessions: uniqueSessions.size,
-        organicUsers: uniqueUsers.size,
+        organicSessions: totalSessions,
+        organicUsers: totalUsers,
         conversions: totalOrders,
         revenue: totalRevenue,
         conversionRate,
