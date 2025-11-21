@@ -123,7 +123,7 @@ const SearchDialog = () => {
 
           {/* Search Results Dropdown */}
           {debouncedSearch && (
-            <div className="absolute top-full left-0 right-0 mt-1.5 bg-glass-gradient backdrop-blur-lg border border-white/10 rounded-lg p-2 shadow-2xl max-h-[60vh] overflow-y-auto custom-scrollbar z-[100]">
+            <div className="absolute top-full left-0 right-0 mt-1.5 bg-glass-gradient backdrop-blur-lg border border-white/10 rounded-lg p-2 shadow-2xl max-h-[60vh] overflow-y-auto custom-scrollbar z-[200]">
               {isLoading ? (
                 <div className="text-center py-4">
                   <Loader2 className="h-8 w-8 text-brand-gold mx-auto mb-2 animate-spin" />
