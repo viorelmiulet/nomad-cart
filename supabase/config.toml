@@ -9,5 +9,11 @@ verify_jwt = false
 [functions.send-support-notification]
 verify_jwt = false
 
+[functions.send-order-status-email]
+verify_jwt = false
+
+[functions.send-custom-email]
+verify_jwt = false
+
 [functions.fetch-ga4-data]
 verify_jwt = true
