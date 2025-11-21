@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 
 export interface CartItem {
@@ -7,6 +7,13 @@ export interface CartItem {
   price: number;
   image: string;
   quantity: number;
+}
+
+export interface AppliedDiscount {
+  id: string;
+  code: string;
+  type: 'percentage' | 'fixed';
+  value: number;
 }
 
 interface CartContextType {
@@ -19,13 +26,34 @@ interface CartContextType {
   clearCart: () => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  appliedDiscount: AppliedDiscount | null;
+  setAppliedDiscount: (discount: AppliedDiscount | null) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [items, setItems] = useState<CartItem[]>(() => {
+    const saved = localStorage.getItem('cartItems');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [isOpen, setIsOpen] = useState(false);
+  const [appliedDiscount, setAppliedDiscount] = useState<AppliedDiscount | null>(() => {
+    const saved = localStorage.getItem('appliedDiscount');
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(items));
+  }, [items]);
+
+  useEffect(() => {
+    if (appliedDiscount) {
+      localStorage.setItem('appliedDiscount', JSON.stringify(appliedDiscount));
+    } else {
+      localStorage.removeItem('appliedDiscount');
+    }
+  }, [appliedDiscount]);
 
   const addItem = (product: Omit<CartItem, 'quantity'>) => {
     setItems(currentItems => {
@@ -82,6 +110,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const clearCart = () => {
     setItems([]);
+    setAppliedDiscount(null);
     toast({
       title: "Coș golit",
       description: "Toate produsele au fost eliminate din coș.",
@@ -98,7 +127,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       getTotalPrice,
       clearCart,
       isOpen,
-      setIsOpen
+      setIsOpen,
+      appliedDiscount,
+      setAppliedDiscount
     }}>
       {children}
     </CartContext.Provider>

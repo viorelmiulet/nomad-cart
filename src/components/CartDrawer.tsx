@@ -11,15 +11,9 @@ import { useDiscount } from "@/hooks/useDiscount";
 import { supabase } from "@/integrations/supabase/client";
 
 const CartDrawer = () => {
-  const { items, updateQuantity, removeItem, getTotalItems, getTotalPrice, clearCart, isOpen, setIsOpen } = useCart();
+  const { items, updateQuantity, removeItem, getTotalItems, getTotalPrice, clearCart, isOpen, setIsOpen, appliedDiscount, setAppliedDiscount } = useCart();
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash'>('card');
   const [discountCode, setDiscountCode] = useState('');
-  const [appliedDiscount, setAppliedDiscount] = useState<{
-    id: string;
-    code: string;
-    type: 'percentage' | 'fixed';
-    value: number;
-  } | null>(null);
   const [checkingCode, setCheckingCode] = useState(false);
   const { discountPercentage } = useDiscount();
   const navigate = useNavigate();

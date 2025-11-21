@@ -13,7 +13,7 @@ import { CreditCard, Banknote, X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const CheckoutPage = () => {
-  const { items, getTotalPrice, clearCart } = useCart();
+  const { items, getTotalPrice, clearCart, appliedDiscount, setAppliedDiscount } = useCart();
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -21,12 +21,6 @@ const CheckoutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash'>('card');
   const [loading, setLoading] = useState(false);
   const [discountCode, setDiscountCode] = useState('');
-  const [appliedDiscount, setAppliedDiscount] = useState<{
-    id: string;
-    code: string;
-    type: 'percentage' | 'fixed';
-    value: number;
-  } | null>(null);
   const [checkingCode, setCheckingCode] = useState(false);
   const [customerData, setCustomerData] = useState({
     firstName: '',
