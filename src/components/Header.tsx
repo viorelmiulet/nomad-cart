@@ -75,8 +75,8 @@ const Header = () => {
         isScrolled ? 'opacity-100 shadow-[0_0_20px_rgba(255,215,0,0.6)]' : 'opacity-0'
       }`}></div>
       
-      <div className={`container flex items-center justify-between relative z-10 px-4 transition-all duration-300 ${
-        isScrolled ? 'h-10 md:h-12 lg:h-14' : 'h-12 md:h-14 lg:h-16'
+      <div className={`container flex items-center justify-between relative z-10 px-6 md:px-8 lg:px-12 transition-all duration-300 ${
+        isScrolled ? 'h-14 md:h-16 lg:h-20' : 'h-16 md:h-20 lg:h-24'
       }`}>
         <Link
           to="/"
@@ -85,8 +85,8 @@ const Header = () => {
         >
           <div className={`relative bg-glass-gradient backdrop-blur-2xl border border-white/20 rounded-lg md:rounded-xl lg:rounded-2xl shadow-lg md:shadow-xl lg:shadow-2xl transition-all duration-300 overflow-hidden ${
             isScrolled 
-              ? 'p-1 sm:p-1.5 md:p-2 lg:p-2.5 xl:p-3' 
-              : 'p-1.5 sm:p-2 md:p-2.5 lg:p-3 xl:p-4'
+              ? 'p-2 sm:p-2.5 md:p-3 lg:p-3.5 xl:p-4' 
+              : 'p-2.5 sm:p-3 md:p-3.5 lg:p-4 xl:p-5'
           }`}>
             {/* Simplified liquid glass background for mobile */}
             <div className="absolute inset-0 bg-liquid-gradient opacity-30 md:opacity-40 group-hover:opacity-50 md:group-hover:opacity-60 transition-opacity duration-300 rounded-lg md:rounded-xl lg:rounded-2xl"></div>
@@ -103,8 +103,8 @@ const Header = () => {
               alt="Mobila Nomad Logo"
               className={`w-auto drop-shadow-lg md:drop-shadow-xl lg:drop-shadow-2xl transition-all duration-300 group-hover:scale-105 md:group-hover:scale-110 relative z-10 ${
                 isScrolled 
-                  ? 'h-5 sm:h-6 md:h-7 lg:h-9 xl:h-11' 
-                  : 'h-6 sm:h-7 md:h-9 lg:h-11 xl:h-14'
+                  ? 'h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16' 
+                  : 'h-10 sm:h-12 md:h-14 lg:h-16 xl:h-20'
               }`}
               loading="eager"
             />
