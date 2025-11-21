@@ -149,6 +149,45 @@ export type Database = {
         }
         Relationships: []
       }
+      email_history: {
+        Row: {
+          content: string
+          created_at: string
+          email_type: string
+          error_message: string | null
+          id: string
+          order_id: string | null
+          recipients: string[]
+          sent_by: string | null
+          status: string
+          subject: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          email_type: string
+          error_message?: string | null
+          id?: string
+          order_id?: string | null
+          recipients: string[]
+          sent_by?: string | null
+          status?: string
+          subject: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          email_type?: string
+          error_message?: string | null
+          id?: string
+          order_id?: string | null
+          recipients?: string[]
+          sent_by?: string | null
+          status?: string
+          subject?: string
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           created_at: string

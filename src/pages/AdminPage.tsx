@@ -9,6 +9,7 @@ import { DiscountSettings } from "@/components/DiscountSettings";
 import { DiscountCodes } from "@/components/DiscountCodes";
 import { SupportStatsDashboard } from "@/components/SupportStatsDashboard";
 import { CustomEmailSender } from "@/components/CustomEmailSender";
+import { EmailHistory } from "@/components/EmailHistory";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1121,12 +1122,13 @@ const AdminPage = () => {
 
         {/* Admin Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-9">
+          <TabsList className="grid w-full grid-cols-10">
             <TabsTrigger value="google-analytics">Analytics</TabsTrigger>
             <TabsTrigger value="products">Produse</TabsTrigger>
             <TabsTrigger value="orders">Comenzi</TabsTrigger>
             <TabsTrigger value="support">Suport Clienți</TabsTrigger>
-            <TabsTrigger value="email">Email Personalizat</TabsTrigger>
+            <TabsTrigger value="email">Email</TabsTrigger>
+            <TabsTrigger value="email-history">Istoric</TabsTrigger>
             <TabsTrigger value="users">Utilizatori</TabsTrigger>
             <TabsTrigger value="company">Companie</TabsTrigger>
             <TabsTrigger value="discount">Reduceri</TabsTrigger>
@@ -1777,6 +1779,11 @@ const AdminPage = () => {
           {/* Custom Email Tab */}
           <TabsContent value="email">
             <CustomEmailSender />
+          </TabsContent>
+
+          {/* Email History Tab */}
+          <TabsContent value="email-history">
+            <EmailHistory />
           </TabsContent>
 
           {/* Company Info Tab */}

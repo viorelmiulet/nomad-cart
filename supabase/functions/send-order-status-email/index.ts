@@ -1,7 +1,10 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
 
 const resendApiKey = Deno.env.get("RESEND_API_KEY");
 const resendFrom = Deno.env.get("RESEND_FROM") || "Mobila Nomad <onboarding@resend.dev>";
+const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -136,6 +139,24 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     console.log('Email sent successfully:', emailData);
+
+    // Save to email history
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    const emailContent = `Comanda #${orderNumber} - Status: ${statusDisplay}`;
+    const { error: historyError } = await supabase
+      .from('email_history')
+      .insert({
+        recipients: [customerEmail],
+        subject: `Actualizare comandă #${orderNumber}`,
+        content: emailContent,
+        email_type: 'order_status',
+        order_id: orderNumber,
+        status: 'sent'
+      });
+
+    if (historyError) {
+      console.error('Failed to save email history:', historyError);
+    }
 
     return new Response(JSON.stringify({ success: true, emailData }), {
       status: 200,
