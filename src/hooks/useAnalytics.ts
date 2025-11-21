@@ -64,6 +64,31 @@ export function useAnalytics() {
         if (error) {
           console.error('Error tracking page view:', error);
         }
+
+        // Track with Google Analytics if available
+        if (typeof window !== 'undefined' && (window as any).gtag) {
+          const gtag = (window as any).gtag;
+          
+          // Send page view to GA4
+          gtag('event', 'page_view', {
+            page_path: location.pathname,
+            page_title: document.title,
+            page_location: window.location.href,
+          });
+
+          // Track organic search traffic
+          const referrer = document.referrer;
+          if (referrer) {
+            const isOrganicSearch = /google|bing|yahoo|duckduckgo|yandex|baidu/i.test(referrer);
+            if (isOrganicSearch) {
+              gtag('event', 'organic_search_visit', {
+                search_engine: new URL(referrer).hostname,
+                landing_page: location.pathname,
+                referrer: referrer,
+              });
+            }
+          }
+        }
       } catch (error) {
         console.error('Error in analytics tracking:', error);
       }
