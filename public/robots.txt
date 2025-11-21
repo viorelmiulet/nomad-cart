@@ -1,14 +1,11 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
+# Robots.txt pentru mobilanomad.ro
+# Permite indexarea doar pentru domeniul principal
 
 User-agent: *
+# Permite toate paginile pentru domeniul mobilanomad.ro
 Allow: /
+
+# Sitemap
+Sitemap: https://mobilanomad.ro/sitemap.xml
+
+# Note: Subdomeniile lovable.app sunt blocate prin meta tag noindex

@@ -19,14 +19,14 @@ const Index = () => {
       <SEO 
         title="Mobilier de Calitate cu Livrare Gratuită"
         description="⭐ Magazin online de mobilier: canapele, paturi, mese, scaune pentru toate camerele. ✓ Livrare gratuită ✓ Prețuri accesibile ✓ Garanție extinsă. Comenzi WhatsApp: 0758433114"
-        canonical="https://mobilanomad.lovable.app/"
+        canonical="https://mobilanomad.ro/"
         keywords="mobilier online, canapele colt, paturi, mese bucătărie, scaune, dormitor complet, camera de zi, mobilier living, bucătării moderne, magazine mobilier România, mobilier ieftin, livrare gratuită mobilier"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "FurnitureStore",
           "name": "Mobila Nomad",
           "description": "Magazin online de mobilier de calitate cu livrare gratuită în România",
-          "url": "https://mobilanomad.lovable.app/",
+          "url": "https://mobilanomad.ro/",
           "telephone": "+40758433114",
           "priceRange": "$$",
           "address": {

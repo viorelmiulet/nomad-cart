@@ -350,7 +350,7 @@ const ProductDetailsPage = () => {
       <SEO
         title={product.name}
         description={metaDescription}
-        canonical={`https://mobilanomad.lovable.app/product/${product.id}`}
+        canonical={`https://mobilanomad.ro/product/${product.id}`}
         ogImage={selectedImage}
         keywords={`${product.name}, mobilier ${product.name.toLowerCase()}, cumpara ${product.name.toLowerCase()}, mobila dormitor, mobilier online, mobilier romania`}
         type="product"

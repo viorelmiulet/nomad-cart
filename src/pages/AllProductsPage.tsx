@@ -33,14 +33,14 @@ const AllProductsPage = () => {
       <SEO 
         title="Toate Produsele - Catalog Complet de Mobilier"
         description="Descoperă catalogul nostru complet de mobilier pentru toate camerele: dormitoare, camere de zi, bucătării și mobilier divers. Peste 500 de produse cu livrare gratuită în România."
-        canonical="https://mobilanomad.lovable.app/toate-produsele"
+        canonical="https://mobilanomad.ro/toate-produsele"
         keywords="catalog mobilier, toate produsele mobilier, magazine mobilier online, mobilier dormitor, mobilier living, mobilier bucătărie, mobilier complet casă"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           "name": "Toate Produsele - Mobila Nomad",
           "description": "Catalog complet de mobilier pentru casa ta",
-          "url": "https://mobilanomad.lovable.app/toate-produsele"
+          "url": "https://mobilanomad.ro/toate-produsele"
         }}
       />
       <Header />
