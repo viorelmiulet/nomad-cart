@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.send-support-notification]
 verify_jwt = false
+
+[functions.fetch-ga4-data]
+verify_jwt = true
