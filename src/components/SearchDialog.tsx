@@ -100,15 +100,15 @@ const SearchDialog = () => {
         
         <form onSubmit={handleSearch} className="space-y-4 md:space-y-8 relative z-10 px-2">
           <div className="relative group">
-            <Search className="absolute left-3 md:left-5 top-3 md:top-5 h-5 w-5 md:h-6 md:w-6 text-brand-gold/80 z-10" />
+            <Search className="absolute left-3 md:left-5 top-3 md:top-5 h-5 w-5 md:h-6 md:w-6 text-brand-gold/80 z-10 pointer-events-none" />
             <Input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Caută canapele, mese, paturi..."
-              className="pl-10 md:pl-14 pr-4 md:pr-6 h-12 md:h-16 bg-glass-gradient backdrop-blur-lg border border-white/20 text-brand-cream placeholder:text-brand-cream/60 focus:border-brand-gold/50 focus:ring-2 focus:ring-brand-gold/30 rounded-lg md:rounded-2xl text-base md:text-lg shadow-xl font-inter"
+              className="relative z-20 pl-10 md:pl-14 pr-4 md:pr-6 h-12 md:h-16 bg-glass-gradient backdrop-blur-lg border border-white/20 text-brand-cream placeholder:text-brand-cream/60 focus:border-brand-gold/50 focus:ring-2 focus:ring-brand-gold/30 rounded-lg md:rounded-2xl text-base md:text-lg shadow-xl font-inter"
               autoFocus
             />
-            <div className="absolute inset-0 bg-liquid-gradient opacity-10 group-focus-within:opacity-20 transition-opacity duration-300 rounded-lg md:rounded-2xl"></div>
+            <div className="absolute inset-0 bg-liquid-gradient opacity-10 group-focus-within:opacity-20 transition-opacity duration-300 rounded-lg md:rounded-2xl pointer-events-none"></div>
           </div>
           
           <div className="flex items-center justify-center text-brand-cream/60 text-sm">
