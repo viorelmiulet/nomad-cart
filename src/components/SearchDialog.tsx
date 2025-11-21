@@ -90,12 +90,12 @@ const SearchDialog = () => {
       {/* Backdrop */}
       {isOpen && debouncedSearch && (
         <div 
-          className="fixed inset-0 bg-brand-dark/80 backdrop-blur-sm z-[150]"
+          className="fixed inset-0 bg-brand-dark/80 backdrop-blur-sm z-[9998]"
           onClick={handleClose}
         />
       )}
       
-      <div ref={searchRef} className="relative z-[160]">
+      <div ref={searchRef} className="relative z-[9999]">
         {!isOpen ? (
         <Button 
           size="icon" 
@@ -132,7 +132,7 @@ const SearchDialog = () => {
 
           {/* Search Results Dropdown */}
           {debouncedSearch && (
-            <div className="absolute top-full left-0 right-0 mt-1.5 bg-glass-gradient backdrop-blur-lg border border-white/10 rounded-lg p-2 shadow-2xl max-h-[60vh] overflow-y-auto custom-scrollbar z-[200]">
+            <div className="absolute top-full left-0 right-0 mt-1.5 bg-glass-gradient backdrop-blur-lg border border-white/10 rounded-lg p-2 shadow-2xl max-h-[60vh] overflow-y-auto custom-scrollbar z-[9999]">
               {isLoading ? (
                 <div className="text-center py-4">
                   <Loader2 className="h-8 w-8 text-brand-gold mx-auto mb-2 animate-spin" />
