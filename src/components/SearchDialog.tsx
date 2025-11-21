@@ -9,13 +9,22 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
-const SearchDialog = () => {
+interface SearchDialogProps {
+  onOpenChange?: (isOpen: boolean) => void;
+}
+
+const SearchDialog = ({ onOpenChange }: SearchDialogProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const { discountPercentage } = useDiscount();
   const navigate = useNavigate();
   const searchRef = useRef<HTMLDivElement>(null);
+
+  // Notify parent when search dialog opens/closes
+  useEffect(() => {
+    onOpenChange?.(!isOpen);
+  }, [isOpen, onOpenChange]);
 
   // Close search when clicking outside
   useEffect(() => {

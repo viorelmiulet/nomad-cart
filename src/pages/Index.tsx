@@ -6,9 +6,11 @@ import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Index = () => {
   const navigate = useNavigate();
+  const [showPromoBanner, setShowPromoBanner] = useState(true);
 
   const handleViewAllProducts = () => {
     navigate("/toate-produsele");
@@ -35,8 +37,8 @@ const Index = () => {
           }
         }}
       />
-      <Header />
-      <PromoBanner />
+      <Header onSearchOpenChange={setShowPromoBanner} />
+      {showPromoBanner && <PromoBanner />}
       <Hero />
       <section className="py-20 bg-hero-gradient relative overflow-hidden" aria-labelledby="popular-products-heading">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95" aria-hidden="true"></div>
