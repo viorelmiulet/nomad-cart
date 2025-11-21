@@ -51,6 +51,9 @@ serve(async (req) => {
         customer_phone: orderData.customer_phone,
         customer_address: orderData.customer_address,
         total: session.amount_total / 100, // Convert back from bani to RON
+        discount_code_id: orderData.discount_code_id || null,
+        discount_percentage: orderData.discount_percentage || 0,
+        discount_amount: orderData.discount_amount || 0,
         status: 'paid'
       }])
       .select()
@@ -76,7 +79,25 @@ serve(async (req) => {
 
     console.log("Order items created");
 
-    return new Response(JSON.stringify({ 
+    // Increment discount code usage if applied
+    if (orderData.discount_code_id) {
+      const { data: discountData } = await supabaseClient
+        .from('discount_codes')
+        .select('current_uses')
+        .eq('id', orderData.discount_code_id)
+        .single();
+      
+      if (discountData) {
+        await supabaseClient
+          .from('discount_codes')
+          .update({ current_uses: discountData.current_uses + 1 })
+          .eq('id', orderData.discount_code_id);
+        
+        console.log("Discount code usage incremented");
+      }
+    }
+
+    return new Response(JSON.stringify({
       success: true, 
       order_id: orderRecord.id,
       payment_method: paymentMethod,

@@ -192,6 +192,9 @@ export type Database = {
           customer_email: string
           customer_name: string
           customer_phone: string | null
+          discount_amount: number | null
+          discount_code_id: string | null
+          discount_percentage: number | null
           id: string
           status: string
           total: number
@@ -204,6 +207,9 @@ export type Database = {
           customer_email: string
           customer_name: string
           customer_phone?: string | null
+          discount_amount?: number | null
+          discount_code_id?: string | null
+          discount_percentage?: number | null
           id?: string
           status?: string
           total: number
@@ -216,13 +222,24 @@ export type Database = {
           customer_email?: string
           customer_name?: string
           customer_phone?: string | null
+          discount_amount?: number | null
+          discount_code_id?: string | null
+          discount_percentage?: number | null
           id?: string
           status?: string
           total?: number
           updated_at?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "orders_discount_code_id_fkey"
+            columns: ["discount_code_id"]
+            isOneToOne: false
+            referencedRelation: "discount_codes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       price_history: {
         Row: {
