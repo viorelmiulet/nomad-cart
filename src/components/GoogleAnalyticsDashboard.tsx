@@ -3,8 +3,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { TrendingUp, Users, ShoppingCart, MousePointerClick, Search, Smartphone, Monitor, Tablet } from 'lucide-react';
+import { TrendingUp, Users, ShoppingCart, MousePointerClick, Search, Smartphone, Monitor, Tablet, AlertCircle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useToast } from '@/hooks/use-toast';
 
 type TimeRange = '1day' | '7days' | '30days' | '90days';
 
@@ -43,6 +45,7 @@ const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 export function GoogleAnalyticsDashboard() {
   const [timeRange, setTimeRange] = useState<TimeRange>('7days');
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [organicTraffic, setOrganicTraffic] = useState<OrganicTrafficData[]>([]);
   const [landingPages, setLandingPages] = useState<LandingPage[]>([]);
   const [searchEngines, setSearchEngines] = useState<SearchEngine[]>([]);
@@ -55,6 +58,7 @@ export function GoogleAnalyticsDashboard() {
     revenue: 0,
     conversionRate: 0,
   });
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchAnalyticsData(timeRange);
@@ -62,131 +66,173 @@ export function GoogleAnalyticsDashboard() {
 
   const fetchAnalyticsData = async (range: TimeRange) => {
     setIsLoading(true);
+    setError(null);
+    
     try {
       const daysMap = { '1day': 1, '7days': 7, '30days': 30, '90days': 90 };
       const days = daysMap[range];
+      const endDate = new Date();
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - days);
 
-      // Fetch organic traffic (sessions with referrer from search engines)
-      const { data: analyticsData, error: analyticsError } = await supabase
-        .from('site_analytics')
-        .select('*')
-        .gte('created_at', startDate.toISOString())
-        .not('referrer', 'is', null);
+      // Format dates for GA4 API (YYYY-MM-DD)
+      const formatDate = (date: Date) => date.toISOString().split('T')[0];
 
-      if (analyticsError) throw analyticsError;
-
-      // Filter organic traffic
-      const organicData = analyticsData?.filter(item => 
-        item.referrer && /google|bing|yahoo|duckduckgo|yandex|baidu/i.test(item.referrer)
-      ) || [];
-
-      // Process daily organic traffic
-      const dailyTraffic = new Map<string, { sessions: Set<string>, users: Set<string> }>();
-      
-      organicData.forEach(item => {
-        const date = new Date(item.created_at).toLocaleDateString('ro-RO');
-        if (!dailyTraffic.has(date)) {
-          dailyTraffic.set(date, { sessions: new Set(), users: new Set() });
+      // Fetch data from GA4 API
+      const { data: ga4Data, error: ga4Error } = await supabase.functions.invoke('fetch-ga4-data', {
+        body: {
+          startDate: formatDate(startDate),
+          endDate: formatDate(endDate),
+          metrics: [
+            'sessions',
+            'totalUsers',
+            'screenPageViews',
+            'bounceRate',
+            'averageSessionDuration',
+            'conversions',
+            'totalRevenue'
+          ],
+          dimensions: [
+            'date',
+            'sessionDefaultChannelGrouping',
+            'landingPage',
+            'deviceCategory',
+            'sessionSource'
+          ]
         }
-        const dayData = dailyTraffic.get(date)!;
-        if (item.session_id) dayData.sessions.add(item.session_id);
-        if (item.user_id) dayData.users.add(item.user_id);
       });
 
-      const trafficArray: OrganicTrafficData[] = Array.from(dailyTraffic.entries())
+      if (ga4Error) {
+        console.error('GA4 API Error:', ga4Error);
+        throw new Error('Nu s-au putut prelua datele din Google Analytics. Verifică configurarea API-ului.');
+      }
+
+      if (!ga4Data || !ga4Data.rows) {
+        console.log('No GA4 data returned');
+        setError('Nu există date disponibile pentru perioada selectată.');
+        setIsLoading(false);
+        return;
+      }
+
+      // Process GA4 data
+      const rows = ga4Data.rows || [];
+      const dimensionHeaders = ga4Data.dimensionHeaders || [];
+      const metricHeaders = ga4Data.metricHeaders || [];
+
+      // Create maps for processing
+      const dailyTrafficMap = new Map<string, { sessions: number, users: number }>();
+      const landingPagesMap = new Map<string, { visits: number, sessions: number }>();
+      const searchEnginesMap = new Map<string, number>();
+      const deviceStatsMap = new Map<string, number>();
+      
+      let totalSessions = 0;
+      let totalUsers = 0;
+      let totalConversions = 0;
+      let totalRevenue = 0;
+
+      // Process each row from GA4
+      rows.forEach((row: any) => {
+        const dimensions = row.dimensionValues || [];
+        const metrics = row.metricValues || [];
+
+        const date = dimensions[0]?.value || '';
+        const channelGroup = dimensions[1]?.value || '';
+        const landingPage = dimensions[2]?.value || '';
+        const device = dimensions[3]?.value || '';
+        const source = dimensions[4]?.value || '';
+
+        const sessions = parseInt(metrics[0]?.value || '0');
+        const users = parseInt(metrics[1]?.value || '0');
+        const pageViews = parseInt(metrics[2]?.value || '0');
+        const conversions = parseFloat(metrics[5]?.value || '0');
+        const revenue = parseFloat(metrics[6]?.value || '0');
+
+        // Filter organic traffic only
+        if (channelGroup.toLowerCase().includes('organic')) {
+          // Daily traffic
+          const formattedDate = date ? `${date.substring(0, 4)}-${date.substring(4, 6)}-${date.substring(6, 8)}` : '';
+          if (formattedDate) {
+            if (!dailyTrafficMap.has(formattedDate)) {
+              dailyTrafficMap.set(formattedDate, { sessions: 0, users: 0 });
+            }
+            const dayData = dailyTrafficMap.get(formattedDate)!;
+            dayData.sessions += sessions;
+            dayData.users += users;
+          }
+
+          // Landing pages
+          if (landingPage && landingPage !== '(not set)') {
+            if (!landingPagesMap.has(landingPage)) {
+              landingPagesMap.set(landingPage, { visits: 0, sessions: 0 });
+            }
+            const pageData = landingPagesMap.get(landingPage)!;
+            pageData.visits += pageViews;
+            pageData.sessions += sessions;
+          }
+
+          // Search engines
+          if (source && source !== '(not set)') {
+            searchEnginesMap.set(source, (searchEnginesMap.get(source) || 0) + sessions);
+          }
+
+          // Device stats
+          if (device && device !== '(not set)') {
+            deviceStatsMap.set(device, (deviceStatsMap.get(device) || 0) + sessions);
+          }
+
+          // Totals
+          totalSessions += sessions;
+          totalUsers += users;
+          totalConversions += conversions;
+          totalRevenue += revenue;
+        }
+      });
+
+      // Convert maps to arrays
+      const trafficArray: OrganicTrafficData[] = Array.from(dailyTrafficMap.entries())
         .map(([date, data]) => ({
           date,
-          sessions: data.sessions.size,
-          users: data.users.size,
+          sessions: data.sessions,
+          users: data.users,
         }))
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-      setOrganicTraffic(trafficArray);
-
-      // Calculate landing pages
-      const pagesMap = new Map<string, { visits: number, sessions: Set<string> }>();
-      organicData.forEach(item => {
-        if (!pagesMap.has(item.page_path)) {
-          pagesMap.set(item.page_path, { visits: 0, sessions: new Set() });
-        }
-        const pageData = pagesMap.get(item.page_path)!;
-        pageData.visits++;
-        if (item.session_id) pageData.sessions.add(item.session_id);
-      });
-
-      const topPages: LandingPage[] = Array.from(pagesMap.entries())
+      const topPages: LandingPage[] = Array.from(landingPagesMap.entries())
         .map(([page, data]) => ({
           page,
           visits: data.visits,
-          sessions: data.sessions.size,
+          sessions: data.sessions,
         }))
         .sort((a, b) => b.visits - a.visits)
         .slice(0, 10);
 
-      setLandingPages(topPages);
-
-      // Calculate search engines
-      const enginesMap = new Map<string, number>();
-      organicData.forEach(item => {
-        if (item.referrer) {
-          const url = new URL(item.referrer);
-          const hostname = url.hostname.toLowerCase();
-          let engine = 'Other';
-          
-          if (hostname.includes('google')) engine = 'Google';
-          else if (hostname.includes('bing')) engine = 'Bing';
-          else if (hostname.includes('yahoo')) engine = 'Yahoo';
-          else if (hostname.includes('duckduckgo')) engine = 'DuckDuckGo';
-          else if (hostname.includes('yandex')) engine = 'Yandex';
-          
-          enginesMap.set(engine, (enginesMap.get(engine) || 0) + 1);
-        }
-      });
-
-      const totalEngineVisits = Array.from(enginesMap.values()).reduce((sum, val) => sum + val, 0);
-      const enginesArray: SearchEngine[] = Array.from(enginesMap.entries())
+      const totalEngineVisits = Array.from(searchEnginesMap.values()).reduce((sum, val) => sum + val, 0);
+      const enginesArray: SearchEngine[] = Array.from(searchEnginesMap.entries())
         .map(([engine, visits]) => ({
-          engine,
+          engine: engine.charAt(0).toUpperCase() + engine.slice(1),
           visits,
-          percentage: (visits / totalEngineVisits) * 100,
+          percentage: totalEngineVisits > 0 ? (visits / totalEngineVisits) * 100 : 0,
         }))
         .sort((a, b) => b.visits - a.visits);
 
-      setSearchEngines(enginesArray);
-
-      // Calculate device stats
-      const devicesMap = new Map<string, number>();
-      organicData.forEach(item => {
-        const device = item.device_type || 'desktop';
-        devicesMap.set(device, (devicesMap.get(device) || 0) + 1);
-      });
-
-      const totalDeviceVisits = Array.from(devicesMap.values()).reduce((sum, val) => sum + val, 0);
-      const devicesArray: DeviceStats[] = Array.from(devicesMap.entries())
+      const totalDeviceVisits = Array.from(deviceStatsMap.values()).reduce((sum, val) => sum + val, 0);
+      const devicesArray: DeviceStats[] = Array.from(deviceStatsMap.entries())
         .map(([device, visits]) => ({
           device: device.charAt(0).toUpperCase() + device.slice(1),
           visits,
-          percentage: (visits / totalDeviceVisits) * 100,
+          percentage: totalDeviceVisits > 0 ? (visits / totalDeviceVisits) * 100 : 0,
         }))
         .sort((a, b) => b.visits - a.visits);
 
-      setDeviceStats(devicesArray);
-
-      // Fetch conversions (orders)
-      const { data: ordersData, error: ordersError } = await supabase
+      // Fetch local orders for conversions chart
+      const { data: ordersData } = await supabase
         .from('orders')
         .select('*')
         .gte('created_at', startDate.toISOString());
 
-      if (ordersError) throw ordersError;
-
-      // Process daily conversions
       const dailyConversions = new Map<string, { orders: number, revenue: number }>();
-      
       ordersData?.forEach(order => {
-        const date = new Date(order.created_at).toLocaleDateString('ro-RO');
+        const date = new Date(order.created_at).toISOString().split('T')[0];
         if (!dailyConversions.has(date)) {
           dailyConversions.set(date, { orders: 0, revenue: 0 });
         }
@@ -203,25 +249,33 @@ export function GoogleAnalyticsDashboard() {
         }))
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
+      // Update state
+      setOrganicTraffic(trafficArray);
+      setLandingPages(topPages);
+      setSearchEngines(enginesArray);
+      setDeviceStats(devicesArray);
       setConversions(conversionsArray);
-
-      // Calculate total stats
-      const uniqueSessions = new Set(organicData.map(item => item.session_id).filter(Boolean));
-      const uniqueUsers = new Set(organicData.map(item => item.user_id).filter(Boolean));
-      const totalOrders = ordersData?.length || 0;
-      const totalRevenue = ordersData?.reduce((sum, order) => sum + order.total, 0) || 0;
-      const conversionRate = uniqueSessions.size > 0 ? (totalOrders / uniqueSessions.size) * 100 : 0;
-
       setTotalStats({
-        organicSessions: uniqueSessions.size,
-        organicUsers: uniqueUsers.size,
-        conversions: totalOrders,
+        organicSessions: totalSessions,
+        organicUsers: totalUsers,
+        conversions: totalConversions,
         revenue: totalRevenue,
-        conversionRate,
+        conversionRate: totalSessions > 0 ? (totalConversions / totalSessions) * 100 : 0,
       });
 
-    } catch (error) {
+      toast({
+        title: "Date actualizate",
+        description: "Datele din Google Analytics au fost preluate cu succes.",
+      });
+
+    } catch (error: any) {
       console.error('Error fetching analytics:', error);
+      setError(error.message || 'A apărut o eroare la preluarea datelor.');
+      toast({
+        title: "Eroare",
+        description: error.message || 'Nu s-au putut prelua datele din Google Analytics.',
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -248,10 +302,35 @@ export function GoogleAnalyticsDashboard() {
     return (
       <div className="space-y-6">
         <Skeleton className="h-10 w-48" />
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32" />)}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+          {[1, 2, 3, 4, 5].map(i => <Skeleton key={i} className="h-32" />)}
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Skeleton className="h-80" />
+          <Skeleton className="h-80" />
         </div>
       </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <Alert variant="destructive">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Eroare la încărcarea datelor</AlertTitle>
+        <AlertDescription>
+          {error}
+          <br />
+          <br />
+          Verifică dacă ai configurat corect credențialele GA4 în Supabase:
+          <ul className="list-disc list-inside mt-2">
+            <li>GA4_PROPERTY_ID</li>
+            <li>GA4_SERVICE_ACCOUNT_KEY</li>
+          </ul>
+          <br />
+          Consultă fișierul <code className="bg-muted px-1 py-0.5 rounded">GA4_SETUP_INSTRUCTIONS.md</code> pentru instrucțiuni detaliate.
+        </AlertDescription>
+      </Alert>
     );
   }
 
