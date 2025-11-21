@@ -11,7 +11,11 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import logoMobilaNomad from "@/assets/logo-mobila-nomad-modern.png";
 import { useState, useEffect } from "react";
 
-const Header = () => {
+interface HeaderProps {
+  onSearchOpenChange?: (isOpen: boolean) => void;
+}
+
+const Header = ({ onSearchOpenChange }: HeaderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, signOut } = useAuth();
@@ -167,7 +171,7 @@ const Header = () => {
           {/* Mobile-first layout with better spacing */}
           {!isAdminPage && (
             <>
-              <SearchDialog />
+              <SearchDialog onOpenChange={onSearchOpenChange} />
               <CartDrawer />
             </>
           )}
