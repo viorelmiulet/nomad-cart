@@ -7,7 +7,7 @@ const PromoBanner = () => {
 
   if (!isActive) return null;
   return (
-    <div className="relative overflow-hidden bg-gradient-to-r from-brand-gold via-amber-500 to-brand-gold py-2 sm:py-3 px-3 sm:px-4 animate-slideDown">
+    <div className="relative overflow-hidden bg-gradient-to-r from-brand-gold via-amber-500 to-brand-gold py-3 sm:py-4 md:py-5 px-3 sm:px-4 animate-slideDown">
       {/* Animated background elements */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-0 left-0 w-32 h-32 sm:w-64 sm:h-64 bg-white/30 rounded-full blur-2xl sm:blur-3xl animate-pulse"></div>
