@@ -10,6 +10,7 @@ import { DiscountCodes } from "@/components/DiscountCodes";
 import { SupportStatsDashboard } from "@/components/SupportStatsDashboard";
 import { CustomEmailSender } from "@/components/CustomEmailSender";
 import { EmailHistory } from "@/components/EmailHistory";
+import { EmailStatsDashboard } from "@/components/EmailStatsDashboard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1122,13 +1123,14 @@ const AdminPage = () => {
 
         {/* Admin Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-10">
+          <TabsList className="grid w-full grid-cols-11">
             <TabsTrigger value="google-analytics">Analytics</TabsTrigger>
             <TabsTrigger value="products">Produse</TabsTrigger>
             <TabsTrigger value="orders">Comenzi</TabsTrigger>
             <TabsTrigger value="support">Suport Clienți</TabsTrigger>
             <TabsTrigger value="email">Email</TabsTrigger>
             <TabsTrigger value="email-history">Istoric</TabsTrigger>
+            <TabsTrigger value="email-stats">Statistici Email</TabsTrigger>
             <TabsTrigger value="users">Utilizatori</TabsTrigger>
             <TabsTrigger value="company">Companie</TabsTrigger>
             <TabsTrigger value="discount">Reduceri</TabsTrigger>
@@ -1138,6 +1140,21 @@ const AdminPage = () => {
           {/* Google Analytics Tab */}
           <TabsContent value="google-analytics">
             <GoogleAnalyticsDashboard />
+          </TabsContent>
+
+          {/* Email Stats Tab */}
+          <TabsContent value="email-stats">
+            <Card>
+              <CardHeader>
+                <CardTitle>Statistici Detaliate Email</CardTitle>
+                <CardDescription>
+                  Rata de deschidere, click-uri și feedback de la clienți
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <EmailStatsDashboard />
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Products Tab */}

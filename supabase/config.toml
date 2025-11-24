@@ -17,3 +17,12 @@ verify_jwt = false
 
 [functions.fetch-ga4-data]
 verify_jwt = true
+
+[functions.track-email-open]
+verify_jwt = false
+
+[functions.track-email-click]
+verify_jwt = false
+
+[functions.submit-email-feedback]
+verify_jwt = false

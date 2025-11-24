@@ -20,14 +20,31 @@ interface OrderStatusEmailRequest {
   newStatus: string;
 }
 
-const getStatusDisplayName = (status: string): string => {
-  switch (status) {
-    case 'pending': return 'În așteptare';
-    case 'processing': return 'În procesare';
-    case 'completed': return 'Finalizată';
-    case 'preluata': return 'Preluată';
-    case 'cancelled': return 'Anulată';
-    default: return status;
+const statusConfig: Record<string, { emoji: string; title: string; message: string }> = {
+  pending: {
+    emoji: '⏳',
+    title: 'Comandă În Așteptare',
+    message: 'Comanda ta a fost primită și este în curs de procesare. Te vom anunța când va fi preluată!'
+  },
+  processing: {
+    emoji: '⚙️',
+    title: 'Comandă În Procesare',
+    message: 'Comanda ta este în procesare. Pregătim produsele pentru livrare!'
+  },
+  preluata: {
+    emoji: '📦',
+    title: 'Comandă Preluată',
+    message: 'Comanda ta a fost preluată și va fi livrată în curând!'
+  },
+  completed: {
+    emoji: '✅',
+    title: 'Comandă Finalizată',
+    message: 'Comanda ta a fost finalizată cu succes! Mulțumim pentru încredere!'
+  },
+  cancelled: {
+    emoji: '❌',
+    title: 'Comandă Anulată',
+    message: 'Comanda ta a fost anulată. Dacă ai întrebări, te rugăm să ne contactezi.'
   }
 };
 
@@ -42,7 +59,6 @@ const normalizeFrom = (input: string): string | null => {
 };
 
 const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -52,9 +68,6 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log(`Sending order status email to: ${customerEmail} for order: ${orderNumber} with status: ${newStatus}`);
 
-    const statusDisplay = getStatusDisplayName(newStatus);
-    
-    // Initialize Supabase client
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Fetch company info
@@ -64,7 +77,7 @@ const handler = async (req: Request): Promise<Response> => {
       .single();
 
     // Fetch order details with items and products
-    const { data: orderData } = await supabase
+    const { data: order } = await supabase
       .from('orders')
       .select(`
         *,
@@ -81,49 +94,40 @@ const handler = async (req: Request): Promise<Response> => {
       .eq('id', orderNumber)
       .single();
 
-    // Build products HTML with images
-    let productsHtml = '';
-    if (orderData?.order_items && orderData.order_items.length > 0) {
-      productsHtml = `
-        <h3 style="color: #333; margin: 30px 0 15px 0; font-size: 20px;">Produse comandate:</h3>
-        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
-          <thead>
-            <tr style="background-color: #f8f9fa;">
-              <th style="padding: 12px; text-align: left; border: 1px solid #e0e0e0; font-weight: 600; color: #333;">Produs</th>
-              <th style="padding: 12px; text-align: center; border: 1px solid #e0e0e0; font-weight: 600; color: #333;">Cantitate</th>
-              <th style="padding: 12px; text-align: right; border: 1px solid #e0e0e0; font-weight: 600; color: #333;">Preț</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${orderData.order_items.map((item: any) => `
-              <tr>
-                <td style="padding: 15px; border: 1px solid #e0e0e0;">
-                  <table style="width: 100%; border: none;">
-                    <tr>
-                      ${item.products?.image_url ? `
-                        <td style="width: 100px; padding-right: 15px; border: none;">
-                          <img src="${item.products.image_url}" 
-                               alt="${item.products.name}" 
-                               style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; display: block;" />
-                        </td>
-                      ` : ''}
-                      <td style="border: none;">
-                        <strong style="color: #333; font-size: 16px; display: block; margin-bottom: 5px;">${item.products?.name || 'Produs'}</strong>
-                        ${item.products?.description ? `
-                          <span style="color: #666; font-size: 14px; line-height: 1.4;">${item.products.description.substring(0, 120)}${item.products.description.length > 120 ? '...' : ''}</span>
-                        ` : ''}
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-                <td style="padding: 15px; text-align: center; border: 1px solid #e0e0e0; font-size: 16px; color: #333;">${item.quantity}</td>
-                <td style="padding: 15px; text-align: right; border: 1px solid #e0e0e0; white-space: nowrap; font-size: 16px; font-weight: 600; color: #667eea;">${Number(item.price).toFixed(2)} RON</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      `;
+    if (!order) {
+      throw new Error('Order not found');
     }
+
+    const orderItems = order.order_items || [];
+
+    // Create email history record first to get tracking ID
+    const emailContent = `Comanda #${orderNumber} - Status: ${statusConfig[newStatus]?.title || newStatus}`;
+    const { data: historyData, error: historyError } = await supabase
+      .from('email_history')
+      .insert({
+        recipients: [customerEmail],
+        subject: `Actualizare comandă #${orderNumber.slice(0, 8)}`,
+        content: emailContent,
+        email_type: 'order_status',
+        order_id: orderNumber,
+        status: 'sending'
+      })
+      .select()
+      .single();
+
+    if (historyError || !historyData) {
+      console.error('Failed to create email history:', historyError);
+      throw new Error('Failed to create email history');
+    }
+
+    const emailHistoryId = historyData.id;
+
+    // Generate tracking URLs
+    const trackingPixelUrl = `${supabaseUrl}/functions/v1/track-email-open?id=${emailHistoryId}&email=${encodeURIComponent(customerEmail)}`;
+    
+    const makeTrackableLink = (url: string) => {
+      return `${supabaseUrl}/functions/v1/track-email-click?id=${emailHistoryId}&email=${encodeURIComponent(customerEmail)}&url=${encodeURIComponent(url)}`;
+    };
 
     // Build company contact HTML
     let contactHtml = '';
@@ -136,7 +140,7 @@ const handler = async (req: Request): Promise<Response> => {
             ${companyInfo.email ? `<div style="margin: 5px 0;">📧 <a href="mailto:${companyInfo.email}" style="color: #667eea; text-decoration: none;">${companyInfo.email}</a></div>` : ''}
             ${companyInfo.phone ? `<div style="margin: 5px 0;">📞 <a href="tel:${companyInfo.phone}" style="color: #667eea; text-decoration: none;">${companyInfo.phone}</a></div>` : ''}
             ${companyInfo.address ? `<div style="margin: 5px 0;">📍 ${companyInfo.address}${companyInfo.city ? `, ${companyInfo.city}` : ''}</div>` : ''}
-            ${companyInfo.website ? `<div style="margin: 5px 0;">🌐 <a href="${companyInfo.website}" style="color: #667eea; text-decoration: none;">${companyInfo.website}</a></div>` : ''}
+            ${companyInfo.website ? `<div style="margin: 5px 0;">🌐 <a href="${makeTrackableLink(companyInfo.website)}" style="color: #667eea; text-decoration: none;">${companyInfo.website}</a></div>` : ''}
           </div>
         </div>
       `;
@@ -150,7 +154,8 @@ const handler = async (req: Request): Promise<Response> => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-    console.log('Using RESEND_FROM:', fromHeader);
+
+    // Send email
     const emailResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -165,66 +170,81 @@ const handler = async (req: Request): Promise<Response> => {
         <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px;">
           <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
             <h1 style="color: white; margin: 0; font-size: 28px;">${companyInfo?.company_name || 'Mobila Nomad'}</h1>
-            <p style="color: white; margin: 10px 0 0 0; opacity: 0.9;">Actualizare comandă</p>
           </div>
           
           <div style="background: white; padding: 30px; border: 1px solid #e0e0e0; border-radius: 0 0 10px 10px;">
-            <h2 style="color: #333; margin: 0 0 20px 0;">Salut ${customerName}!</h2>
+            <h2 style="color: #333; margin: 0 0 20px 0; font-size: 24px;">
+              ${statusConfig[newStatus]?.emoji || '📦'} ${statusConfig[newStatus]?.title || 'Actualizare Comandă'}
+            </h2>
             
-            <p style="color: #666; line-height: 1.6; margin: 0 0 20px 0; font-size: 16px;">
-              Comanda ta a fost actualizată cu un nou status.
+            <p style="color: #666; line-height: 1.8; margin: 0 0 20px 0; font-size: 16px;">
+              ${statusConfig[newStatus]?.message || `Comanda ta a fost actualizată la statusul: ${newStatus}`}
             </p>
             
-            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <div style="margin-bottom: 12px;">
-                <span style="color: #666; font-size: 14px;">Numărul comenzii:</span><br>
-                <strong style="color: #333; font-size: 18px;">#${orderNumber.slice(0, 8)}</strong>
-              </div>
-              <div style="margin-bottom: 12px;">
-                <span style="color: #666; font-size: 14px;">Status nou:</span><br>
-                <strong style="color: #667eea; font-size: 20px;">${statusDisplay}</strong>
-              </div>
-              ${orderData ? `
-                <div style="margin-bottom: 12px;">
-                  <span style="color: #666; font-size: 14px;">Total comandă:</span><br>
-                  <strong style="color: #333; font-size: 22px;">${Number(orderData.total).toFixed(2)} RON</strong>
-                </div>
-                ${orderData.customer_phone ? `
-                  <div style="margin-bottom: 12px;">
-                    <span style="color: #666; font-size: 14px;">Telefon:</span><br>
-                    <span style="color: #333; font-size: 16px;">${orderData.customer_phone}</span>
-                  </div>
-                ` : ''}
-                ${orderData.customer_address ? `
-                  <div>
-                    <span style="color: #666; font-size: 14px;">Adresă livrare:</span><br>
-                    <span style="color: #333; font-size: 16px;">${orderData.customer_address}</span>
-                  </div>
-                ` : ''}
-              ` : ''}
+            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; margin: 25px 0;">
+              <h3 style="color: #333; margin: 0 0 15px 0; font-size: 18px;">📋 Detalii Comandă</h3>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                  <td style="padding: 8px 0; color: #666; font-size: 14px;">Număr comandă:</td>
+                  <td style="padding: 8px 0; color: #333; font-weight: bold; font-size: 14px;">#${order.id.slice(0, 8)}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #666; font-size: 14px;">Data:</td>
+                  <td style="padding: 8px 0; color: #333; font-size: 14px;">${new Date(order.created_at).toLocaleDateString('ro-RO')}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #666; font-size: 14px;">Status:</td>
+                  <td style="padding: 8px 0; color: #333; font-weight: bold; font-size: 14px;">${statusConfig[newStatus]?.title || newStatus}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #666; font-size: 14px;">Client:</td>
+                  <td style="padding: 8px 0; color: #333; font-size: 14px;">${order.customer_name}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #666; font-size: 14px;">Adresă livrare:</td>
+                  <td style="padding: 8px 0; color: #333; font-size: 14px;">${order.customer_address}</td>
+                </tr>
+              </table>
             </div>
-            
-            ${newStatus === 'completed' ? `
-              <div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                <strong>🎉 Comanda ta a fost finalizată!</strong><br>
-                Mulțumim pentru încrederea acordată!
-              </div>
-            ` : ''}
-            
-            ${newStatus === 'preluata' ? `
-              <div style="background: #cce5ff; border: 1px solid #99ccff; color: #004085; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                <strong>📦 Comanda ta a fost preluată!</strong><br>
-                Sperăm că ești mulțumit de produsele noastre!
-              </div>
-            ` : ''}
-            
-            ${productsHtml}
-            
-            <p style="color: #666; line-height: 1.6; margin: 30px 0 0 0; font-size: 16px;">
-              Dacă ai întrebări despre comanda ta, nu ezita să ne contactezi.
-            </p>
-            
+
+            <div style="margin: 25px 0;">
+              <h3 style="color: #333; margin: 0 0 15px 0; font-size: 18px;">🛒 Produse Comandate</h3>
+              ${orderItems.map((item: any) => `
+                <div style="display: table; width: 100%; margin-bottom: 15px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; width: 120px; padding: 15px; vertical-align: top;">
+                      ${item.products?.image_url ? `<a href="${makeTrackableLink(item.products.image_url)}" style="display: block;"><img src="${item.products.image_url}" alt="${item.products.name}" style="width: 100%; height: auto; border-radius: 4px; display: block;" /></a>` : ''}
+                    </div>
+                    <div style="display: table-cell; padding: 15px; vertical-align: top;">
+                      <h4 style="margin: 0 0 8px 0; color: #333; font-size: 16px;">${item.products?.name || 'Produs'}</h4>
+                      ${item.products?.description ? `<p style="margin: 0 0 8px 0; color: #666; font-size: 13px;">${item.products.description.substring(0, 120)}${item.products.description.length > 120 ? '...' : ''}</p>` : ''}
+                      <p style="margin: 0; color: #666; font-size: 14px;">
+                        <strong>Cantitate:</strong> ${item.quantity} × ${Number(item.price).toFixed(2)} RON
+                      </p>
+                      <p style="margin: 5px 0 0 0; color: #667eea; font-weight: bold; font-size: 15px;">
+                        Subtotal: ${(item.quantity * Number(item.price)).toFixed(2)} RON
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 8px; margin: 25px 0; text-align: center;">
+              <p style="color: white; font-size: 14px; margin: 0 0 5px 0;">Total Comandă</p>
+              <p style="color: white; font-size: 32px; font-weight: bold; margin: 0;">${Number(order.total).toFixed(2)} RON</p>
+            </div>
+
             ${contactHtml}
+            
+            <div style="margin: 30px 0; padding: 20px; background: #f0f4ff; border-radius: 8px; text-align: center;">
+              <p style="color: #333; margin: 0 0 15px 0; font-size: 14px;">Cum a fost experiența ta cu această comandă?</p>
+              <div style="margin: 10px 0;">
+                <a href="${makeTrackableLink(`${supabaseUrl}/functions/v1/submit-email-feedback?id=${emailHistoryId}&email=${encodeURIComponent(customerEmail)}&rating=5`)}" style="display: inline-block; margin: 0 5px; font-size: 24px; text-decoration: none;">⭐⭐⭐⭐⭐</a>
+                <a href="${makeTrackableLink(`${supabaseUrl}/functions/v1/submit-email-feedback?id=${emailHistoryId}&email=${encodeURIComponent(customerEmail)}&rating=4`)}" style="display: inline-block; margin: 0 5px; font-size: 24px; text-decoration: none;">⭐⭐⭐⭐</a>
+                <a href="${makeTrackableLink(`${supabaseUrl}/functions/v1/submit-email-feedback?id=${emailHistoryId}&email=${encodeURIComponent(customerEmail)}&rating=3`)}" style="display: inline-block; margin: 0 5px; font-size: 24px; text-decoration: none;">⭐⭐⭐</a>
+              </div>
+            </div>
             
             <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 30px 0;">
             
@@ -233,6 +253,9 @@ const handler = async (req: Request): Promise<Response> => {
               <strong>Echipa ${companyInfo?.company_name || 'Mobila Nomad'}</strong>
             </p>
           </div>
+          
+          <!-- Tracking Pixel -->
+          <img src="${trackingPixelUrl}" width="1" height="1" style="display:block;" alt="" />
         </div>
         `
       })
@@ -242,6 +265,13 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (!emailResponse.ok || (emailData && (emailData.statusCode || emailData.error))) {
       console.error('Resend API error:', emailData);
+      
+      // Update email history status to failed
+      await supabase
+        .from('email_history')
+        .update({ status: 'failed', error_message: JSON.stringify(emailData) })
+        .eq('id', emailHistoryId);
+      
       return new Response(JSON.stringify({ success: false, error: emailData }), {
         status: 500,
         headers: { 'Content-Type': 'application/json', ...corsHeaders },
@@ -250,22 +280,11 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('Email sent successfully:', emailData);
 
-    // Save to email history
-    const emailContent = `Comanda #${orderNumber} - Status: ${statusDisplay}`;
-    const { error: historyError } = await supabase
+    // Update email history status to sent
+    await supabase
       .from('email_history')
-      .insert({
-        recipients: [customerEmail],
-        subject: `Actualizare comandă #${orderNumber}`,
-        content: emailContent,
-        email_type: 'order_status',
-        order_id: orderNumber,
-        status: 'sent'
-      });
-
-    if (historyError) {
-      console.error('Failed to save email history:', historyError);
-    }
+      .update({ status: 'sent' })
+      .eq('id', emailHistoryId);
 
     return new Response(JSON.stringify({ success: true, emailData }), {
       status: 200,
