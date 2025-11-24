@@ -86,18 +86,45 @@ const handler = async (req: Request): Promise<Response> => {
       `;
     }
 
-    // Send email to all recipients
-    const emailResponse = await fetch('https://api.resend.com/emails', {
+    // We'll send individual emails to track each recipient
+    const emailResults = [];
+    
+    for (const recipient of recipients) {
+      // Generate a unique email history ID for tracking
+      const { data: historyData, error: historyError } = await supabase
+        .from('email_history')
+        .insert({
+          recipients: [recipient],
+          subject: subject,
+          content: htmlContent,
+          email_type: 'custom',
+          status: 'sending'
+        })
+        .select()
+        .single();
+
+      if (historyError || !historyData) {
+        console.error('Failed to create email history:', historyError);
+        continue;
+      }
+
+      const emailHistoryId = historyData.id;
+      
+      // Generate tracking URLs
+      const trackingPixelUrl = `${supabaseUrl}/functions/v1/track-email-open?id=${emailHistoryId}&email=${encodeURIComponent(recipient)}`;
+
+      // Send email to this recipient
+      const emailResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${resendApiKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        from: fromHeader,
-        to: recipients,
-        subject: subject,
-        html: `
+        body: JSON.stringify({
+          from: fromHeader,
+          to: [recipient],
+          subject: subject,
+          html: `
         <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px;">
           <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
             <h1 style="color: white; margin: 0; font-size: 28px;">${companyInfo?.company_name || 'Mobila Nomad'}</h1>
@@ -115,39 +142,48 @@ const handler = async (req: Request): Promise<Response> => {
               <strong>Echipa ${companyInfo?.company_name || 'Mobila Nomad'}</strong>
             </p>
           </div>
+          
+          <!-- Tracking Pixel -->
+          <img src="${trackingPixelUrl}" width="1" height="1" style="display:block;" alt="" />
         </div>
         `
-      })
-    });
-
-    const emailData = await emailResponse.json().catch(() => ({}));
-
-    if (!emailResponse.ok || (emailData && (emailData.statusCode || emailData.error))) {
-      console.error('Resend API error:', emailData);
-      return new Response(JSON.stringify({ success: false, error: emailData }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders },
-      });
-    }
-
-    console.log('Custom email sent successfully:', emailData);
-
-    // Save to email history
-    const { error: historyError } = await supabase
-      .from('email_history')
-      .insert({
-        recipients: recipients,
-        subject: subject,
-        content: htmlContent,
-        email_type: 'custom',
-        status: 'sent'
+        })
       });
 
-    if (historyError) {
-      console.error('Failed to save email history:', historyError);
+      const emailData = await emailResponse.json().catch(() => ({}));
+
+      if (!emailResponse.ok || (emailData && (emailData.statusCode || emailData.error))) {
+        console.error('Resend API error for recipient:', recipient, emailData);
+        
+        // Update status to failed
+        await supabase
+          .from('email_history')
+          .update({ status: 'failed', error_message: JSON.stringify(emailData) })
+          .eq('id', emailHistoryId);
+          
+        emailResults.push({ recipient, success: false, error: emailData });
+      } else {
+        console.log('Custom email sent successfully to:', recipient);
+        
+        // Update status to sent
+        await supabase
+          .from('email_history')
+          .update({ status: 'sent' })
+          .eq('id', emailHistoryId);
+          
+        emailResults.push({ recipient, success: true, emailData });
+      }
     }
 
-    return new Response(JSON.stringify({ success: true, emailData }), {
+    const successCount = emailResults.filter(r => r.success).length;
+    const failCount = emailResults.filter(r => !r.success).length;
+
+    return new Response(JSON.stringify({ 
+      success: successCount > 0, 
+      totalSent: successCount,
+      totalFailed: failCount,
+      results: emailResults 
+    }), {
       status: 200,
       headers: { 'Content-Type': 'application/json', ...corsHeaders },
     });

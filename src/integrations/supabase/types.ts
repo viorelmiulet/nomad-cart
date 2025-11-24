@@ -149,6 +149,82 @@ export type Database = {
         }
         Relationships: []
       }
+      email_clicks: {
+        Row: {
+          clicked_at: string
+          created_at: string
+          email_history_id: string
+          id: string
+          ip_address: unknown
+          link_url: string
+          recipient_email: string
+          user_agent: string | null
+        }
+        Insert: {
+          clicked_at?: string
+          created_at?: string
+          email_history_id: string
+          id?: string
+          ip_address?: unknown
+          link_url: string
+          recipient_email: string
+          user_agent?: string | null
+        }
+        Update: {
+          clicked_at?: string
+          created_at?: string
+          email_history_id?: string
+          id?: string
+          ip_address?: unknown
+          link_url?: string
+          recipient_email?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_clicks_email_history_id_fkey"
+            columns: ["email_history_id"]
+            isOneToOne: false
+            referencedRelation: "email_history"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_feedback: {
+        Row: {
+          created_at: string
+          email_history_id: string
+          feedback_text: string | null
+          id: string
+          rating: number | null
+          recipient_email: string
+        }
+        Insert: {
+          created_at?: string
+          email_history_id: string
+          feedback_text?: string | null
+          id?: string
+          rating?: number | null
+          recipient_email: string
+        }
+        Update: {
+          created_at?: string
+          email_history_id?: string
+          feedback_text?: string | null
+          id?: string
+          rating?: number | null
+          recipient_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_feedback_email_history_id_fkey"
+            columns: ["email_history_id"]
+            isOneToOne: false
+            referencedRelation: "email_history"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_history: {
         Row: {
           content: string
@@ -187,6 +263,44 @@ export type Database = {
           subject?: string
         }
         Relationships: []
+      }
+      email_opens: {
+        Row: {
+          created_at: string
+          email_history_id: string
+          id: string
+          ip_address: unknown
+          opened_at: string
+          recipient_email: string
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          email_history_id: string
+          id?: string
+          ip_address?: unknown
+          opened_at?: string
+          recipient_email: string
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          email_history_id?: string
+          id?: string
+          ip_address?: unknown
+          opened_at?: string
+          recipient_email?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_opens_email_history_id_fkey"
+            columns: ["email_history_id"]
+            isOneToOne: false
+            referencedRelation: "email_history"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       order_items: {
         Row: {
