@@ -62,6 +62,30 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
+    // Fetch company info
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    const { data: companyInfo } = await supabase
+      .from('company_info')
+      .select('*')
+      .single();
+
+    // Build company contact HTML
+    let contactHtml = '';
+    if (companyInfo) {
+      contactHtml = `
+        <div style="margin-top: 40px; padding: 25px; background: #f8f9fa; border-radius: 8px;">
+          <h3 style="color: #333; margin: 0 0 15px 0; font-size: 18px;">${companyInfo.company_name}</h3>
+          ${companyInfo.description ? `<p style="color: #666; margin: 0 0 15px 0; line-height: 1.5; font-size: 14px;">${companyInfo.description}</p>` : ''}
+          <div style="color: #666; font-size: 14px; line-height: 1.8;">
+            ${companyInfo.email ? `<div style="margin: 5px 0;">📧 <a href="mailto:${companyInfo.email}" style="color: #667eea; text-decoration: none;">${companyInfo.email}</a></div>` : ''}
+            ${companyInfo.phone ? `<div style="margin: 5px 0;">📞 <a href="tel:${companyInfo.phone}" style="color: #667eea; text-decoration: none;">${companyInfo.phone}</a></div>` : ''}
+            ${companyInfo.address ? `<div style="margin: 5px 0;">📍 ${companyInfo.address}${companyInfo.city ? `, ${companyInfo.city}` : ''}</div>` : ''}
+            ${companyInfo.website ? `<div style="margin: 5px 0;">🌐 <a href="${companyInfo.website}" style="color: #667eea; text-decoration: none;">${companyInfo.website}</a></div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
     // Send email to all recipients
     const emailResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -74,19 +98,21 @@ const handler = async (req: Request): Promise<Response> => {
         to: recipients,
         subject: subject,
         html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px;">
           <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-            <h1 style="color: white; margin: 0; font-size: 28px;">Mobila Nomad</h1>
+            <h1 style="color: white; margin: 0; font-size: 28px;">${companyInfo?.company_name || 'Mobila Nomad'}</h1>
           </div>
           
           <div style="background: white; padding: 30px; border: 1px solid #e0e0e0; border-radius: 0 0 10px 10px;">
             ${htmlContent}
             
+            ${contactHtml}
+            
             <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 30px 0;">
             
             <p style="color: #999; font-size: 14px; margin: 0; text-align: center;">
               Cu drag,<br>
-              <strong>Echipa Mobila Nomad</strong>
+              <strong>Echipa ${companyInfo?.company_name || 'Mobila Nomad'}</strong>
             </p>
           </div>
         </div>
@@ -107,7 +133,6 @@ const handler = async (req: Request): Promise<Response> => {
     console.log('Custom email sent successfully:', emailData);
 
     // Save to email history
-    const supabase = createClient(supabaseUrl, supabaseKey);
     const { error: historyError } = await supabase
       .from('email_history')
       .insert({
