@@ -11,6 +11,7 @@ import { SupportStatsDashboard } from "@/components/SupportStatsDashboard";
 import { CustomEmailSender } from "@/components/CustomEmailSender";
 import { EmailHistory } from "@/components/EmailHistory";
 import { EmailStatsDashboard } from "@/components/EmailStatsDashboard";
+import { EmailTemplateEditor } from "@/components/EmailTemplateEditor";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1131,6 +1132,7 @@ const AdminPage = () => {
             <TabsTrigger value="email">Email</TabsTrigger>
             <TabsTrigger value="email-history">Istoric</TabsTrigger>
             <TabsTrigger value="email-stats">Statistici Email</TabsTrigger>
+            <TabsTrigger value="email-templates">Template-uri</TabsTrigger>
             <TabsTrigger value="users">Utilizatori</TabsTrigger>
             <TabsTrigger value="company">Companie</TabsTrigger>
             <TabsTrigger value="discount">Reduceri</TabsTrigger>
@@ -1801,6 +1803,11 @@ const AdminPage = () => {
           {/* Email History Tab */}
           <TabsContent value="email-history">
             <EmailHistory />
+          </TabsContent>
+
+          {/* Email Templates Tab */}
+          <TabsContent value="email-templates">
+            <EmailTemplateEditor />
           </TabsContent>
 
           {/* Company Info Tab */}

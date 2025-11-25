@@ -302,6 +302,39 @@ export type Database = {
           },
         ]
       }
+      email_templates: {
+        Row: {
+          created_at: string
+          html_content: string
+          id: string
+          is_active: boolean
+          subject: string
+          template_type: string
+          updated_at: string
+          variables: Json
+        }
+        Insert: {
+          created_at?: string
+          html_content: string
+          id?: string
+          is_active?: boolean
+          subject: string
+          template_type: string
+          updated_at?: string
+          variables?: Json
+        }
+        Update: {
+          created_at?: string
+          html_content?: string
+          id?: string
+          is_active?: boolean
+          subject?: string
+          template_type?: string
+          updated_at?: string
+          variables?: Json
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           created_at: string
