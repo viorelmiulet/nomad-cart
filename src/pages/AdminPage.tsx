@@ -869,7 +869,7 @@ const AdminPage = () => {
           body: {
             customerName: order.customer_name,
             customerEmail: order.customer_email,
-            orderNumber: orderId.slice(0, 8).toUpperCase(),
+            orderNumber: orderId,
             newStatus: newStatus
           }
         });
