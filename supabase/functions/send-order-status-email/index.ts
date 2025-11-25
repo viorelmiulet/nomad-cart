@@ -143,14 +143,21 @@ const handler = async (req: Request): Promise<Response> => {
     };
 
     // Prepare template data
-    const products = orderItems.map((item: any) => ({
-      name: item.products?.name || 'Produs',
-      description: item.products?.description || '',
-      image_url: item.products?.image_url || '',
-      quantity: item.quantity,
-      price: Number(item.price).toFixed(2),
-      subtotal: (item.quantity * Number(item.price)).toFixed(2)
-    }));
+    const products = orderItems.map((item: any) => {
+      const productUrl = item.products?.id 
+        ? `https://mobilanomad.ro/product/${item.products.id}`
+        : 'https://mobilanomad.ro/products';
+      
+      return {
+        name: item.products?.name || 'Produs',
+        description: item.products?.description ? item.products.description.substring(0, 120) + (item.products.description.length > 120 ? '...' : '') : '',
+        image_url: item.products?.image_url || '',
+        quantity: item.quantity,
+        price: Number(item.price).toFixed(2),
+        subtotal: (item.quantity * Number(item.price)).toFixed(2),
+        productLink: makeTrackableLink(productUrl)
+      };
+    });
 
     const templateData = {
       customerName,
