@@ -3,7 +3,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
 import Handlebars from "https://cdn.skypack.dev/handlebars@4.7.8";
 
 const resendApiKey = Deno.env.get("RESEND_API_KEY");
-const resendFrom = Deno.env.get("RESEND_FROM") || "Mobila Nomad <onboarding@resend.dev>";
+const resendFrom = Deno.env.get("RESEND_FROM");
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
@@ -54,7 +54,7 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    const fromHeader = normalizeFrom(resendFrom);
+    const fromHeader = normalizeFrom(resendFrom || '');
     if (!fromHeader) {
       console.error('Invalid RESEND_FROM format. Expected "Name <email@domain>" or "email@domain". Received:', resendFrom);
       return new Response(JSON.stringify({ error: 'Invalid RESEND_FROM format. Use "Name <email@domain>" or "email@domain".' }), {
@@ -62,6 +62,11 @@ const handler = async (req: Request): Promise<Response> => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+
+    // Extract reply-to email from fromHeader
+    const replyToEmail = fromHeader.includes('<') 
+      ? fromHeader.match(/<(.+)>/)?.[1] || fromHeader
+      : fromHeader;
 
     // Fetch company info and email template
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -124,7 +129,19 @@ const handler = async (req: Request): Promise<Response> => {
       const compiledTemplate = Handlebars.compile(template.html_content);
       const finalHtmlContent = compiledTemplate(templateData);
 
-      // Send email to this recipient
+      // Create plain text version from HTML (simple strip tags)
+      const plainText = htmlContent
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+        .replace(/<[^>]+>/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .trim();
+
+      // Send email to this recipient with anti-spam headers
       const emailResponse = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
@@ -134,8 +151,15 @@ const handler = async (req: Request): Promise<Response> => {
         body: JSON.stringify({
           from: fromHeader,
           to: [recipient],
+          reply_to: replyToEmail,
           subject: subject,
-          html: finalHtmlContent
+          html: finalHtmlContent,
+          text: plainText,
+          headers: {
+            'X-Entity-Ref-ID': emailHistoryId,
+            'List-Unsubscribe': `<mailto:${replyToEmail}?subject=Unsubscribe>`,
+            'X-Mailer': 'Mobila Nomad Marketing System',
+          }
         })
       });
 
