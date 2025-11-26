@@ -32,30 +32,30 @@ const Hero = () => {
         style={{ transform: `translateY(${offset3}px)` }}
       ></div>
       
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-12 md:py-24 lg:py-32 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-20 lg:py-28 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 lg:gap-16 items-center">
           <div 
             className="text-luxury-dark text-center lg:text-left"
             style={{ transform: `translateY(${offset1 * 0.3}px)` }}
           >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 md:mb-10 font-playfair text-luxury-dark">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight mb-4 sm:mb-6 md:mb-8 font-playfair text-luxury-dark">
               Mii de piese de mobilier
               <span className="block bg-brand-gradient bg-clip-text text-transparent">
                 cu livrare gratuită
               </span>
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-luxury-dark/80 mb-8 md:mb-12 leading-relaxed font-inter max-w-xl mx-auto lg:mx-0">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-luxury-dark/80 mb-6 sm:mb-8 md:mb-10 leading-relaxed font-inter max-w-xl mx-auto lg:mx-0">
               Descoperă colecția noastră vastă de mobilier pentru toate camerele din casă. 
               Calitate superioară, prețuri accesibile și livrare gratuită.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center lg:justify-start">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-5 justify-center lg:justify-start">
               <Button 
                 size="lg" 
                 variant="outline"
                 onClick={handleWhatsAppContact}
-                className="border-2 border-green-500/50 bg-glass-gradient backdrop-blur-lg text-white hover:bg-green-500/20 hover:border-green-400/70 transition-all duration-300 px-6 md:px-10 py-3 md:py-5 h-12 md:h-16 text-base md:text-xl font-semibold shadow-xl w-full sm:w-auto"
+                className="border-2 border-green-500/50 bg-glass-gradient backdrop-blur-lg text-white hover:bg-green-500/20 hover:border-green-400/70 transition-all duration-300 px-5 sm:px-6 md:px-8 py-3 md:py-4 h-12 sm:h-13 md:h-14 text-sm sm:text-base md:text-lg font-semibold shadow-xl w-full sm:w-auto min-h-[44px] touch-manipulation"
               >
-                <MessageCircle className="mr-2 h-5 w-5 md:h-6 md:w-6" />
+                <MessageCircle className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                 Contactează-ne pe WhatsApp
               </Button>
             </div>
@@ -63,28 +63,28 @@ const Hero = () => {
           
           
           <div 
-            className="relative mt-8 lg:mt-0"
+            className="relative mt-6 sm:mt-8 lg:mt-0"
             style={{ transform: `translateY(${-offset2 * 0.3}px)` }}
           >
-            <div className="absolute inset-0 bg-glass-gradient backdrop-blur-3xl rounded-2xl md:rounded-3xl opacity-40 animate-liquid-flow"></div>
-            <div className="relative bg-glass-gradient backdrop-blur-xl rounded-2xl md:rounded-3xl p-4 md:p-10 border border-white/20 shadow-2xl group hover:shadow-brand-gold/20 transition-all duration-500">
-              <div className="absolute inset-0 bg-liquid-gradient opacity-20 rounded-2xl md:rounded-3xl group-hover:opacity-30 transition-opacity duration-300"></div>
-              <div className="flex items-center justify-center h-48 md:h-80 lg:h-96 relative z-10">
+            <div className="absolute inset-0 bg-glass-gradient backdrop-blur-3xl rounded-xl sm:rounded-2xl md:rounded-3xl opacity-40 animate-liquid-flow"></div>
+            <div className="relative bg-glass-gradient backdrop-blur-xl rounded-xl sm:rounded-2xl md:rounded-3xl p-3 sm:p-4 md:p-8 lg:p-10 border border-white/20 shadow-2xl group hover:shadow-brand-gold/20 transition-all duration-500">
+              <div className="absolute inset-0 bg-liquid-gradient opacity-20 rounded-xl sm:rounded-2xl md:rounded-3xl group-hover:opacity-30 transition-opacity duration-300"></div>
+              <div className="flex items-center justify-center h-40 sm:h-48 md:h-64 lg:h-80 xl:h-96 relative z-10">
                 <img 
                   src={heroCozyCpollection} 
                   alt="Colecții speciale de mobilier Mobila Nomad - canapele confortabile, paturi elegante și mese moderne pentru casa ta" 
-                  className="w-full h-full object-cover rounded-xl md:rounded-2xl shadow-2xl"
+                  className="w-full h-full object-cover rounded-lg sm:rounded-xl md:rounded-2xl shadow-2xl"
                   loading="eager"
                 />
               </div>
-              <div className="text-center mt-4 md:mt-8 relative z-10">
-                <h3 className="text-xl md:text-3xl font-bold text-brand-cream mb-2 font-playfair drop-shadow-lg">Colecții Speciale</h3>
-                <p className="text-sm md:text-lg text-brand-cream/80 font-inter drop-shadow">Disponibile pentru comandă</p>
+              <div className="text-center mt-3 sm:mt-4 md:mt-6 relative z-10">
+                <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-brand-cream mb-1 sm:mb-2 font-playfair drop-shadow-lg">Colecții Speciale</h3>
+                <p className="text-xs sm:text-sm md:text-base lg:text-lg text-brand-cream/80 font-inter drop-shadow">Disponibile pentru comandă</p>
               </div>
               
               {/* Glass reflection effect */}
-              <div className="absolute top-2 left-2 md:top-4 md:left-4 w-8 h-8 md:w-16 md:h-16 bg-white/10 rounded-full blur-xl opacity-60"></div>
-              <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 w-6 h-6 md:w-12 md:h-12 bg-brand-gold/20 rounded-full blur-lg opacity-40"></div>
+              <div className="absolute top-2 left-2 md:top-4 md:left-4 w-6 h-6 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 bg-white/10 rounded-full blur-xl opacity-60"></div>
+              <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 md:bottom-6 md:right-6 lg:bottom-8 lg:right-8 w-4 h-4 sm:w-6 sm:h-6 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-brand-gold/20 rounded-full blur-lg opacity-40"></div>
             </div>
           </div>
         </div>
