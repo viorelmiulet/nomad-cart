@@ -40,23 +40,23 @@ const Index = () => {
       <Header onSearchOpenChange={setShowPromoBanner} />
       {showPromoBanner && <PromoBanner />}
       <Hero />
-      <section className="py-12 md:py-24 lg:py-32 bg-hero-gradient relative overflow-hidden" aria-labelledby="popular-products-heading">
+      <section className="py-8 sm:py-12 md:py-20 lg:py-28 bg-hero-gradient relative overflow-hidden" aria-labelledby="popular-products-heading">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/90 via-brand-navy/70 to-brand-dark/95" aria-hidden="true"></div>
         <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow" aria-hidden="true"></div>
         <div className="container mx-auto px-4 sm:px-6 md:px-8 relative z-10">
-          <header className="text-center mb-12 md:mb-20">
-            <h2 id="popular-products-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-8 font-playfair text-brand-cream">
+          <header className="text-center mb-8 sm:mb-12 md:mb-16">
+            <h2 id="popular-products-heading" className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 md:mb-6 font-playfair text-brand-cream">
               Produse Populare
             </h2>
-            <p className="text-base md:text-xl text-brand-cream/90 max-w-2xl mx-auto font-inter leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-brand-cream/90 max-w-2xl mx-auto font-inter leading-relaxed px-4">
               Cele mai apreciate piese de mobilier de către clienții noștri
             </p>
           </header>
           <PopularProducts />
-          <div className="text-center mt-12 md:mt-20">
+          <div className="text-center mt-8 sm:mt-12 md:mt-16">
             <Button 
               onClick={handleViewAllProducts}
-              className="bg-brand-gradient text-brand-dark px-8 md:px-12 py-3 md:py-4 h-12 md:h-16 text-base md:text-xl font-semibold hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="bg-brand-gradient text-brand-dark px-6 sm:px-8 md:px-10 py-3 md:py-4 h-12 sm:h-13 md:h-14 text-sm sm:text-base md:text-lg font-semibold hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 min-h-[44px] touch-manipulation"
               aria-label="Vezi toate produsele din magazin"
             >
               Vezi Toate Produsele

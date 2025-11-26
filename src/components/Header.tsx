@@ -79,8 +79,8 @@ const Header = ({ onSearchOpenChange }: HeaderProps) => {
         isScrolled ? 'opacity-100 shadow-[0_0_20px_rgba(255,215,0,0.6)]' : 'opacity-0'
       }`}></div>
       
-      <div className={`container flex items-center justify-between relative z-10 px-6 md:px-8 lg:px-12 transition-all duration-300 ${
-        isScrolled ? 'h-14 md:h-16 lg:h-20' : 'h-16 md:h-20 lg:h-24'
+      <div className={`container flex items-center justify-between relative z-10 px-3 sm:px-4 md:px-6 lg:px-8 transition-all duration-300 ${
+        isScrolled ? 'h-14 sm:h-15 md:h-16 lg:h-18' : 'h-16 sm:h-17 md:h-18 lg:h-20'
       }`}>
         <Link
           to="/"
@@ -167,7 +167,7 @@ const Header = ({ onSearchOpenChange }: HeaderProps) => {
           </div>
         )}
 
-        <div className="flex items-center space-x-1 sm:space-x-2 relative z-10">
+        <div className="flex items-center gap-1 sm:gap-2 relative z-10">
           {/* Mobile-first layout with better spacing */}
           {!isAdminPage && (
             <>
