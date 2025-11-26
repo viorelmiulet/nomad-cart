@@ -3,9 +3,9 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
 import Handlebars from "https://cdn.skypack.dev/handlebars@4.7.8";
 
 const resendApiKey = Deno.env.get("RESEND_API_KEY");
-const resendFrom = Deno.env.get("RESEND_FROM") || "Mobila Nomad <onboarding@resend.dev>";
+const resendFrom = Deno.env.get("RESEND_FROM");
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -189,7 +189,7 @@ const handler = async (req: Request): Promise<Response> => {
     const compiledSubject = Handlebars.compile(template.subject);
     const emailSubject = compiledSubject(templateData);
 
-    const fromHeader = normalizeFrom(resendFrom);
+    const fromHeader = normalizeFrom(resendFrom || '');
     if (!fromHeader) {
       console.error('Invalid RESEND_FROM format. Expected "Name <email@domain>" or "email@domain". Received:', resendFrom);
       return new Response(JSON.stringify({ error: 'Invalid RESEND_FROM format. Use "Name <email@domain>" or "email@domain".' }), {
@@ -198,7 +198,35 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    // Send email
+    // Extract reply-to email from fromHeader
+    const replyToEmail = fromHeader.includes('<') 
+      ? fromHeader.match(/<(.+)>/)?.[1] || fromHeader
+      : fromHeader;
+
+    // Generate plain text version
+    const plainText = `
+Bună ${customerName},
+
+${statusConfig[newStatus]?.message || `Comanda ta a fost actualizată la statusul: ${newStatus}`}
+
+Detalii comandă:
+- Număr comandă: ${order.id.slice(0, 8).toUpperCase()}
+- Data: ${new Date(order.created_at).toLocaleDateString('ro-RO')}
+- Total: ${Number(order.total).toFixed(2)} RON
+- Adresă: ${order.customer_address}
+
+Produse comandate:
+${orderItems.map((item: any) => `- ${item.products?.name || 'Produs'} x${item.quantity} - ${(item.quantity * Number(item.price)).toFixed(2)} RON`).join('\n')}
+
+Pentru detalii, vizitează: https://mobilanomad.ro
+
+${companyInfo?.company_name || 'Mobila Nomad'}
+${companyInfo?.phone || ''}
+${companyInfo?.email || ''}
+${companyInfo?.address || ''}, ${companyInfo?.city || ''}
+    `.trim();
+
+    // Send email with anti-spam headers
     const emailResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -208,8 +236,15 @@ const handler = async (req: Request): Promise<Response> => {
       body: JSON.stringify({
         from: fromHeader,
         to: [customerEmail],
+        reply_to: replyToEmail,
         subject: emailSubject,
-        html: htmlContent
+        html: htmlContent,
+        text: plainText,
+        headers: {
+          'X-Entity-Ref-ID': emailHistoryId,
+          'List-Unsubscribe': `<mailto:${replyToEmail}?subject=Unsubscribe>`,
+          'X-Mailer': 'Mobila Nomad Notification System',
+        }
       })
     });
 
