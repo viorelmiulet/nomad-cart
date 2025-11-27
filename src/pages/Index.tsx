@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import PopularProducts from "@/components/PopularProducts";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import InstallPWABanner from "@/components/InstallPWABanner";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -65,6 +66,7 @@ const Index = () => {
         </div>
       </section>
       <Footer />
+      <InstallPWABanner />
     </main>
   );
 };
