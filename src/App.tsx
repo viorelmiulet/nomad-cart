@@ -18,7 +18,7 @@ import DormitorPage from "./pages/DormitorPage";
 import DormitorCompletPage from "./pages/DormitorCompletPage";
 import BucatariePage from "./pages/BucatariePage";
 import AllProductsPage from "./pages/AllProductsPage";
-
+import InstallPage from "./pages/InstallPage";
 
 import BlogPage from "./pages/BlogPage";
 import BlogPostPage from "./pages/BlogPostPage";
@@ -58,6 +58,7 @@ const App = () => (
              <Route path="/dormitor-complet" element={<DormitorCompletPage />} />
              <Route path="/bucatarie" element={<BucatariePage />} />
              <Route path="/toate-produsele" element={<AllProductsPage />} />
+             <Route path="/install" element={<InstallPage />} />
               
               
               <Route path="/blog" element={<BlogPage />} />
