@@ -6,8 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { AnalyticsTracker } from "@/components/AnalyticsTracker";
-import { SupportChat } from "@/components/SupportChat";
+import FloatingContactButtons from "@/components/FloatingContactButtons";
 import Index from "./pages/Index";
 import ProductsPage from "./pages/ProductsPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
@@ -46,8 +45,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <AnalyticsTracker>
-            <Routes>
+          <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/products" element={<ProductsPage />} />
               <Route path="/product/:id" element={<ProductDetailsPage />} />
@@ -75,8 +73,7 @@ const App = () => (
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </AnalyticsTracker>
-          <SupportChat />
+          <FloatingContactButtons />
         </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
