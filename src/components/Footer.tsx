@@ -1,7 +1,10 @@
 import { Facebook, Instagram, MessageCircle, Mail, Phone, MapPin } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useCart } from "@/contexts/CartContext";
 
 const Footer = () => {
+  const { items, getTotalPrice } = useCart();
+  
   const handleSocialClick = (platform: string) => {
     toast({
       title: `Conectare ${platform}`,
@@ -10,8 +13,26 @@ const Footer = () => {
   };
 
   const handleWhatsAppClick = () => {
-    const phoneNumber = "40758433114"; // Number without + or spaces
-    const message = "Salut! Sunt interesat de produsele voastre de mobilier.";
+    const phoneNumber = "40758433114";
+    
+    let message = "Salut! ";
+    
+    if (items.length > 0) {
+      message += "Doresc să comand următoarele produse:\n\n";
+      
+      items.forEach((item, index) => {
+        message += `${index + 1}. ${item.name}\n`;
+        message += `   Cantitate: ${item.quantity} buc\n`;
+        message += `   Preț: ${item.price.toLocaleString('ro-RO')} Lei\n`;
+        message += `   Subtotal: ${(item.price * item.quantity).toLocaleString('ro-RO')} Lei\n\n`;
+      });
+      
+      message += `*TOTAL COMANDĂ: ${getTotalPrice().toLocaleString('ro-RO')} Lei*\n\n`;
+      message += "Aștept confirmarea comenzii. Mulțumesc!";
+    } else {
+      message += "Sunt interesat de produsele voastre de mobilier.";
+    }
+    
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };

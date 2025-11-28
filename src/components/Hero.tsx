@@ -1,15 +1,35 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
 import { useParallaxMulti } from "@/hooks/useParallax";
+import { useCart } from "@/contexts/CartContext";
 
 import heroCozyCpollection from "@/assets/hero-cozy-collection.jpg";
 
 const Hero = () => {
   const [offset1, offset2, offset3] = useParallaxMulti([0.2, 0.4, 0.6]);
+  const { items, getTotalPrice } = useCart();
 
   const handleWhatsAppContact = () => {
     const phoneNumber = "0758433114";
-    const message = "Salut! Sunt interesat de mobilierul de calitate la prețuri accesibile.";
+    
+    let message = "Salut! ";
+    
+    if (items.length > 0) {
+      message += "Doresc să comand următoarele produse:\n\n";
+      
+      items.forEach((item, index) => {
+        message += `${index + 1}. ${item.name}\n`;
+        message += `   Cantitate: ${item.quantity} buc\n`;
+        message += `   Preț: ${item.price.toLocaleString('ro-RO')} Lei\n`;
+        message += `   Subtotal: ${(item.price * item.quantity).toLocaleString('ro-RO')} Lei\n\n`;
+      });
+      
+      message += `*TOTAL COMANDĂ: ${getTotalPrice().toLocaleString('ro-RO')} Lei*\n\n`;
+      message += "Aștept confirmarea comenzii. Mulțumesc!";
+    } else {
+      message += "Sunt interesat de mobilierul de calitate la prețuri accesibile.";
+    }
+    
     const whatsappUrl = `https://wa.me/4${phoneNumber.substring(1)}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
