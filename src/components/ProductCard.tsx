@@ -32,7 +32,7 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const { addItem } = useCart();
   const { toggleItem, isInWishlist } = useWishlist();
-  const { discountPercentage } = useDiscount();
+  const { discountPercentage, isActive } = useDiscount();
 
   const cardPrice = price * (1 - discountPercentage / 100);
 
@@ -106,9 +106,11 @@ const ProductCard = ({
               <span className="text-lg sm:text-xl font-bold text-foreground font-playfair">
                 {price.toLocaleString('ro-RO')} Lei
               </span>
-              <span className="text-xs sm:text-sm text-muted-foreground font-inter">
-                (cash)
-              </span>
+              {!isActive && (
+                <span className="text-xs sm:text-sm text-muted-foreground font-inter">
+                  (cash)
+                </span>
+              )}
               {originalPrice && (
                 <span className="text-sm sm:text-base text-muted-foreground line-through font-inter">
                   {originalPrice.toLocaleString('ro-RO')} Lei
@@ -116,18 +118,22 @@ const ProductCard = ({
               )}
             </div>
             
-            {/* Preț card - discount dinamic */}
-            <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
-              <span className="text-xl sm:text-2xl font-bold text-brand-gold font-playfair">
-                {cardPrice.toLocaleString('ro-RO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} Lei
-              </span>
-              <Badge variant="secondary" className="bg-brand-gold/20 text-brand-gold border-brand-gold/30 font-semibold text-xs">
-                -{discountPercentage}% card
-              </Badge>
-            </div>
-            <p className="text-[10px] sm:text-xs text-muted-foreground font-inter italic">
-              *Preț special pentru plata cu cardul bancar
-            </p>
+            {/* Preț card - discount dinamic - afișat doar dacă există reducere activă */}
+            {isActive && (
+              <>
+                <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
+                  <span className="text-xl sm:text-2xl font-bold text-brand-gold font-playfair">
+                    {cardPrice.toLocaleString('ro-RO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} Lei
+                  </span>
+                  <Badge variant="secondary" className="bg-brand-gold/20 text-brand-gold border-brand-gold/30 font-semibold text-xs">
+                    -{discountPercentage}% card
+                  </Badge>
+                </div>
+                <p className="text-[10px] sm:text-xs text-muted-foreground font-inter italic">
+                  *Preț special pentru plata cu cardul bancar
+                </p>
+              </>
+            )}
           </div>
           
           <Button 
