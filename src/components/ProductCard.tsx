@@ -106,11 +106,6 @@ const ProductCard = ({
               <span className="text-lg sm:text-xl font-bold text-foreground font-playfair">
                 {price.toLocaleString('ro-RO')} Lei
               </span>
-              {!isActive && (
-                <span className="text-xs sm:text-sm text-muted-foreground font-inter">
-                  (cash)
-                </span>
-              )}
               {originalPrice && (
                 <span className="text-sm sm:text-base text-muted-foreground line-through font-inter">
                   {originalPrice.toLocaleString('ro-RO')} Lei
