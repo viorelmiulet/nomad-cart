@@ -4,7 +4,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer"; // Footer component
 import { AdminSupportChat } from "@/components/AdminSupportChat";
 import { CompanyInfoEditor } from "@/components/CompanyInfoEditor";
-import { GoogleAnalyticsDashboard } from "@/components/GoogleAnalyticsDashboard";
 import { DiscountSettings } from "@/components/DiscountSettings";
 import { DiscountCodes } from "@/components/DiscountCodes";
 import { SupportStatsDashboard } from "@/components/SupportStatsDashboard";
@@ -1124,8 +1123,7 @@ const AdminPage = () => {
 
         {/* Admin Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-11">
-            <TabsTrigger value="google-analytics">Analytics</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-10">
             <TabsTrigger value="products">Produse</TabsTrigger>
             <TabsTrigger value="orders">Comenzi</TabsTrigger>
             <TabsTrigger value="support">Suport Clienți</TabsTrigger>
@@ -1138,11 +1136,6 @@ const AdminPage = () => {
             <TabsTrigger value="discount">Reduceri</TabsTrigger>
             <TabsTrigger value="settings">Setări</TabsTrigger>
           </TabsList>
-
-          {/* Google Analytics Tab */}
-          <TabsContent value="google-analytics">
-            <GoogleAnalyticsDashboard />
-          </TabsContent>
 
           {/* Email Stats Tab */}
           <TabsContent value="email-stats">
