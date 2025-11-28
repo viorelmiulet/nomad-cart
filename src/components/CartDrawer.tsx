@@ -2,7 +2,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ShoppingCart, Plus, Minus, Trash2, CreditCard, Banknote, Tag, X } from "lucide-react";
+import { ShoppingCart, Plus, Minus, Trash2, CreditCard, Banknote, Tag, X, MessageCircle } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
@@ -161,6 +161,50 @@ const CartDrawer = () => {
     
     setIsOpen(false);
     navigate('/checkout');
+  };
+
+  const handleWhatsAppOrder = () => {
+    if (items.length === 0) {
+      toast({
+        title: "Coșul este gol",
+        description: "Adaugă produse în coș pentru a comanda prin WhatsApp.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const phoneNumber = "40758433114";
+    let message = "Salut! Doresc să comand următoarele produse:\n\n";
+    
+    items.forEach((item, index) => {
+      message += `${index + 1}. ${item.name}\n`;
+      message += `   Cantitate: ${item.quantity} buc\n`;
+      message += `   Preț: ${item.price.toLocaleString('ro-RO')} Lei\n`;
+      message += `   Subtotal: ${(item.price * item.quantity).toLocaleString('ro-RO')} Lei\n\n`;
+    });
+    
+    const discountedPrice = getDiscountedPrice();
+    message += `*Subtotal: ${getTotalPrice().toLocaleString('ro-RO')} Lei*\n`;
+    
+    if (appliedDiscount) {
+      const discountText = appliedDiscount.type === 'percentage' 
+        ? `${appliedDiscount.value}%` 
+        : `${appliedDiscount.value} Lei`;
+      message += `Cod reducere (${discountText}): -${getCodeDiscount().toLocaleString('ro-RO')} Lei\n`;
+    }
+    
+    if (paymentMethod === 'card') {
+      message += `Discount card (${discountPercentage}%): -${getCardDiscount().toLocaleString('ro-RO')} Lei\n`;
+    }
+    
+    message += `\n*TOTAL COMANDĂ: ${discountedPrice.toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Lei*\n`;
+    message += `\nMetodă plată: ${paymentMethod === 'card' ? 'Card Bancar' : 'Numerar'}\n`;
+    message += "\nAștept confirmarea comenzii. Mulțumesc!";
+    
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+    
+    setIsOpen(false);
   };
 
   return (
@@ -365,6 +409,14 @@ const CartDrawer = () => {
                     className="w-full bg-brand-gradient hover:opacity-90 text-brand-dark font-semibold h-12 md:h-14 text-sm md:text-base shadow-xl transform hover:scale-[1.02] transition-all duration-300"
                   >
                     Finalizează Comanda
+                  </Button>
+                  <Button 
+                    onClick={handleWhatsAppOrder}
+                    variant="outline"
+                    className="w-full border-2 border-green-500/50 bg-glass-gradient text-brand-cream hover:bg-green-500/10 hover:border-green-400/70 transition-all duration-300 h-12 md:h-14 text-sm md:text-base flex items-center gap-2"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    Comandă pe WhatsApp
                   </Button>
                   <Button 
                     variant="outline"
