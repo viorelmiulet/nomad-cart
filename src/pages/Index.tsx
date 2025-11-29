@@ -1,11 +1,10 @@
 import Header from "@/components/Header";
 import PromoBanner from "@/components/PromoBanner";
 import Hero from "@/components/Hero";
-import PopularProducts from "@/components/PopularProducts";
+import { ShopifyProductGrid } from "@/components/ShopifyProductGrid";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import InstallPWABanner from "@/components/InstallPWABanner";
-import { ProductRecommendations } from "@/components/ProductRecommendations";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -54,27 +53,7 @@ const Index = () => {
               Cele mai apreciate piese de mobilier de către clienții noștri
             </p>
           </header>
-          <PopularProducts />
-          <div className="text-center mt-8 sm:mt-12 md:mt-16">
-            <Button 
-              onClick={handleViewAllProducts}
-              className="bg-brand-gradient text-brand-dark px-6 sm:px-8 md:px-10 py-3 md:py-4 h-12 sm:h-13 md:h-14 text-sm sm:text-base md:text-lg font-semibold hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 min-h-[44px] touch-manipulation"
-              aria-label="Vezi toate produsele din magazin"
-            >
-              Vezi Toate Produsele
-            </Button>
-          </div>
-        </div>
-      </section>
-      
-      {/* AI-Powered Recommendations Section */}
-      <section className="py-12 md:py-16 bg-gradient-to-b from-background to-muted/20">
-        <div className="container mx-auto px-4 sm:px-6 md:px-8">
-          <ProductRecommendations 
-            limit={4}
-            title="Recomandări Personalizate"
-            description="Produse selectate special pentru tine cu ajutorul inteligenței artificiale"
-          />
+          <ShopifyProductGrid />
         </div>
       </section>
       
