@@ -1,7 +1,7 @@
 const SHOPIFY_API_VERSION = '2025-07';
 const SHOPIFY_STORE_PERMANENT_DOMAIN = 'nomad-cart-totzw.myshopify.com';
 const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
-const SHOPIFY_STOREFRONT_TOKEN = '8d1d35ba51f86976100d4ba70ab66a7c';
+const SHOPIFY_STOREFRONT_TOKEN = '79ffe5ddcbecedb70a9e42abd6e045c4';
 
 export interface ShopifyProduct {
   node: {
