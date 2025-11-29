@@ -7,6 +7,7 @@ interface CartStore {
   cartId: string | null;
   checkoutUrl: string | null;
   isLoading: boolean;
+  lastCheckoutItems: CartItem[];
   
   // Actions
   addItem: (item: CartItem) => void;
@@ -17,6 +18,8 @@ interface CartStore {
   setCheckoutUrl: (url: string) => void;
   setLoading: (loading: boolean) => void;
   createCheckout: () => Promise<void>;
+  saveCheckoutItems: () => void;
+  clearLastCheckoutItems: () => void;
 }
 
 export const useCartStore = create<CartStore>()(
@@ -26,6 +29,7 @@ export const useCartStore = create<CartStore>()(
       cartId: null,
       checkoutUrl: null,
       isLoading: false,
+      lastCheckoutItems: [],
 
       addItem: (item) => {
         const { items } = get();
@@ -85,6 +89,14 @@ export const useCartStore = create<CartStore>()(
         } finally {
           setLoading(false);
         }
+      },
+
+      saveCheckoutItems: () => {
+        set({ lastCheckoutItems: [...get().items] });
+      },
+
+      clearLastCheckoutItems: () => {
+        set({ lastCheckoutItems: [] });
       }
     }),
     {
