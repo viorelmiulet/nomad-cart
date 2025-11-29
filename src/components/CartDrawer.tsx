@@ -31,13 +31,17 @@ const CartDrawer = () => {
     }
 
     try {
+      // Save checkout items for confirmation page
+      const saveCheckoutItems = useCartStore.getState().saveCheckoutItems;
+      saveCheckoutItems();
+      
       await createCheckout();
       const checkoutUrl = useCartStore.getState().checkoutUrl;
       if (checkoutUrl) {
         window.open(checkoutUrl, '_blank');
         toast({
-          title: "Redirecționare către checkout",
-          description: "Te-am redirecționat către pagina de finalizare comandă.",
+          title: "Checkout deschis",
+          description: "După finalizarea comenzii pe Shopify, revino aici și accesează /order-confirmation pentru confirmarea comenzii",
         });
         setIsOpen(false);
       }

@@ -26,6 +26,7 @@ import AuthPage from "./pages/AuthPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import CheckoutSuccessPage from "./pages/CheckoutSuccessPage";
 import CheckoutCancelPage from "./pages/CheckoutCancelPage";
+import OrderConfirmationPage from "./pages/OrderConfirmationPage";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -65,6 +66,7 @@ const App = () => (
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
               <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
+              <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
               <Route path="/admin" element={
                 <ProtectedRoute>
                   <AdminPage />
