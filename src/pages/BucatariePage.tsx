@@ -1,97 +1,14 @@
-import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ProductCard from "@/components/ProductCard";
+import { ShopifyProductGrid } from "@/components/ShopifyProductGrid";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Filter, SortAsc, ChefHat, Utensils, CookingPot, Refrigerator } from "lucide-react";
+import { ArrowLeft, ChefHat, Utensils, CookingPot } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import categoryKitchen from "@/assets/category-kitchen.jpg";
 
 const BucatariePage = () => {
   const navigate = useNavigate();
-  const [selectedSubcategory, setSelectedSubcategory] = useState("toate");
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const subcategories = [
-    { id: "toate", name: "Toate Produsele", icon: ChefHat },
-    { id: "bucatarii-complete", name: "Bucătării Complete", icon: CookingPot },
-    { id: "corpuri", name: "Corpuri Individuale", icon: Utensils },
-    { id: "accesorii", name: "Accesorii", icon: Refrigerator },
-  ];
-
-  useEffect(() => {
-    fetchKitchenProducts();
-  }, []);
-
-  const fetchKitchenProducts = async () => {
-    try {
-      setLoading(true);
-      
-      // Get bucatarie category ID first
-      const { data: categoryData, error: categoryError } = await supabase
-        .from('categories')
-        .select('id')
-        .eq('slug', 'bucatarie')
-        .single();
-
-      if (categoryError) {
-        console.error('Error fetching category:', categoryError);
-        return;
-      }
-
-      // Then fetch products with that category_id
-      const { data, error } = await supabase
-        .from('products')
-        .select('id, name, price, image_url, description')
-        .eq('category_id', categoryData.id)
-        .eq('status', 'active')
-        .order('name', { ascending: true });
-
-      if (error) {
-        console.error('Error fetching kitchen products:', error);
-        return;
-      }
-
-      console.log('Fetched kitchen products:', data?.length || 0, 'products');
-      setProducts(data || []);
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const filterProducts = (products: any[], subcategory: string) => {
-    if (subcategory === "toate") return products;
-    
-    switch (subcategory) {
-      case "bucatarii-complete":
-        return products.filter(p => 
-          p.name.toLowerCase().includes("bucătărie") &&
-          (p.name.toLowerCase().includes("completă") || p.name.toLowerCase().includes("cm"))
-        );
-      case "corpuri":
-        return products.filter(p => 
-          p.name.toLowerCase().includes("corp") ||
-          p.name.toLowerCase().includes("blat")
-        );
-      case "accesorii":
-        return products.filter(p => 
-          p.name.toLowerCase().includes("organizator") ||
-          p.name.toLowerCase().includes("coș") ||
-          p.name.toLowerCase().includes("sistem") ||
-          p.name.toLowerCase().includes("set")
-        );
-      default:
-        return products;
-    }
-  };
-
-  const filteredProducts = filterProducts(products, selectedSubcategory);
 
   return (
     <div className="min-h-screen bg-background">
@@ -144,27 +61,6 @@ const BucatariePage = () => {
         </div>
       </section>
 
-      {/* Subcategories Filter */}
-      <section className="py-8 bg-muted/30" aria-label="Filtrare produse bucătărie">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap gap-4 justify-center">
-            {subcategories.map((subcat) => {
-              const IconComponent = subcat.icon;
-              return (
-                <Button
-                  key={subcat.id}
-                  variant={selectedSubcategory === subcat.id ? "default" : "outline"}
-                  onClick={() => setSelectedSubcategory(subcat.id)}
-                  className="flex items-center gap-2"
-                >
-                  <IconComponent className="h-4 w-4" />
-                  {subcat.name}
-                </Button>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
       {/* Benefits Section */}
       <section className="py-12 bg-background" aria-labelledby="benefits-kitchen-heading">
@@ -220,42 +116,11 @@ const BucatariePage = () => {
               Mobilier pentru Bucătării
             </h2>
             <p className="text-muted-foreground">
-              Descoperă colecția noastră de {filteredProducts.length} produse pentru bucătăria ta
+              Descoperă colecția noastră de produse pentru bucătăria ta
             </p>
           </header>
           
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {[...Array(8)].map((_, index) => (
-                <div key={index} className="space-y-4">
-                  <Skeleton className="aspect-square rounded-lg" />
-                  <Skeleton className="h-4 w-3/4" />
-                  <Skeleton className="h-4 w-1/2" />
-                </div>
-              ))}
-            </div>
-          ) : filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  id={product.id}
-                  name={product.name}
-                  price={product.price}
-                  image={product.image_url || '/placeholder.svg'}
-                  rating={4.5}
-                  reviews={Math.floor(Math.random() * 50) + 10}
-                  isNew={new Date(product.created_at || Date.now()) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground text-lg">
-                Nu s-au găsit produse pentru categoria selectată.
-              </p>
-            </div>
-          )}
+          <ShopifyProductGrid />
         </div>
       </section>
       
