@@ -159,6 +159,19 @@ const handler = async (req: Request): Promise<Response> => {
       };
     });
 
+    // Generate WhatsApp contact link
+    const companyPhoneClean = (companyInfo?.phone || '').replace(/\D/g, '');
+    const whatsappMessage = encodeURIComponent(
+      `Bună! Am o întrebare despre comanda mea #${order.id.slice(0, 8).toUpperCase()}.\n\n` +
+      `Status actual: ${statusConfig[newStatus]?.title || newStatus}\n` +
+      `Data comenzii: ${new Date(order.created_at).toLocaleDateString('ro-RO')}\n` +
+      `Total: ${Number(order.total).toFixed(2)} RON\n\n` +
+      `Mulțumesc!`
+    );
+    const whatsappLink = companyPhoneClean 
+      ? `https://wa.me/${companyPhoneClean}?text=${whatsappMessage}`
+      : `https://wa.me/?text=${whatsappMessage}`;
+
     const templateData = {
       customerName,
       orderNumber: order.id.slice(0, 8).toUpperCase(),
@@ -176,6 +189,7 @@ const handler = async (req: Request): Promise<Response> => {
       companyCity: companyInfo?.city || '',
       companyWebsite: companyInfo?.website || '',
       trackingPixelUrl,
+      whatsappLink: makeTrackableLink(whatsappLink),
       feedbackUrl5: makeTrackableLink(`${supabaseUrl}/functions/v1/submit-email-feedback?id=${emailHistoryId}&email=${encodeURIComponent(customerEmail)}&rating=5`),
       feedbackUrl4: makeTrackableLink(`${supabaseUrl}/functions/v1/submit-email-feedback?id=${emailHistoryId}&email=${encodeURIComponent(customerEmail)}&rating=4`),
       feedbackUrl3: makeTrackableLink(`${supabaseUrl}/functions/v1/submit-email-feedback?id=${emailHistoryId}&email=${encodeURIComponent(customerEmail)}&rating=3`)
