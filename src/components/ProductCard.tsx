@@ -2,11 +2,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, Heart, Star } from "lucide-react";
-import { useCartStore } from "@/stores/cartStore";
+import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/hooks/useWishlist";
 import { Link } from "react-router-dom";
 import { useDiscount } from "@/hooks/useDiscount";
-import { toast } from "@/hooks/use-toast";
 
 interface ProductCardProps {
   id: string;
@@ -31,7 +30,7 @@ const ProductCard = ({
   isNew, 
   isOnSale 
 }: ProductCardProps) => {
-  const addItem = useCartStore(state => state.addItem);
+  const { addItem } = useCart();
   const { toggleItem, isInWishlist } = useWishlist();
   const { discountPercentage, isActive } = useDiscount();
 
@@ -40,64 +39,7 @@ const ProductCard = ({
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    // Create a mock Shopify product structure for Supabase products
-    const mockShopifyProduct = {
-      node: {
-        id: `gid://shopify/Product/${id}`,
-        title: name,
-        description: '',
-        handle: id,
-        priceRange: {
-          minVariantPrice: {
-            amount: price.toString(),
-            currencyCode: 'RON'
-          }
-        },
-        images: {
-          edges: [{
-            node: {
-              url: image,
-              altText: name
-            }
-          }]
-        },
-        variants: {
-          edges: [{
-            node: {
-              id: `gid://shopify/ProductVariant/${id}`,
-              title: 'Default',
-              price: {
-                amount: price.toString(),
-                currencyCode: 'RON'
-              },
-              availableForSale: true,
-              selectedOptions: []
-            }
-          }]
-        },
-        options: []
-      }
-    };
-
-    const cartItem = {
-      product: mockShopifyProduct,
-      variantId: `gid://shopify/ProductVariant/${id}`,
-      variantTitle: 'Default',
-      price: {
-        amount: price.toString(),
-        currencyCode: 'RON'
-      },
-      quantity: 1,
-      selectedOptions: []
-    };
-    
-    addItem(cartItem);
-    
-    toast({
-      title: "Adăugat în coș!",
-      description: `${name} a fost adăugat în coșul tău.`,
-    });
+    addItem({ id, name, price, image });
   };
 
   const handleToggleWishlist = (e: React.MouseEvent) => {
