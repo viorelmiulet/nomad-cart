@@ -120,7 +120,7 @@ const BucatariePage = () => {
             </p>
           </header>
           
-          <ShopifyProductGrid />
+          <ShopifyProductGrid productType="Bucătării" />
         </div>
       </section>
       

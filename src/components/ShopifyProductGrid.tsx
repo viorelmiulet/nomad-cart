@@ -3,7 +3,12 @@ import { fetchShopifyProducts, ShopifyProduct } from '@/lib/shopify';
 import { ShopifyProductCard } from './ShopifyProductCard';
 import { Loader2 } from 'lucide-react';
 
-export const ShopifyProductGrid = () => {
+interface ShopifyProductGridProps {
+  productType?: string;
+  limit?: number;
+}
+
+export const ShopifyProductGrid = ({ productType, limit = 50 }: ShopifyProductGridProps = {}) => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -12,7 +17,8 @@ export const ShopifyProductGrid = () => {
     const loadProducts = async () => {
       try {
         setLoading(true);
-        const data = await fetchShopifyProducts(50);
+        const query = productType ? `product_type:${productType}` : undefined;
+        const data = await fetchShopifyProducts(limit, query);
         setProducts(data);
       } catch (err) {
         console.error('Failed to load products:', err);
@@ -23,7 +29,7 @@ export const ShopifyProductGrid = () => {
     };
 
     loadProducts();
-  }, []);
+  }, [productType, limit]);
 
   if (loading) {
     return (

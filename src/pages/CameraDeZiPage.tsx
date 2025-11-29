@@ -121,7 +121,7 @@ const CameraDeZiPage = () => {
             </p>
           </header>
           
-          <ShopifyProductGrid />
+          <ShopifyProductGrid productType="Canapele" />
         </div>
       </section>
       
