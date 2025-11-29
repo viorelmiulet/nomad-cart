@@ -1,95 +1,14 @@
-import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ProductCard from "@/components/ProductCard";
+import { ShopifyProductGrid } from "@/components/ShopifyProductGrid";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Filter, SortAsc, Sofa, Armchair, Home, ShoppingBag } from "lucide-react";
+import { ArrowLeft, Sofa, Home, ShoppingBag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import categoryLiving from "@/assets/category-living.jpg";
 
 const CameraDeZiPage = () => {
   const navigate = useNavigate();
-  const [selectedSubcategory, setSelectedSubcategory] = useState("toate");
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const subcategories = [
-    { id: "toate", name: "Toate Produsele", icon: Home },
-    { id: "canapele-coltare", name: "Canapele Colțare", icon: Sofa },
-    { id: "fotolii", name: "Fotolii", icon: Armchair },
-    { id: "accesorii", name: "Accesorii", icon: ShoppingBag },
-  ];
-
-  useEffect(() => {
-    fetchLivingRoomProducts();
-  }, []);
-
-  const fetchLivingRoomProducts = async () => {
-    try {
-      setLoading(true);
-      
-      // Get camera-de-zi category ID first
-      const { data: categoryData, error: categoryError } = await supabase
-        .from('categories')
-        .select('id')
-        .eq('slug', 'camera-de-zi')
-        .single();
-
-      if (categoryError) {
-        console.error('Error fetching category:', categoryError);
-        return;
-      }
-
-      // Then fetch products with that category_id
-      const { data, error } = await supabase
-        .from('products')
-        .select('id, name, price, image_url, description, created_at')
-        .eq('category_id', categoryData.id)
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching living room products:', error);
-        return;
-      }
-
-      console.log('Fetched living room products:', data?.length || 0, 'products');
-      setProducts(data || []);
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const filterProducts = (products: any[], subcategory: string) => {
-    if (subcategory === "toate") return products;
-    
-    switch (subcategory) {
-      case "canapele-coltare":
-        return products.filter(p => 
-          p.name.toLowerCase().includes("canapea") &&
-          p.name.toLowerCase().includes("colțar")
-        );
-      case "fotolii":
-        return products.filter(p => 
-          p.name.toLowerCase().includes("fotoliu")
-        );
-      case "accesorii":
-        return products.filter(p => 
-          p.name.toLowerCase().includes("masă") ||
-          p.name.toLowerCase().includes("lampă") ||
-          p.name.toLowerCase().includes("covor")
-        );
-      default:
-        return products;
-    }
-  };
-
-  const filteredProducts = filterProducts(products, selectedSubcategory);
 
   return (
     <div className="min-h-screen bg-background">
@@ -143,27 +62,6 @@ const CameraDeZiPage = () => {
         </div>
       </section>
 
-      {/* Subcategories Filter */}
-      <section className="py-8 bg-muted/30" aria-label="Filtrare produse camera de zi">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap gap-4 justify-center">
-            {subcategories.map((subcat) => {
-              const IconComponent = subcat.icon;
-              return (
-                <Button
-                  key={subcat.id}
-                  variant={selectedSubcategory === subcat.id ? "default" : "outline"}
-                  onClick={() => setSelectedSubcategory(subcat.id)}
-                  className="flex items-center gap-2"
-                >
-                  <IconComponent className="h-4 w-4" />
-                  {subcat.name}
-                </Button>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
       {/* Benefits Section */}
       <section className="py-12 bg-background" aria-labelledby="benefits-living-heading">
@@ -219,42 +117,11 @@ const CameraDeZiPage = () => {
               Mobilier pentru Camera de Zi
             </h2>
             <p className="text-muted-foreground">
-              Descoperă colecția noastră de {filteredProducts.length} produse pentru camera ta de zi
+              Descoperă colecția noastră de produse pentru camera ta de zi
             </p>
           </header>
           
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {[...Array(8)].map((_, index) => (
-                <div key={index} className="space-y-4">
-                  <Skeleton className="aspect-square rounded-lg" />
-                  <Skeleton className="h-4 w-3/4" />
-                  <Skeleton className="h-4 w-1/2" />
-                </div>
-              ))}
-            </div>
-          ) : filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  id={product.id}
-                  name={product.name}
-                  price={product.price}
-                  image={product.image_url || '/placeholder.svg'}
-                  rating={4.5}
-                  reviews={Math.floor(Math.random() * 50) + 10}
-                  isNew={new Date(product.created_at || Date.now()) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground text-lg">
-                Nu s-au găsit produse pentru categoria selectată.
-              </p>
-            </div>
-          )}
+          <ShopifyProductGrid />
         </div>
       </section>
       

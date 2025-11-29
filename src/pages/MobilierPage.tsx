@@ -1,18 +1,10 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ProductCard from "@/components/ProductCard";
+import { ShopifyProductGrid } from "@/components/ShopifyProductGrid";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Filter, SortAsc } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "@/hooks/use-toast";
-
-// Import product images
-import sofaImage from "@/assets/product-sofa-modern.jpg";
-import diningTableImage from "@/assets/product-dining-table.jpg";
-import wardrobeImage from "@/assets/product-wardrobe.jpg";
-import armchairsImage from "@/assets/product-armchairs.jpg";
-import bookshelfImage from "@/assets/product-bookshelf.jpg";
 
 const MobilierPage = () => {
   const navigate = useNavigate();
@@ -20,62 +12,6 @@ const MobilierPage = () => {
   const handleGoBack = () => {
     navigate("/");
   };
-
-  const handleFilter = () => {
-    toast({
-      title: "Filtre",
-      description: "Sistemul de filtrare va fi implementat în curând.",
-    });
-  };
-
-  const handleSort = () => {
-    toast({
-      title: "Sortare",
-      description: "Opțiunile de sortare vor fi disponibile în curând.",
-    });
-  };
-
-  const mobilierProducts = [
-    {
-      id: "m1",
-      name: "Bibliotecă Modulară de Lux",
-      price: 2499,
-      originalPrice: 2899,
-      image: bookshelfImage,
-      rating: 5,
-      reviews: 89,
-      isNew: true,
-      isOnSale: true
-    },
-    {
-      id: "m2", 
-      name: "Masă de Dining Extensibilă",
-      price: 1899,
-      image: diningTableImage,
-      rating: 5,
-      reviews: 95,
-      isNew: true
-    },
-    {
-      id: "m3",
-      name: "Dulap Dormitor cu Oglinzi", 
-      price: 3299,
-      originalPrice: 3799,
-      image: wardrobeImage,
-      rating: 4,
-      reviews: 67,
-      isOnSale: true
-    },
-    {
-      id: "m4",
-      name: "Set Fotolii Living de Lux",
-      price: 2399,
-      image: armchairsImage,
-      rating: 4,
-      reviews: 45,
-      isNew: true
-    }
-  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -99,41 +35,19 @@ const MobilierPage = () => {
         <div className="absolute inset-0 bg-liquid-gradient opacity-30 animate-liquid-flow"></div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="flex items-center justify-between mb-16">
-            <div className="flex items-center space-x-4">
-              <Button
-                onClick={handleGoBack}
-                variant="outline"
-                className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Înapoi la Home
-              </Button>
-              
-              <h1 className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
-                Mobilier de Lux
-              </h1>
-            </div>
+          <div className="flex items-center space-x-4 mb-16">
+            <Button
+              onClick={handleGoBack}
+              variant="outline"
+              className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Înapoi la Home
+            </Button>
             
-            <div className="hidden md:flex items-center space-x-4">
-              <Button
-                onClick={handleFilter}
-                variant="outline" 
-                className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
-              >
-                <Filter className="h-4 w-4 mr-2" />
-                Filtre
-              </Button>
-              
-              <Button
-                onClick={handleSort}
-                variant="outline"
-                className="border-luxury-gold/50 text-luxury-cream hover:bg-luxury-gold/10 hover:border-luxury-gold/70"
-              >
-                <SortAsc className="h-4 w-4 mr-2" />
-                Sortare
-              </Button>
-            </div>
+            <h1 className="text-3xl lg:text-4xl font-bold font-playfair text-luxury-cream">
+              Mobilier de Lux
+            </h1>
           </div>
           
           <div className="text-center mb-16">
@@ -143,11 +57,7 @@ const MobilierPage = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {mobilierProducts.map((product) => (
-              <ProductCard key={product.id} {...product} />
-            ))}
-          </div>
+          <ShopifyProductGrid />
         </div>
       </main>
       
