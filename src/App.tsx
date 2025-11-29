@@ -10,6 +10,7 @@ import FloatingContactButtons from "@/components/FloatingContactButtons";
 import Index from "./pages/Index";
 import ProductsPage from "./pages/ProductsPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
+import ShopifyProductDetailsPage from "./pages/ShopifyProductDetailsPage";
 import ContactPage from "./pages/ContactPage";
 import MobilierPage from "./pages/MobilierPage";
 import CameraDeZiPage from "./pages/CameraDeZiPage";
@@ -47,9 +48,10 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-              <Route path="/" element={<Index />} />
+            <Route path="/" element={<Index />} />
               <Route path="/products" element={<ProductsPage />} />
               <Route path="/produs/:id" element={<ProductDetailsPage />} />
+              <Route path="/product/:handle" element={<ShopifyProductDetailsPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/mobilier" element={<MobilierPage />} />
               <Route path="/camera-de-zi" element={<CameraDeZiPage />} />
