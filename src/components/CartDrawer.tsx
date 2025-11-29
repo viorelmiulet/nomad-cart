@@ -1,32 +1,34 @@
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Plus, Minus, Trash2, ArrowRight } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
-import { useNavigate } from "react-router-dom";
+import { ShoppingCart, Plus, Minus, Trash2, ExternalLink, Loader2 } from "lucide-react";
+import { useCartStore } from "@/stores/cartStore";
 import { useState } from "react";
 
 const CartDrawer = () => {
-  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
   const { 
     items, 
-    isOpen,
-    setIsOpen,
+    isLoading, 
     updateQuantity, 
     removeItem, 
     clearCart,
-    getTotalItems,
-    getTotalPrice
-  } = useCart();
+    createCheckout 
+  } = useCartStore();
   
-  const totalItems = getTotalItems();
-  const totalPrice = getTotalPrice();
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
 
-  const handleCheckout = () => {
-    if (items.length === 0) {
-      return;
+  const handleCheckout = async () => {
+    try {
+      await createCheckout();
+      const checkoutUrl = useCartStore.getState().checkoutUrl;
+      if (checkoutUrl) {
+        window.open(checkoutUrl, '_blank');
+        setIsOpen(false);
+      }
+    } catch (error) {
+      console.error('Checkout failed:', error);
     }
-    setIsOpen(false);
-    navigate('/checkout');
   };
 
   return (
@@ -70,21 +72,26 @@ const CartDrawer = () => {
               <div className="flex-1 overflow-y-auto pr-2 min-h-0">
                 <div className="space-y-3 md:space-y-4">
                   {items.map((item) => (
-                    <div key={item.id} className="flex items-center space-x-3 p-3 md:p-4 bg-brand-gold/10 rounded-lg md:rounded-xl border border-brand-gold/20 shadow-md">
+                    <div key={item.variantId} className="flex items-center space-x-3 p-3 md:p-4 bg-brand-gold/10 rounded-lg md:rounded-xl border border-brand-gold/20 shadow-md">
                       <div className="w-16 h-16 md:w-20 md:h-20 bg-brand-dark rounded-lg overflow-hidden flex-shrink-0">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-full h-full object-cover"
-                        />
+                        {item.product.node.images?.edges?.[0]?.node && (
+                          <img
+                            src={item.product.node.images.edges[0].node.url}
+                            alt={item.product.node.title}
+                            className="w-full h-full object-cover"
+                          />
+                        )}
                       </div>
                       
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium text-brand-cream text-sm md:text-base mb-1 truncate">
-                          {item.name}
+                          {item.product.node.title}
                         </h4>
+                        <p className="text-xs text-brand-cream/60 mb-1">
+                          {item.selectedOptions.map(opt => opt.value).join(' • ')}
+                        </p>
                         <p className="text-brand-gold font-semibold drop-shadow-sm text-sm md:text-base">
-                          {item.price.toFixed(2)} Lei
+                          {parseFloat(item.price.amount).toFixed(2)} {item.price.currencyCode}
                         </p>
                       </div>
                       
@@ -93,7 +100,7 @@ const CartDrawer = () => {
                           size="icon"
                           variant="ghost"
                           className="h-6 w-6 text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-md transition-all duration-200 touch-manipulation"
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeItem(item.variantId)}
                         >
                           <Trash2 className="h-3 w-3" />
                         </Button>
@@ -103,7 +110,7 @@ const CartDrawer = () => {
                             size="icon"
                             variant="ghost"
                             className="h-6 w-6 text-brand-cream/80 hover:text-brand-gold hover:bg-brand-gold/10 rounded-md transition-all duration-200 touch-manipulation"
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
                           >
                             <Minus className="h-3 w-3" />
                           </Button>
@@ -112,7 +119,7 @@ const CartDrawer = () => {
                             size="icon"
                             variant="ghost"
                             className="h-6 w-6 text-brand-cream/80 hover:text-brand-gold hover:bg-brand-gold/10 rounded-md transition-all duration-200 touch-manipulation"
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
                           >
                             <Plus className="h-3 w-3" />
                           </Button>
@@ -128,7 +135,7 @@ const CartDrawer = () => {
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold text-brand-cream font-playfair">Total</span>
                   <span className="text-xl md:text-2xl font-bold text-brand-gold font-playfair drop-shadow-lg">
-                    {totalPrice.toFixed(2)} Lei
+                    {totalPrice.toFixed(2)} {items[0]?.price.currencyCode || 'RON'}
                   </span>
                 </div>
                 
@@ -136,10 +143,19 @@ const CartDrawer = () => {
                   onClick={handleCheckout}
                   className="w-full bg-brand-gradient hover:opacity-90 text-brand-dark font-bold h-11 md:h-12 text-sm md:text-base" 
                   size="lg"
-                  disabled={items.length === 0}
+                  disabled={items.length === 0 || isLoading}
                 >
-                  <ArrowRight className="w-4 h-4 mr-2" />
-                  Finalizează comanda
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Creez checkout...
+                    </>
+                  ) : (
+                    <>
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Checkout cu Shopify
+                    </>
+                  )}
                 </Button>
 
                 <Button
