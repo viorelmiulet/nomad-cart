@@ -2,18 +2,29 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
 import { fetchShopifyProducts, ShopifyProduct } from "@/lib/shopify";
+import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle2, Package, ArrowRight, Home } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle2, Package, ArrowRight, Home, Truck, Calendar, MapPin } from "lucide-react";
 import { ShopifyProductCard } from "@/components/ShopifyProductCard";
+
+interface TrackingInfo {
+  tracking_number: string;
+  carrier: string;
+  status: string;
+  estimated_delivery: string | null;
+  notes: string | null;
+}
 
 const OrderConfirmationPage = () => {
   const navigate = useNavigate();
   const { lastCheckoutItems, clearLastCheckoutItems, clearCart } = useCartStore();
   const [recommendations, setRecommendations] = useState<ShopifyProduct[]>([]);
+  const [trackingInfo, setTrackingInfo] = useState<TrackingInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -45,6 +56,29 @@ const OrderConfirmationPage = () => {
     };
 
     loadRecommendations();
+    
+    // Try to load tracking info if available
+    // Note: This is a placeholder - you'll need to connect orders to tracking
+    // For now, we'll check if there's a recent order
+    const loadTracking = async () => {
+      try {
+        // Get the most recent order (you may want to pass order ID via URL params)
+        const { data, error } = await supabase
+          .from("shipment_tracking")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .single();
+
+        if (data && !error) {
+          setTrackingInfo(data);
+        }
+      } catch (error) {
+        console.error("Error loading tracking:", error);
+      }
+    };
+
+    loadTracking();
   }, [lastCheckoutItems, navigate, clearCart]);
 
   const totalAmount = lastCheckoutItems.reduce(
@@ -123,12 +157,101 @@ const OrderConfirmationPage = () => {
                 </div>
 
                 {/* Tracking Info */}
-                <div className="bg-primary/5 rounded-lg p-4 border border-primary/10">
-                  <p className="text-sm text-center">
-                    📦 Vei primi un număr de tracking prin email când comanda ta va fi expediată.
-                    Poți verifica statusul comenzii în secțiunea <strong>Comenzile Mele</strong> din contul tău Shopify.
-                  </p>
-                </div>
+                {trackingInfo ? (
+                  <Card className="border-primary/20">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center gap-2">
+                        <Truck className="w-5 h-5 text-primary" />
+                        <CardTitle className="text-lg">Urmărire Colet</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid gap-3">
+                        <div className="flex items-start justify-between">
+                          <div className="space-y-1">
+                            <p className="text-sm text-muted-foreground">Număr Tracking</p>
+                            <p className="font-mono font-semibold">{trackingInfo.tracking_number}</p>
+                          </div>
+                          <Badge variant="secondary" className="font-medium">
+                            {trackingInfo.carrier}
+                          </Badge>
+                        </div>
+
+                        <div className="flex items-center gap-2 pt-2">
+                          <MapPin className="w-4 h-4 text-muted-foreground" />
+                          <div>
+                            <p className="text-sm font-medium">
+                              Status: <span className="capitalize">{trackingInfo.status.replace("_", " ")}</span>
+                            </p>
+                          </div>
+                        </div>
+
+                        {trackingInfo.estimated_delivery && (
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-muted-foreground" />
+                            <div>
+                              <p className="text-sm">
+                                <span className="text-muted-foreground">Livrare estimată: </span>
+                                <span className="font-medium">
+                                  {new Date(trackingInfo.estimated_delivery).toLocaleDateString('ro-RO', {
+                                    weekday: 'long',
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                  })}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        )}
+
+                        {trackingInfo.notes && (
+                          <div className="pt-2 border-t">
+                            <p className="text-sm text-muted-foreground">{trackingInfo.notes}</p>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="pt-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full"
+                          onClick={() => {
+                            // Generate carrier tracking URL
+                            let trackingUrl = "";
+                            switch (trackingInfo.carrier) {
+                              case "FedEx":
+                                trackingUrl = `https://www.fedex.com/fedextrack/?trknbr=${trackingInfo.tracking_number}`;
+                                break;
+                              case "UPS":
+                                trackingUrl = `https://www.ups.com/track?tracknum=${trackingInfo.tracking_number}`;
+                                break;
+                              case "DHL":
+                                trackingUrl = `https://www.dhl.com/en/express/tracking.html?AWB=${trackingInfo.tracking_number}`;
+                                break;
+                              case "USPS":
+                                trackingUrl = `https://tools.usps.com/go/TrackConfirmAction?tLabels=${trackingInfo.tracking_number}`;
+                                break;
+                              default:
+                                return;
+                            }
+                            if (trackingUrl) window.open(trackingUrl, "_blank");
+                          }}
+                        >
+                          <Truck className="w-4 h-4 mr-2" />
+                          Urmărește pe site-ul {trackingInfo.carrier}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="bg-primary/5 rounded-lg p-4 border border-primary/10">
+                    <p className="text-sm text-center">
+                      📦 Vei primi un număr de tracking prin email când comanda ta va fi expediată.
+                    </p>
+                  </div>
+                )}
 
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3 pt-4">

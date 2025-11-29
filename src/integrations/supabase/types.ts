@@ -649,6 +649,50 @@ export type Database = {
         }
         Relationships: []
       }
+      shipment_tracking: {
+        Row: {
+          carrier: string
+          created_at: string
+          estimated_delivery: string | null
+          id: string
+          notes: string | null
+          order_id: string | null
+          status: string
+          tracking_number: string
+          updated_at: string
+        }
+        Insert: {
+          carrier: string
+          created_at?: string
+          estimated_delivery?: string | null
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          status?: string
+          tracking_number: string
+          updated_at?: string
+        }
+        Update: {
+          carrier?: string
+          created_at?: string
+          estimated_delivery?: string | null
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          status?: string
+          tracking_number?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipment_tracking_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       site_analytics: {
         Row: {
           browser: string | null

@@ -11,6 +11,7 @@ import { CustomEmailSender } from "@/components/CustomEmailSender";
 import { EmailHistory } from "@/components/EmailHistory";
 import { EmailStatsDashboard } from "@/components/EmailStatsDashboard";
 import { EmailTemplateEditor } from "@/components/EmailTemplateEditor";
+import { TrackingManager } from "@/components/TrackingManager";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1123,9 +1124,10 @@ const AdminPage = () => {
 
         {/* Admin Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-10">
+          <TabsList className="grid w-full grid-cols-11">
             <TabsTrigger value="products">Produse</TabsTrigger>
             <TabsTrigger value="orders">Comenzi</TabsTrigger>
+            <TabsTrigger value="tracking">Tracking</TabsTrigger>
             <TabsTrigger value="support">Suport Clienți</TabsTrigger>
             <TabsTrigger value="email">Email</TabsTrigger>
             <TabsTrigger value="email-history">Istoric</TabsTrigger>
@@ -1136,6 +1138,11 @@ const AdminPage = () => {
             <TabsTrigger value="discount">Reduceri</TabsTrigger>
             <TabsTrigger value="settings">Setări</TabsTrigger>
           </TabsList>
+
+          {/* Tracking Tab */}
+          <TabsContent value="tracking">
+            <TrackingManager />
+          </TabsContent>
 
           {/* Email Stats Tab */}
           <TabsContent value="email-stats">
