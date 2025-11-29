@@ -1,4 +1,4 @@
-import { ShoppingCart, Search, User, LogOut } from "lucide-react";
+import { ShoppingCart, Search, User, LogOut, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CartDrawer from "./CartDrawer";
 import SearchDialog from "./SearchDialog";
@@ -172,6 +172,15 @@ const Header = ({ onSearchOpenChange }: HeaderProps) => {
           {!isAdminPage && (
             <>
               <SearchDialog onOpenChange={onSearchOpenChange} />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate('/cart')}
+                className="text-white/90 hover:text-brand-gold hover:bg-white/10 min-w-[44px] min-h-[44px]"
+                aria-label="Vezi coșul"
+              >
+                <ShoppingBag className="h-5 w-5" />
+              </Button>
               <CartDrawer />
             </>
           )}
