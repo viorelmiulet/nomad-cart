@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
-import Handlebars from "https://cdn.skypack.dev/handlebars@4.7.8";
+import Handlebars from "https://esm.sh/handlebars@4.7.8";
 
 const resendApiKey = Deno.env.get("RESEND_API_KEY");
 const resendFrom = Deno.env.get("RESEND_FROM");
