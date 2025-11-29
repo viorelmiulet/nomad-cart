@@ -28,6 +28,7 @@ const ShopifyProductDetailsPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     if (!handle) return;
@@ -134,6 +135,11 @@ const ShopifyProductDetailsPage = () => {
     }
   };
 
+  const handleImageChange = (url: string) => {
+    setImageLoaded(false);
+    setSelectedImage(url);
+  };
+
   const handleAddToCart = () => {
     if (!product || !selectedVariant) {
       toast({
@@ -232,11 +238,20 @@ const ShopifyProductDetailsPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Images Section */}
           <div className="space-y-4">
-            <div className="aspect-square overflow-hidden rounded-2xl bg-brand-dark border border-brand-gold/20">
+            <div className="aspect-square overflow-hidden rounded-2xl bg-brand-dark border border-brand-gold/20 relative">
+              {!imageLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-full h-full animate-pulse bg-gradient-to-br from-brand-gold/10 via-brand-gold/5 to-transparent" />
+                </div>
+              )}
               <img
                 src={selectedImage}
                 alt={product.node.title}
-                className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                loading="lazy"
+                onLoad={() => setImageLoaded(true)}
+                className={`w-full h-full object-cover transition-all duration-500 hover:scale-105 ${
+                  imageLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
               />
             </div>
 
@@ -245,8 +260,8 @@ const ShopifyProductDetailsPage = () => {
                 {allImages.map((image, index) => (
                   <button
                     key={index}
-                    onClick={() => setSelectedImage(image.url)}
-                    className={`aspect-square overflow-hidden rounded-lg border-2 transition-colors ${
+                    onClick={() => handleImageChange(image.url)}
+                    className={`aspect-square overflow-hidden rounded-lg border-2 transition-colors relative ${
                       selectedImage === image.url 
                         ? 'border-brand-gold' 
                         : 'border-brand-gold/20 hover:border-brand-gold/50'
@@ -255,6 +270,7 @@ const ShopifyProductDetailsPage = () => {
                     <img
                       src={image.url}
                       alt={image.altText || `${product.node.title} ${index + 1}`}
+                      loading="lazy"
                       className="w-full h-full object-cover"
                     />
                   </button>
