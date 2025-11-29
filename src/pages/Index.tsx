@@ -5,6 +5,7 @@ import PopularProducts from "@/components/PopularProducts";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import InstallPWABanner from "@/components/InstallPWABanner";
+import { ProductRecommendations } from "@/components/ProductRecommendations";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -65,6 +66,18 @@ const Index = () => {
           </div>
         </div>
       </section>
+      
+      {/* AI-Powered Recommendations Section */}
+      <section className="py-12 md:py-16 bg-gradient-to-b from-background to-muted/20">
+        <div className="container mx-auto px-4 sm:px-6 md:px-8">
+          <ProductRecommendations 
+            limit={4}
+            title="Recomandări Personalizate"
+            description="Produse selectate special pentru tine cu ajutorul inteligenței artificiale"
+          />
+        </div>
+      </section>
+      
       <Footer />
       <InstallPWABanner />
     </main>

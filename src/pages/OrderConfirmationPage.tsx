@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
-import { fetchShopifyProducts, ShopifyProduct } from "@/lib/shopify";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import { ProductRecommendations } from "@/components/ProductRecommendations";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, Package, ArrowRight, Home, Truck, Calendar, MapPin } from "lucide-react";
-import { ShopifyProductCard } from "@/components/ShopifyProductCard";
 
 interface TrackingInfo {
   tracking_number: string;
@@ -23,9 +22,7 @@ interface TrackingInfo {
 const OrderConfirmationPage = () => {
   const navigate = useNavigate();
   const { lastCheckoutItems, clearLastCheckoutItems, clearCart } = useCartStore();
-  const [recommendations, setRecommendations] = useState<ShopifyProduct[]>([]);
   const [trackingInfo, setTrackingInfo] = useState<TrackingInfo | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // If no order items, redirect to home
@@ -36,30 +33,8 @@ const OrderConfirmationPage = () => {
 
     // Clear the actual cart since checkout was completed
     clearCart();
-
-    // Fetch recommendations based on purchased items
-    const loadRecommendations = async () => {
-      try {
-        // Get all products and filter out purchased ones
-        const allProducts = await fetchShopifyProducts(20);
-        const purchasedIds = lastCheckoutItems.map(item => item.product.node.id);
-        const recommended = allProducts
-          .filter(product => !purchasedIds.includes(product.node.id))
-          .slice(0, 4);
-        
-        setRecommendations(recommended);
-      } catch (error) {
-        console.error('Failed to load recommendations:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadRecommendations();
     
     // Try to load tracking info if available
-    // Note: This is a placeholder - you'll need to connect orders to tracking
-    // For now, we'll check if there's a recent order
     const loadTracking = async () => {
       try {
         // Get the most recent order (you may want to pass order ID via URL params)
@@ -277,21 +252,14 @@ const OrderConfirmationPage = () => {
               </CardContent>
             </Card>
 
-            {/* Recommendations */}
-            {!isLoading && recommendations.length > 0 && (
-              <div className="space-y-6">
-                <div className="text-center">
-                  <h2 className="text-2xl font-bold mb-2">S-ar Putea să-ți Placă Și</h2>
-                  <p className="text-muted-foreground">Produse selectate special pentru tine</p>
-                </div>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {recommendations.map((product) => (
-                    <ShopifyProductCard key={product.node.id} product={product} />
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* AI-Powered Recommendations */}
+            <div className="mt-8">
+              <ProductRecommendations 
+                limit={4}
+                title="S-ar Putea să-ți Placă Și"
+                description="Recomandări personalizate bazate pe achiziția ta recentă"
+              />
+            </div>
           </div>
         </main>
 
