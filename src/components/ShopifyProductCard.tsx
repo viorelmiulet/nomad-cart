@@ -4,6 +4,7 @@ import { ShoppingCart } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { toast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 interface ShopifyProductCardProps {
   product: ShopifyProduct;
@@ -12,6 +13,7 @@ interface ShopifyProductCardProps {
 export const ShopifyProductCard = ({ product }: ShopifyProductCardProps) => {
   const addItem = useCartStore(state => state.addItem);
   const { node } = product;
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleAddToCart = () => {
     const variant = node.variants.edges[0]?.node;
@@ -50,13 +52,24 @@ export const ShopifyProductCard = ({ product }: ShopifyProductCardProps) => {
       to={`/product/${node.handle}`}
       className="group bg-brand-dark/50 backdrop-blur-sm rounded-xl overflow-hidden border border-brand-gold/20 hover:border-brand-gold/50 transition-all duration-300 hover:shadow-xl hover:shadow-brand-gold/20"
     >
-      <div className="aspect-square overflow-hidden bg-brand-dark">
+      <div className="aspect-square overflow-hidden bg-brand-dark relative">
         {imageUrl ? (
-          <img 
-            src={imageUrl} 
-            alt={node.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
+          <>
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-brand-dark/80 flex items-center justify-center">
+                <div className="w-full h-full animate-pulse bg-gradient-to-br from-brand-gold/10 via-brand-gold/5 to-transparent" />
+              </div>
+            )}
+            <img 
+              src={imageUrl} 
+              alt={node.title}
+              loading="lazy"
+              onLoad={() => setImageLoaded(true)}
+              className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-500 ${
+                imageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
+          </>
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-brand-gold/10">
             <ShoppingCart className="h-16 w-16 text-brand-gold/30" />
