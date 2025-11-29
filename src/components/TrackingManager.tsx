@@ -129,6 +129,7 @@ export const TrackingManager = () => {
       };
 
       const existing = trackings[selectedOrder.id];
+      const isNewTracking = !existing;
 
       if (existing) {
         const { error } = await supabase
@@ -145,6 +146,29 @@ export const TrackingManager = () => {
 
         if (error) throw error;
         toast.success("Tracking added successfully");
+      }
+
+      // Send tracking email notification
+      try {
+        const { error: emailError } = await supabase.functions.invoke('send-tracking-email', {
+          body: {
+            orderId: selectedOrder.id,
+            trackingNumber: formData.tracking_number,
+            carrier: formData.carrier,
+            status: formData.status,
+            estimatedDelivery: formData.estimated_delivery,
+            notes: formData.notes
+          }
+        });
+
+        if (emailError) {
+          console.error('Failed to send tracking email:', emailError);
+          toast.error("Tracking saved but email notification failed");
+        } else {
+          toast.success(isNewTracking ? "Tracking added and customer notified" : "Tracking updated and customer notified");
+        }
+      } catch (emailError) {
+        console.error('Error sending tracking email:', emailError);
       }
 
       setIsDialogOpen(false);
